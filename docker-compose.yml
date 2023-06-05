@@ -1,0 +1,6 @@
+version: '3.3'
+
+volumes:
+  mysql-volume:
+
+services:
