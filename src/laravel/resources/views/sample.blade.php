@@ -10,7 +10,7 @@
 <body>
     <div id="app">
         <!-- @yield('App') -->
-        <sample-app></sample-app>
+        <sample></sample>
     </div>
     <!-- <script src="js/app.ts"></script> -->
     <!-- <app-blog-post></app-blog-post> -->

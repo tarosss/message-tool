@@ -1,33 +1,50 @@
 <template>
-    <div>
-        app2
-
-    
-        <span @click="change">変更</span>
+    <div>    
+        <span >変更 {{ p }}</span>
+        <p>
+            {{ x }}
+        </p>
+        <p>
+        </p>
+        <p>
+            {{ y }}
+        </p>
     </div>
 </template>
-<script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+<script setup lang="ts">
+import { directive } from "@babel/types";
+import { computed, defineComponent, ref, onMounted, onUnmounted, watch, watchEffect } from "vue";
 import { useStore } from 'vuex'
+import {useMouse} from './mouse'
 const app2 = 'app2'
-export default defineComponent({
-    setup() {
-        const store = useStore()
-        console.log(store);
-        
-        const app = ref(1)
+const store = useStore()
+const p = 1
 
-        const change = () => {
-            console.log(1111);
-            store.commit('addTen', 10000000)
-        }
-        return {
-            app,
-            name: computed(() => store.state.name),
-            gacha: computed(() => store.state.gacha),
-            change
-        }
-    }
+const {x,y} = useMouse()
+console.log(x.value,y.value);
 
-})
+// watchEffect(() => {
+//     const temp = x.value
+//     console.log('watch');
+    
+// })
+
+
+// console.log(computed(() => x.value));
+
+
+// export default defineComponent({
+//     props: {
+//         p: String
+//     },
+//     setup(props) {
+//         const p = ref(props.p)
+
+//         return {
+//             p
+//         }
+//     }
+// })
+
+
 </script>

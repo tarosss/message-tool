@@ -1,22 +1,24 @@
 <template>
     <div class="a">
-        {{ hello  }}
-        {{ g }}
-        {{ g2 }}
-        sscacsscscs
-        <App2 />
+        {{ text }}
+        <input type="text" v-model="text">
+        <!-- <App2/> -->
+        <!-- text2 =  {{ text2 }} !! -->    
     </div>
 </template>
 
 <script setup lang="ts">
 
 import { computed, ref } from "vue";
-import sample from './sample'
-import App2 from './App2.vue'
+
 import { useStore } from 'vuex'
 
+import {useMouse} from './mouse'
+import { useFetch } from "./samples/useFetch";
+
 const store = useStore()
-const hello = ref('cjsc')
+const text = ref('text')
+const text2 = ref(text)
 const g = computed(() => store.state.gacha)
 const g2 = computed(() => {
     console.log('gs');
@@ -24,9 +26,11 @@ const g2 = computed(() => {
     return a + 1
 })
 
-const g3 = computed(() => {
-    console.log(g2);
-    
-})
+const url = ref('cscsc')
+const {data, error} = useFetch(text)
+// const {x,y} = useMouse()
+
+
+
 </script>
 

@@ -14,6 +14,9 @@ export const useStores = createStore({
         },
         addTen(state, num) {
             state.gacha += num
+        },
+        setName(state, name) {
+            state.name = name
         }
     }
 })
