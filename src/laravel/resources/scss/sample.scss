@@ -1,0 +1,38 @@
+.bounce-enter-active {
+    animation: bounce-in 0.5s reverse;
+    // opacity: 0.5s ease;
+    transition: opacity 0.5s ease;
+}
+
+.bounce-leave-active {
+    animation: bounce-in 1s;
+}
+
+@keyframes bounce-in{
+    0% {
+        transform: scale(0.1);
+
+        // background-color: red;
+      }
+      50% {
+        transform: scale(2);
+        // background-color: blue;
+      }
+      100% {
+        transform: scale(0);
+        // background-color: green;
+      }
+}
+
+.list-enter-active,
+.list-leave-active {
+    transition: all 1s;
+}
+
+
+
+.list-enter-from,
+.list-leave-to
+ {
+    opacity: 0;
+}

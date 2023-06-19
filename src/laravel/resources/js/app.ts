@@ -1,11 +1,18 @@
 import './bootstrap';
-import { createApp } from "vue/dist/vue.esm-bundler.js";;
+import { createApp } from "vue/dist/vue.esm-bundler.js";
+import { createPinia } from 'pinia'
+import router from './router'
 import App from './App.vue';
 import Sample from './Sample.vue'
-import {useStores} from './store/vuex'
+import Route from './Route.vue'
+
 
 const app = createApp({
     components:{
-        'sample': Sample
+        'sample': Sample,
+        'route': Route
     }
-}).use(useStores).mount('#app')
+})
+.use(createPinia())
+.use(router)
+.mount('#app')
