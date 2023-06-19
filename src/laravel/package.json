@@ -23,6 +23,7 @@
         "vue-loader": "^17.0.1"
     },
     "dependencies": {
-        "vuex": "^4.0.2"
+        "pinia": "^2.1.4",
+        "vue-router": "^4.2.2"
     }
 }
