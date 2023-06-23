@@ -16,12 +16,7 @@ RUN apt-get update && \
     zip \
     unzip \
     vim \
-    libcurl4-openssl-dev \
-    pkg-config \
-    libssl-dev\
-    && docker-php-ext-install pdo_mysql bcmath \
-    && pecl install mongodb \
-    && docker-php-ext-enable mongodb
+    && docker-php-ext-install pdo_mysql bcmath
 
 EXPOSE 5173
 WORKDIR /var/www/html
