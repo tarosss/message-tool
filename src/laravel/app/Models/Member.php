@@ -1,10 +1,12 @@
 <?php
 
 namespace App\Models;
-
+use Laravel\Sanctum\HasApiTokens;
 use Moloquent;
 
-class Members extends Moloquent
+class Member extends Moloquent
 {
+    use HasApiTokens;
+
     protected $collection = 'members';
 }

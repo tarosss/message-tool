@@ -14,6 +14,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::group(['prefix' => 'member'], function () {
+        Route::post('/store', '\App\Http\Controllers\Api\MemberController@create')->middleware(['abilities:collection:create']);
+    });
+    Route::post('/post', '\App\Http\Controllers\Api\@index');
 });
+
+Route::group(['prefix' => 'tokens'], function () {
+    Route::post('/create', '\App\Http\Controllers\Api\TokenController@create');
+});
+
