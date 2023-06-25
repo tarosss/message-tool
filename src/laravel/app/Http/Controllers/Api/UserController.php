@@ -2,39 +2,20 @@
 
 namespace App\Http\Controllers\Api;
 
-use Exception;
 use Illuminate\Http\Request;
-use \Symfony\Component\HttpFoundation\Response;
-use App\Interfaces\Repositories\MessageToolRepositoryInterface;
-use App\Interfaces\Repositories\UserRepositoryInterface;
-use App\Facades\StringUtils;
-use Log;
+use \App\Interfaces\Repositories\MessageToolRepositoryInterface;
+use \App\Interfaces\Repositories\UserRepositoryInterface;
+use Illuminate\Http\Response;
 
-class MemberController extends \App\Http\Controllers\Controller
+
+class UserController extends \App\Http\Controllers\Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
-
-        Log::info('response is ' . $request);
-        var_dump("ckjannmksac");
-
-        return response()->json([
-            'key' => 'value'
-        ], 400);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function create(Request $request)
+    public function index()
     {
         //
     }
@@ -44,19 +25,31 @@ class MemberController extends \App\Http\Controllers\Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, MessageToolRepositoryInterface $messageToolRepository)
+    public function create()
     {
-        $messageToolRepository->createMembers([
-            'member_id' => StringUtils::getRandomString(20)
-        ]);
-        
+        //
+    }
 
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request, UserRepositoryInterface $userRepository)
+    {
         try {
+            $userRepository->createUser([
+                'user_id' => $request->input('user_id')
+            ]);
+
             return response()->json([
                 'error' => false
             ], Response::HTTP_CREATED);
-        } catch (Exception $e) {
-
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 

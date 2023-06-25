@@ -2,7 +2,6 @@
 
 namespace App\Exceptions;
 
-use GuzzleHttp\Psr7\Request;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 use Log;
@@ -53,15 +52,19 @@ class Handler extends ExceptionHandler
             
         });
 
-        $this->renderable(function (\App\Exceptions\SampleException $e) {
+        $this->renderable(function (\Exception $e) {
             return response()->json([
                 'error' => true,
-                'message' => '汚い犬'
-            ], 300);
+                'message' => 'Internal server error'
+            ], 500);
         });
 
         $this->reportable(function (Throwable $e) {
             //
+            return response()->json([
+                'error' => true,
+                'message' => 'internal server_error'
+            ], 500);
             return true;
         });
     }

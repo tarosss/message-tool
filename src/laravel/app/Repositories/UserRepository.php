@@ -23,4 +23,9 @@ class UserRepository implements UserRepositoryInterface
 
         return $toArray ? $user->toArray() : $user;
     }
+
+    public function createUser(array $data): void
+    {
+        User::insert($data);
+    }
 }
