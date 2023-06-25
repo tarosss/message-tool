@@ -217,6 +217,7 @@ return [
         'Moloquent' => Jenssegers\Mongodb\Eloquent\Model::class,
         'Log' => Illuminate\Support\Facades\Log::class,
         'DB' => Illuminate\Support\Facades\DB::class,
+        'Storage' => Illuminate\Support\Facades\Storage::class,
     ])->toArray(),
 
 ];

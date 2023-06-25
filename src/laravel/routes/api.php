@@ -19,8 +19,10 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::group(['prefix' => 'member'], function () {
-        Route::post('/store', '\App\Http\Controllers\Api\MemberController@create')->middleware(['abilities:collection:create']);
+    Route::group(['prefix' => 'store', 'middleware' => ['abilities:collection:store']], function () {
+        Route::post('/member', '\App\Http\Controllers\Api\MemberController@store');
+        Route::post('/message', '\App\Http\Controllers\Api\MessageController@store');
+
     });
     Route::post('/post', '\App\Http\Controllers\Api\@index');
 });
@@ -29,3 +31,7 @@ Route::group(['prefix' => 'tokens'], function () {
     Route::post('/create', '\App\Http\Controllers\Api\TokenController@create');
 });
 
+
+Route::group(['prefix' => 'user'], function () {
+    Route::post('/store', '\App\Http\Controllers\Api\UserController@store');
+});
