@@ -16,3 +16,6 @@ use Illuminate\Support\Facades\Route;
 Route::view('/', 'sample');
 Route::view('/sample', 'sample');
 
+Route::get('/mongo', 'App\Http\Controllers\SampleController@index');
+
+

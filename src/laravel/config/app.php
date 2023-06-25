@@ -181,9 +181,9 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-
+        App\Providers\RepositoriesProvider::class,
         /*
-         * Package Service Providers...
+         * Package Service Provider ...
          */
 
         /*
@@ -194,6 +194,10 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
+
+        Jenssegers\Mongodb\MongodbServiceProvider::class,
+
 
     ],
 
@@ -210,6 +214,9 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+        'Moloquent' => Jenssegers\Mongodb\Eloquent\Model::class,
+        'Log' => Illuminate\Support\Facades\Log::class,
+        'DB' => Illuminate\Support\Facades\DB::class,
     ])->toArray(),
 
 ];

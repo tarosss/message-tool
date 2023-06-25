@@ -2,9 +2,10 @@
 
 namespace App\Exceptions;
 
+use GuzzleHttp\Psr7\Request;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
-
+use Log;
 class Handler extends ExceptionHandler
 {
     /**
@@ -23,6 +24,7 @@ class Handler extends ExceptionHandler
      */
     protected $dontReport = [
         //
+        \App\Exceptions\SampleException::class
     ];
 
     /**
@@ -43,8 +45,24 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
+        // $this->reportable(function (App\Exceptions\SampleException $e) {
+        //     Log::info("mcvakmfnjkdnvkancjks");
+        // });
+
+        $this->reportable(function (\App\Exceptions\SampleException $e) {
+            
+        });
+
+        $this->renderable(function (\App\Exceptions\SampleException $e) {
+            return response()->json([
+                'error' => true,
+                'message' => '汚い犬'
+            ], 300);
+        });
+
         $this->reportable(function (Throwable $e) {
             //
+            return true;
         });
     }
 }

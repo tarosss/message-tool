@@ -2,11 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Moloquent;
 
-class Message extends Model
+class Message extends Moloquent
 {
-    use HasFactory;
-    protected $table = "message";
+    protected $collection = 'message';
 }
