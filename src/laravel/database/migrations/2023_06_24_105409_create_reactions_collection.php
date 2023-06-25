@@ -14,7 +14,10 @@ return new class extends Migration
     public function up()
     {
         Schema::create('reactions', function (Blueprint $table) {
-            $table->id();
+            $table->string('icon_path');
+            $table->string('reaction_name');
+            $table->array('reaction_kinds');
+
             $table->timestamps();
         });
     }

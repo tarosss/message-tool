@@ -14,7 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('drafts', function (Blueprint $table) {
-            $table->id();
+            $table->string('draft');
+            $table->string('user_id');
+            $table->string('channel_id');
+            $table->array('files');
+
+            
             $table->timestamps();
         });
     }

@@ -14,8 +14,15 @@ return new class extends Migration
     public function up()
     {
         Schema::create('channels', function (Blueprint $table) {
-            $table->id();
+            $table->string('channel_type'); // 1 全体グループ 2 ダイレクトメッセージ
+
+            $table->string('channel_name');
+            $table->string('create_user');
+            $table->array('members');
+
+            
             $table->timestamps();
+            $table->primary('channel_name');
         });
     }
 

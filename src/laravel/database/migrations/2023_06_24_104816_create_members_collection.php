@@ -16,8 +16,20 @@ return new class extends Migration
     public function up()
     {
         Schema::create('members', function (Blueprint $table) {
-            $table->id();
+            $table->integer('member_id');
+            $table->string('member_name');
+            $table->string('member_name_yomi');
+            $table->string('display_member_name');
+            $table->string('email');
+            $table->string('tel');
+            $table->string('status');
+            $table->string('time_zone');
+            $table->boolean('invested');
+
+            $table->array('recently_used_icons');
             $table->timestamps();
+            $table->primary('email');
+
         });
     }
 

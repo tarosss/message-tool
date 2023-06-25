@@ -14,7 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('workspace', function (Blueprint $table) {
-            $table->id();
+            $table->string('workspace_name');
+            $table->string('primary_owner');
+            $table->string('owners');
+
+            $table->integer('workspace_plan');
+
             $table->timestamps();
         });
     }
