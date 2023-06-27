@@ -12,6 +12,7 @@ class Message extends Moloquent
         'message',
         'member_id',
         'storage',
+        'sended'
     ];
 
     public function member()

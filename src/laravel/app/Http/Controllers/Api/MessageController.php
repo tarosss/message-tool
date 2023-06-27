@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use \App\Interfaces\Repositories\MessageToolRepositoryInterface;
-use \App\Facades\StringUtils;
-use \App\Facades\MimeType;
-use \App\Facades\Date;
+use App\Interfaces\Repositories\MessageToolRepositoryInterface;
+use App\Facades\StringUtils;
+use App\Facades\MimeType;
+use App\Facades\Date;
 
 use Exception;
 use Log;
@@ -42,12 +42,16 @@ class MessageController extends \App\Http\Controllers\Controller
      */
     public function store(Request $request, MessageToolRepositoryInterface $messageToolRepository)
     {
+
+        // データベースに入っている途中変更のメッセージを登録するさいの処理を追加する必要がある
+
         try {
             $storage = \App\Factories\StorageFactory::getStorage();
 
             $now = Date::getNow();
 
-            foreach($request['data'] as $data) {
+            $insertFiles = [];
+            foreach($request->input('data') as $data) {
                 Log::info($data);
                 $insertedMessage = $messageToolRepository->createMessage([
                     'message' => $data['message'],
@@ -56,7 +60,6 @@ class MessageController extends \App\Http\Controllers\Controller
                     'sended' => $data['sended']
                 ]);
 
-                $insertFiles = [];
                 foreach($data['files'] as $file) {
                     $fileName = (function () use ($file) {
                         $fileName = StringUtils::getRandomString(30);

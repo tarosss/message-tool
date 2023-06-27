@@ -3,8 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-
-class ChannelController extends Controller
+use App\Interfaces\Repositories\MessageToolRepositoryInterface;
+use Log;
+class ChannelController extends \App\Http\Controllers\Controller
 {
     /**
      * Display a listing of the resource.
@@ -32,9 +33,25 @@ class ChannelController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, MessageToolRepositoryInterface $messageToolRepository)
     {
-        //
+        try {
+            $messageToolRepository->createChannel([
+                'channel_type' => $request->input('channel_type'),
+                'channel_name' => $request->input('channel_name'),
+                'create_user' => $request->input('create_user'),
+                'members' => $request->has('members') ? $request->input('members') : [],
+            ]);
+            
+            return response()->json([
+                'error' => false
+            ], Response::HTTP_CREATED);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
