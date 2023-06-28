@@ -14,10 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::group(['prefix' => 'store', 'middleware' => ['abilities:collection:store']], function () {
         Route::post('/user', '\App\Http\Controllers\Api\MemberController@store');
@@ -25,7 +21,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/channel', '\App\Http\Controllers\Api\ChannelController@store');
         Route::post('/reaction', '\App\Http\Controllers\Api\ReactionController@store');
         Route::post('/reaction-kind', '\App\Http\Controllers\Api\ReactionKindController@store');
-
     });
     Route::post('/post', '\App\Http\Controllers\Api\@index');
 });
