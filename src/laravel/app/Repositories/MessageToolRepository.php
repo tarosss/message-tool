@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Message;
 use App\Models\Member;
 use App\Models\Channel;
+use App\Models\Reaction;
 use App\Models\File;
 use App\Interfaces\Repositories\MessageToolRepositoryInterface;
 
@@ -65,5 +66,15 @@ class MessageToolRepository implements MessageToolRepositoryInterface
     public function createChannels($data): void
     {
         Channel::insert($data);
+    }
+
+    public function createReaction($data): Reaction
+    {
+        return Reaction::create($data);
+    }
+
+    public function createReactions($data): void
+    {
+        Reaction::insert($data);
     }
 }

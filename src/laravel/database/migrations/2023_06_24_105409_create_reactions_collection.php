@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('icon_path');
             $table->string('reaction_name');
             $table->array('reaction_kinds');
-
+            
             $table->timestamps();
         });
     }

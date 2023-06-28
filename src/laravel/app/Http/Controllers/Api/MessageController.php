@@ -52,7 +52,6 @@ class MessageController extends \App\Http\Controllers\Controller
 
             $insertFiles = [];
             foreach($request['data'] as $data) {
-                Log::info($data);
                 $insertedMessage = $messageToolRepository->createMessage([
                     'message' => $data['message'],
                     'member_id' => $data['member_id'],
