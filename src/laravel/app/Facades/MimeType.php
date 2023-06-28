@@ -9,6 +9,10 @@ class MimeType
         switch($mimeType) {
             case 'image/png':
             return 'png';
+            case 'image/jpeg':
+            return 'jpeg';
+            case 'image/jpg':
+            return 'jpg';
         }
     }
 }

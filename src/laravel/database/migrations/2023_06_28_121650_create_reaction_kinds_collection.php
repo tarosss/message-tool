@@ -13,11 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('reactions', function (Blueprint $table) {
-            $table->string('icon_path');
-            $table->string('reaction_name');
-            $table->array('reaction_kinds');
-            
+        Schema::create('reaction_kinds', function (Blueprint $table) {
+            $table->string('reaction_kind_name');
             $table->timestamps();
         });
     }
@@ -29,6 +26,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reactions');
+        Schema::dropIfExists('reaction_kinds_collection');
     }
 };

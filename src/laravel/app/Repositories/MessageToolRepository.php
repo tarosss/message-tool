@@ -4,6 +4,10 @@ namespace App\Repositories;
 
 use App\Models\Message;
 use App\Models\Member;
+use App\Models\Channel;
+use App\Models\Reaction;
+use App\Models\ReactionKind;
+
 use App\Models\File;
 use App\Interfaces\Repositories\MessageToolRepositoryInterface;
 
@@ -26,30 +30,63 @@ class MessageToolRepository implements MessageToolRepositoryInterface
         return $toArray ? $user->toArray() : $user;
     }
 
+    public function createMember($data)
+    {
+        return Member::create($data);
+    }
+
     public function createMembers($data)
     {
         Member::insert($data);
     }
 
-    public function createMessage($data)
+    public function createMessage($data): Message
     {
-        $message = Message::create($data);
-        return $message;
+        return Message::create($data);
     }
 
-    public function createMessages($data)
+    public function createMessages($data): void
     {
         Message::insert($data);
     }
 
-    public function createFile($data)
+    public function createFile($data): File
     {
-        $file = File::create($data);
-        return $file;
+        return File::create($data);
     }
 
-    public function createFiles($data)
+    public function createFiles($data): void
     {
         File::insert($data);
+    }
+
+    public function createChannel($data): Channel
+    {
+        return Channel::create($data);
+    }
+
+    public function createChannels($data): void
+    {
+        Channel::insert($data);
+    }
+
+    public function createReaction($data): Reaction
+    {
+        return Reaction::create($data);
+    }
+
+    public function createReactions($data): void
+    {
+        Reaction::insert($data);
+    }
+
+    public function createReactionKind($data): ReactionKind
+    {
+        return ReactionKind::create($data);
+    }
+
+    public function createReactionKinds($data): void
+    {
+        ReactionKind::insert($data);
     }
 }

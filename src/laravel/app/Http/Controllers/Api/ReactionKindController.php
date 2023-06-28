@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\ReactionKind;
 use Illuminate\Http\Request;
-use App\Interfaces\Repositories\MessageToolRepositoryInterface;
 use Illuminate\Http\Response;
-
+use App\Interfaces\Repositories\MessageToolRepositoryInterface;
+use App\Facades\Date;
+use Exception;
 use Log;
-class ChannelController extends \App\Http\Controllers\Controller
+class ReactionKindController extends \App\Http\Controllers\Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,16 +17,6 @@ class ChannelController extends \App\Http\Controllers\Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
     {
         //
     }
@@ -38,13 +30,18 @@ class ChannelController extends \App\Http\Controllers\Controller
     public function store(Request $request, MessageToolRepositoryInterface $messageToolRepository)
     {
         try {
-            $messageToolRepository->createChannel([
-                'channel_type' => $request->input('channel_type'),
-                'channel_name' => $request->input('channel_name'),
-                'create_user' => $request->input('create_user'),
-                'users' => $request->has('users') ? $request->input('users') : [],
-            ]);
+            $now = Date::getNow();
+            $insertedReactionKinds = [];
+            foreach($request['data'] as $data) {
+                $insertedReactionKinds[] = [
+                    'reaction_kind_name' => $data['reaction_kind_name'],
+                    'created_at' => $now
+                ];
 
+            }
+            // Log::info($insertedReactionKinds);
+            $messageToolRepository->createReactionKinds($insertedReactionKinds);
+            
             return response()->json([
                 'error' => false
             ], Response::HTTP_CREATED);
@@ -59,21 +56,10 @@ class ChannelController extends \App\Http\Controllers\Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Todo  $todo
+     * @param  \App\Models\ReactionKind  $reactionKind
      * @return \Illuminate\Http\Response
      */
-    public function show(Todo $todo)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Todo  $todo
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Todo $todo)
+    public function show(ReactionKind $reactionKind)
     {
         //
     }
@@ -82,10 +68,10 @@ class ChannelController extends \App\Http\Controllers\Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Todo  $todo
+     * @param  \App\Models\ReactionKind  $reactionKind
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Todo $todo)
+    public function update(Request $request, ReactionKind $reactionKind)
     {
         //
     }
@@ -93,12 +79,11 @@ class ChannelController extends \App\Http\Controllers\Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Todo  $todo
+     * @param  \App\Models\ReactionKind  $reactionKind
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Todo $todo)
+    public function destroy(ReactionKind $reactionKind)
     {
         //
     }
-
 }
