@@ -6,6 +6,8 @@ use App\Models\Message;
 use App\Models\Member;
 use App\Models\Channel;
 use App\Models\Reaction;
+use App\Models\ReactionKind;
+
 use App\Models\File;
 use App\Interfaces\Repositories\MessageToolRepositoryInterface;
 
@@ -76,5 +78,15 @@ class MessageToolRepository implements MessageToolRepositoryInterface
     public function createReactions($data): void
     {
         Reaction::insert($data);
+    }
+
+    public function createReactionKind($data): ReactionKind
+    {
+        return ReactionKind::create($data);
+    }
+
+    public function createReactionKinds($data): void
+    {
+        ReactionKind::insert($data);
     }
 }

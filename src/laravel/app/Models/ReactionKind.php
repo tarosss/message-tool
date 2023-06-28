@@ -2,10 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Moloquent;
 
-class ReactionKind extends Model
+class ReactionKind extends Moloquent
 {
-    use HasFactory;
+    protected $collection = 'reaction_kinds';
+
+    protected $fillable = [
+        'reaction_kind_name',
+        'created_at',
+        'updated_at',
+    ];
 }
