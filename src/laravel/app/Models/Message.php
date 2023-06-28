@@ -10,14 +10,14 @@ class Message extends Moloquent
 
     protected $fillable = [
         'message',
-        'member_id',
+        'user_id',
         'storage',
         'sended'
     ];
 
-    public function member()
+    public function user()
     {
-        return $this->belongsTo(\App\Models\Member::class, 'member_id', 'member_id');
+        return $this->belongsTo(\App\Models\Member::class, 'user_id', 'user_id');
     }
 
     public function channel()

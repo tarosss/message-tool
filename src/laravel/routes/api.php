@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::group(['prefix' => 'store', 'middleware' => ['abilities:collection:store']], function () {
-        Route::post('/member', '\App\Http\Controllers\Api\MemberController@store');
+        Route::post('/user', '\App\Http\Controllers\Api\MemberController@store');
         Route::post('/message', '\App\Http\Controllers\Api\MessageController@store');
         Route::post('/channel', '\App\Http\Controllers\Api\ChannelController@store');
 
@@ -33,6 +33,6 @@ Route::group(['prefix' => 'tokens'], function () {
 });
 
 
-Route::group(['prefix' => 'user'], function () {
+Route::group(['prefix' => 'first-user'], function () {
     Route::post('/store', '\App\Http\Controllers\Api\UserController@store');
 });

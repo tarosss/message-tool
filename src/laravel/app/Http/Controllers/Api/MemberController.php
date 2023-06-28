@@ -47,7 +47,7 @@ class MemberController extends \App\Http\Controllers\Controller
     public function store(Request $request, MessageToolRepositoryInterface $messageToolRepository)
     {
         $messageToolRepository->createMembers([
-            'member_id' => StringUtils::getRandomString(20)
+            'user_id' => StringUtils::getRandomString(20)
         ]);
         
 

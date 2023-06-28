@@ -18,7 +18,7 @@ return new class extends Migration
 
             $table->string('channel_name');
             $table->string('create_user');
-            $table->array('members');
+            $table->array('users');
 
             
             $table->timestamps();

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use App\Interfaces\Repositories\MessageToolRepositoryInterface;
+use Illuminate\Http\Response;
+
 use Log;
 class ChannelController extends \App\Http\Controllers\Controller
 {
@@ -40,9 +42,9 @@ class ChannelController extends \App\Http\Controllers\Controller
                 'channel_type' => $request->input('channel_type'),
                 'channel_name' => $request->input('channel_name'),
                 'create_user' => $request->input('create_user'),
-                'members' => $request->has('members') ? $request->input('members') : [],
+                'users' => $request->has('users') ? $request->input('users') : [],
             ]);
-            
+
             return response()->json([
                 'error' => false
             ], Response::HTTP_CREATED);

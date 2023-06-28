@@ -12,7 +12,7 @@ class Channel extends Moloquent
         'channel_type',
         'channel_name',
         'create_user',
-        'members',
+        'users',
         'created_at',
         'updated_at',
     ];

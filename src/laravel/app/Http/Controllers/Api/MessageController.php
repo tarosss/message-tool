@@ -51,7 +51,7 @@ class MessageController extends \App\Http\Controllers\Controller
             $now = Date::getNow();
 
             $insertFiles = [];
-            foreach($request->input('data') as $data) {
+            foreach($request['data'] as $data) {
                 Log::info($data);
                 $insertedMessage = $messageToolRepository->createMessage([
                     'message' => $data['message'],
