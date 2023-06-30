@@ -18,5 +18,9 @@
     },
     "include": [
         "resources/js/**/*" 
-    ]
+    ],
+    "ts-node": {
+        "esm": true,
+        "experimentalSpecifierResolution": "node"
+    }
   }

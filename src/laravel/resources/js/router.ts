@@ -1,10 +1,9 @@
 import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router';
-import SampleVue from './Sample.vue';
-import App2 from './App2.vue';
+import Message from './Message.vue'
 
 const routes: Array<RouteRecordRaw> = [
-  { path: '/', component: SampleVue },
-  { path: '/about', component: App2 },
+  { path: '/', component: Message },
+  { path: '/about', component: Message },
 ]
 
 const router = createRouter({

@@ -30,6 +30,12 @@ class MessageToolRepository implements MessageToolRepositoryInterface
         return $toArray ? $user->toArray() : $user;
     }
 
+    public function getAllMessages()
+    {
+        return Message::all()
+            ->toArray();
+    }
+
     public function createMember($data)
     {
         return Member::create($data);

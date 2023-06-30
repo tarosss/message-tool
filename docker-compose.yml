@@ -10,6 +10,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - ${VITE_PORT}:5173
+      - ${SOCKET_PORT}:3000
     volumes:
       - ./src/:/var/www/html
     environment:
