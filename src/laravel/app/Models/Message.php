@@ -15,6 +15,11 @@ class Message extends Moloquent
         'sended'
     ];
 
+    protected $dispatchesEvents = [
+        // 'created' => \App\Events\SampleEvent::class,
+        'created' => \App\Events\PublicEvent::class
+    ];
+
     public function user()
     {
         return $this->belongsTo(\App\Models\Member::class, 'user_id', 'user_id');

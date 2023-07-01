@@ -18,6 +18,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        \App\Events\SampleEvent::class => [
+            \App\Listeners\SendPodcastNotification::class
+        ]
     ];
 
     /**
@@ -28,6 +31,10 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+
+        // Event::listen(
+        //     \App\Events\SampleEvent::class,
+        //     [\App\Listeners\SendPodcastNotification::class, "handle"]);
     }
 
     /**
@@ -37,6 +44,6 @@ class EventServiceProvider extends ServiceProvider
      */
     public function shouldDiscoverEvents()
     {
-        return false;
+        return true;
     }
 }

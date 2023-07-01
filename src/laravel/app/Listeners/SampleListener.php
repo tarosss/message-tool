@@ -2,11 +2,11 @@
 
 namespace App\Listeners;
 
-use App\Events\PodcastProcessed;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+
 use Log;
-class SendPodcastNotification
+class SampleListener
 {
     /**
      * Create the event listener.
@@ -21,12 +21,13 @@ class SendPodcastNotification
     /**
      * Handle the event.
      *
-     * @param  \App\Events\PodcastProcessed  $event
+     * @param  object  $event
      * @return void
      */
-    public function handle(\App\Events\SampleEvent $sampleEvent)
+    public function handle(\App\Events\SampleEvent $event)
     {
-        Log::info('linstened');
-        Log::info($sampleEvent->a);
+        //
+        Log::info("From Sample Lintener Handle");
     }
+
 }

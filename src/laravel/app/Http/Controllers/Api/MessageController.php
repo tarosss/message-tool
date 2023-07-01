@@ -54,7 +54,7 @@ class MessageController extends \App\Http\Controllers\Controller
             foreach($request['data'] as $data) {
                 $insertedMessage = $messageToolRepository->createMessage([
                     'message' => $data['message'],
-                    'member_id' => $data['member_id'],
+                    'user_id' => $data['user_id'],
                     'storage' => $storage->getDisk(),
                     'sended' => $data['sended']
                 ]);
@@ -69,7 +69,7 @@ class MessageController extends \App\Http\Controllers\Controller
                     $storage->putFileAs('message', $file, $fileName);
                     
                     $insertFiles[] = [
-                        'message_id' => $insertedMessage->_id,
+                        'user_id' => $insertedMessage->_id,
                         'original_file_name' => $file->getClientOriginalName(),
                         'file_name' => $fileName,
                         'created_at' => $now,
@@ -79,11 +79,11 @@ class MessageController extends \App\Http\Controllers\Controller
 
 
             // ファイルの保存
-
-
-            // テキストベースのデータ
+            Log::info('in controller');
+            broadcast(new \App\Events\SampleEvent);
+            // テキストベースのデータ   
             $messageToolRepository->createFiles($insertFiles);
-
+            // event()
             // ファイルの保存
             return response()->json([
                 'error' => false
