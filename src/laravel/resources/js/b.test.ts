@@ -1,3 +1,3 @@
 test('checkb', () => {
-    console.log('OK')
+  console.log('OK')
 })

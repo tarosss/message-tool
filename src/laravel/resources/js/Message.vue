@@ -1,7 +1,7 @@
 <template>
-    Message
+  Message
 
-    <!-- <button @click="clicked"></button> -->
+  <!-- <button @click="clicked"></button> -->
 </template>
 
 <script lang="ts" setup>
