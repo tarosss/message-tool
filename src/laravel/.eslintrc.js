@@ -23,6 +23,10 @@ module.exports = {
   ],
   rules: {
     "import/prefer-default-export": "warn",
-    "@typescript-eslint/quotes": ["error", "double"],
+    "@typescript-eslint/quotes": ["error", "single"],
+    "@typescript-eslint/semi": ["warn", "never"],
+    indent: "warn",
+    "object-curly-newline": "warn"
+
   },
 };

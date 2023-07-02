@@ -1,4 +1,4 @@
-import { Server } from "socket.io";
+import { Server } from 'socket.io'
 
 interface ServerToClientEvents {
   noArg: () => void
@@ -23,33 +23,28 @@ interface SocketData {
   age: number
 }
 
-const io = new Server<
-ClientToServerEvents,
-ServerToClientEvents,
-InterServerEvents,
-SocketData
->({
+const io = new Server<ClientToServerEvents, ServerToClientEvents, InterServerEvents, SocketData>({
   cors: {
-    origin: "http://localhost",
+    origin: 'http://localhost',
   },
-});
+})
 
-io.on("connection", (socket) => {
-  console.log(socket.id);
+io.on('connection', (socket) => {
+  console.log(socket.id)
 
   // イベント発行
-  socket.emit("hello", "from server");
+  socket.emit('hello', 'from server')
 
   // イベント受信
-  socket.on("message", (message) => {
-    console.log(`from client: ${message}`);
-    io.emit("hello2", "from server2");
-  });
+  socket.on('message', (message) => {
+    console.log(`from client: ${message}`)
+    io.emit('hello2', 'from server2')
+  })
 
   // 切断イベント受信
-  socket.on("disconnect", (reason) => {
-    console.log(`user disconnected. reason is ${reason}.`);
-  });
-});
+  socket.on('disconnect', (reason) => {
+    console.log(`user disconnected. reason is ${reason}.`)
+  })
+})
 
-io.listen(3000);
+io.listen(3000)
