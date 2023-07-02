@@ -6,7 +6,7 @@
         "watch": "vite build --watch",
         "socket-server-start": "ts-node resources/js/socket-server",
         "jest": "./node_modules/.bin/jest $npm_config_path",
-        "prettier": "./node_modules/.bin/prettier --write resources/js/$npm_config_path",
+        "prettier": "./node_modules/.bin/prettier --write ./$npm_config_path",
         "eslint": "./node_modules/.bin/eslint resources/js/**/*.{js,ts}",
         "tsc": "./node_modules/.bin/tsc $npm_config_path"
     },
