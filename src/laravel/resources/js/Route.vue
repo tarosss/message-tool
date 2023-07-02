@@ -5,7 +5,6 @@
 </template>
 
 <script setup lang="ts">
-
 // import { defineProps } from 'vue';
 // props = defineProps
 
@@ -20,5 +19,4 @@
 //     }[]
 // }>()
 // console.log(props.data);
-
 </script>

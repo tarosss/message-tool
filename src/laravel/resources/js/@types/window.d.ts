@@ -1,6 +1,5 @@
 interface Window {
-    myProp: number,
-    aaaa: String
-    Echo: 
+  myProp: number
+  aaaa: String
 }
 // declare var window: Window & typeof globalThis

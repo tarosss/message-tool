@@ -1,5 +1,4 @@
 interface sampleClass {
-    myProp: number,
-    aaaa: String
+  myProp: number
+  aaaa: String
 }
-

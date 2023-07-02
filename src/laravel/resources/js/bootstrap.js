@@ -1,5 +1,5 @@
-import _ from 'lodash';
-window._ = _;
+import _ from 'lodash'
+window._ = _
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -7,26 +7,23 @@ window._ = _;
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-import axios from 'axios';
-window.axios = axios;
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+import axios from 'axios'
+window.axios = axios
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
-
-import Echo from "laravel-echo"
-import io from 'socket.io-client';
+import Echo from 'laravel-echo'
+import io from 'socket.io-client'
 window.io = io
 window.Echo = new Echo({
     broadcaster: 'socket.io',
     host: window.location.hostname + ':6001',
-    forceTLS: true
-    // host: 'http://127.0.0.1:6001'
-});
+    forceTLS: true,
+})
 
-window.addEventListener('load', (event) => {
-    console.log('load')
-    window.Echo.channel('laravel_database_channel-name')
-    .listen('SampleEvent', (e) => {
-        console.log(',la;cv');
-    });
-  });
-console.log();
+window.Echo.channel('laravel_database_channel-name').listen(
+    'SampleEvent',
+    (e) => {
+        console.log(',la;cv')
+    }
+)
+console.log()

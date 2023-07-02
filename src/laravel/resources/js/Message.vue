@@ -5,15 +5,13 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted } from 'vue';
+import { computed, onMounted } from 'vue'
 // import socket from './socket';
 
 // const connected = computed(() => socket.connected)
-onMounted(() => {
-
-})
+onMounted(() => {})
 // const clicked = () => {
 //     socket.emit("message", 'こんにてゃ')
 // }
-
-</script>./socketio/socket
+</script>
+./socketio/socket

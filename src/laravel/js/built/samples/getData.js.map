@@ -1,0 +1,1 @@
+{"version":3,"file":"getData.js","sourceRoot":"","sources":["../../../resources/js/samples/getData.ts"],"names":[],"mappings":"AAKA,wDAAwD;AACxD,MAAM,UAAU,OAAO;IACrB,OAAO;QACL,EAAE,EAAE,EAAE,CAAC,EAAE,KAAK,EAAE,qBAAqB,EAAE;QACvC,EAAE,EAAE,EAAE,CAAC,EAAE,KAAK,EAAE,mBAAmB,EAAE;QACrC,EAAE,EAAE,EAAE,CAAC,EAAE,KAAK,EAAE,mBAAmB,EAAE;KACtC,CAAC;AACJ,CAAC"}

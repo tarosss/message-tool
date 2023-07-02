@@ -4,7 +4,7 @@ import { io } from "socket.io-client";
 export const state = reactive({
   connected: false,
   fooEvents: [],
-  barEvents: []
+  barEvents: [],
 });
 
 // "undefined" means the URL will be computed from the `window.location` object
@@ -13,8 +13,8 @@ const URL = process.env.NODE_ENV === "production" ? undefined : "http://localhos
 const socket = io("http://localhost:3000");
 
 socket.on("connects", () => {
-    console.log("connectedss");
-    
+  console.log("connectedss");
+
   state.connected = true;
 });
 
@@ -31,8 +31,7 @@ socket.on("bar", (...args) => {
 });
 
 socket.on("hello2", (str: string) => {
-    console.log(str);
-    
-})
+  console.log(str);
+});
 
-export default socket
+export default socket;

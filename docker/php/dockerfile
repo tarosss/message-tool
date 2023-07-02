@@ -26,4 +26,4 @@ RUN apt-get update && \
 
 EXPOSE 5173
 EXPOSE 3000
-WORKDIR /var/www/html
+WORKDIR /var/www/html/laravel
