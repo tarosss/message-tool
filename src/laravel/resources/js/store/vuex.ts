@@ -1,22 +1,22 @@
-import {createStore} from 'vuex'
+import { createStore } from "vuex";
 
 export const useStores = createStore({
-    state() {
-        return { 
-            name: '原神',
-            version: '2.6',
-            gacha: 0,
-        }
+  state() {
+    return {
+      name: "原神",
+      version: "2.6",
+      gacha: 0,
+    };
+  },
+  mutations: {
+    addOne(state) {
+      state.gacha++;
     },
-    mutations: {
-        addOne(state) {
-            state.gacha++
-        },
-        addTen(state, num) {
-            state.gacha += num
-        },
-        setName(state, name) {
-            state.name = name
-        }
-    }
-})
+    addTen(state, num) {
+      state.gacha += num;
+    },
+    setName(state, name) {
+      state.name = name;
+    },
+  },
+});

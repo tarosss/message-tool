@@ -23,5 +23,7 @@ RUN apt-get update && \
     && pecl install mongodb \
     && docker-php-ext-enable mongodb
 
+
 EXPOSE 5173
-WORKDIR /var/www/html
+EXPOSE 3000
+WORKDIR /var/www/html/laravel

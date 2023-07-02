@@ -10,6 +10,7 @@ services:
       dockerfile: Dockerfile
     ports:
       - ${VITE_PORT}:5173
+      - ${SOCKET_PORT}:3000
     volumes:
       - ./src/:/var/www/html
     environment:
@@ -20,7 +21,7 @@ services:
       - DB_USERNAME=${MONGO_EXPRESS_USER}
       - DB_PASSWORD=${MONGO_EXPRESS_PASSWORD}
       - "TZ=Asia/Tokyo"
-
+    
   web:
     build:
       context: ./docker/nginx
@@ -32,7 +33,6 @@ services:
       - app
     volumes:
       - ./src/:/var/www/html
-
   mongo:
     build:
       context: ./docker/mongo
@@ -57,6 +57,26 @@ services:
       ME_CONFIG_MONGODB_SERVER: ${MONGO_EXPRESS_SERVER}
     depends_on:
       - mongo
+  redis:
+    build: 
+      context: ./docker/redis
+      dockerfile: Dockerfile
+    ports:
+      - 6379:6379
+    volumes:
+      - ./data/redis:/data
+
+  laravel-echo-server:
+    build: 
+      context: ./docker/laravel-echo-server
+      dockerfile: Dockerfile
+    volumes:
+      - type: bind
+        source: ./src
+        target: /work
+    ports:
+      - 6001:6001
+      - 6002:6002
     # build:
     #   context: ./docker/mysql
     #   dockerfile: Dockerfile

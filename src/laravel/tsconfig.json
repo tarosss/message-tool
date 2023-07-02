@@ -1,12 +1,13 @@
 {
     "compilerOptions": {
         "jsx": "preserve",
-        "outDir": "./built/",
+        "rootDir": "./resources/js/",
+        "outDir": "./resources/built",
         "sourceMap": true,
         "strict": true,
         "noImplicitReturns": true,
         "noImplicitAny": true,
-        "module": "es2015",
+        "module": "es2022",
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "moduleResolution": "node",
@@ -18,5 +19,9 @@
     },
     "include": [
         "resources/js/**/*" 
-    ]
+    ],
+    "ts-node": {
+        "esm": true,
+        "experimentalSpecifierResolution": "node"
+    }
   }
