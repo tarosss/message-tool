@@ -1,27 +1,23 @@
 {
-    "compilerOptions": {
-        "jsx": "preserve",
-        "rootDir": "./resources/js/",
-        "outDir": "./resources/built",
-        "sourceMap": true,
-        "strict": true,
-        "noImplicitReturns": true,
-        "noImplicitAny": true,
-        "module": "es2022",
-        "experimentalDecorators": true,
-        "emitDecoratorMetadata": true,
-        "moduleResolution": "node",
-        "target": "es6",
-        "lib": [
-            "es2016",
-            "dom"
-        ]
-    },
-    "include": [
-        "resources/js/**/*",
-    ],
-    "ts-node": {
-        "esm": true,
-        "experimentalSpecifierResolution": "node"
-    }
+  "compilerOptions": {
+    "jsx": "preserve",
+    "rootDir": "./resources/js/",
+    "outDir": "./resources/built",
+    "sourceMap": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "noImplicitAny": true,
+    "module": "es2022",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "moduleResolution": "node",
+    "target": "es6",
+    "lib": ["ES2023", "dom"],
+    
+  },
+  "include": ["resources/js/**/*"],
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
   }
+}
