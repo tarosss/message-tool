@@ -1,6 +1,5 @@
 <template>
-  Message
-
+  
   <!-- <button @click="clicked"></button> -->
 </template>
 
@@ -10,8 +9,5 @@ import { computed, onMounted } from 'vue'
 
 // const connected = computed(() => socket.connected)
 onMounted(() => {})
-// const clicked = () => {
-//     socket.emit("message", 'こんにてゃ')
-// }
+
 </script>
-./socketio/socket

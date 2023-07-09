@@ -1,10 +1,11 @@
 <template>
-  <router-link to="/">Home</router-link>
-  <router-link to="/about">Edit</router-link>
-  <router-view />
-</template>
+  <Header></Header>
 
+  <router-link to="/"></router-link>
+  <!-- <router-link to="/about"></router-link> -->
+</template>
 <script setup lang="ts">
+import Header from './components/Header.vue'
 // import { defineProps } from 'vue';
 // props = defineProps
 
