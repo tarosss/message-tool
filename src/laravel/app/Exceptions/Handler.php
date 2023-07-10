@@ -55,7 +55,7 @@ class Handler extends ExceptionHandler
         $this->renderable(function (\Exception $e) {
             return response()->json([
                 'error' => true,
-                'message' => 'Internal server error'
+                'message' => $e->getMessage()
             ], 500);
         });
 
@@ -65,7 +65,7 @@ class Handler extends ExceptionHandler
                 'error' => true,
                 'message' => 'internal server_error'
             ], 500);
-            return true;
+            // return true;
         });
     }
 }

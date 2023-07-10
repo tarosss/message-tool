@@ -13,7 +13,10 @@
     "moduleResolution": "node",
     "target": "es6",
     "lib": ["ES2023", "dom"],
-    
+    "baseUrl": ".",
+    "paths": {
+      "@": ["./resources/js/"],
+    }
   },
   "include": ["resources/js/**/*"],
   "ts-node": {

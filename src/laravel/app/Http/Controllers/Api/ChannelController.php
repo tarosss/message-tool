@@ -62,9 +62,23 @@ class ChannelController extends \App\Http\Controllers\Controller
      * @param  \App\Models\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function show(Todo $todo)
+    public function show(Request $request, MessageToolRepositoryInterface $messageToolRepository)
     {
-        //
+        Log::info("message");
+        try {
+            $channels = $messageToolRepository->getChannels([]);
+
+            Log::info($channels);
+            return response()->json([
+                'error' => false,
+                'channels' => $channels
+            ], Response::HTTP_OK);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**

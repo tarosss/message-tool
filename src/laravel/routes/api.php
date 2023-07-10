@@ -22,8 +22,19 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/reaction', '\App\Http\Controllers\Api\ReactionController@store');
         Route::post('/reaction-kind', '\App\Http\Controllers\Api\ReactionKindController@store');
     });
+
+    Route::group(['prefix' => 'show', 'middleware' => ['abilities:collection:show']], function () {
+        Route::get('/user', '\App\Http\Controllers\Api\MemberController@store');
+        Route::get('/message', '\App\Http\Controllers\Api\MessageController@store');
+        Route::get('/channel', '\App\Http\Controllers\Api\ChannelController@show');
+        Route::get('/reaction', '\App\Http\Controllers\Api\ReactionController@store');
+        Route::get('/reaction-kind', '\App\Http\Controllers\Api\ReactionKindController@store');
+    });
+    
+    
     Route::post('/post', '\App\Http\Controllers\Api\@index');
 });
+Route::get('/channel', '\App\Http\Controllers\Api\ChannelController@show');
 
 Route::group(['prefix' => 'tokens'], function () {
     Route::post('/create', '\App\Http\Controllers\Api\TokenController@create');
