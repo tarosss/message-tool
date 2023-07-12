@@ -19,9 +19,6 @@ onBeforeMount(()=> {
       .then(jsonText => JSON.parse(jsonText as string))
       .then(json => {
         useChannels().setChannels(json.channels)
-        // const s = storeToRefs(channels)
-        
-        // channels.setChannels(v[0])
       })
   ])
 
