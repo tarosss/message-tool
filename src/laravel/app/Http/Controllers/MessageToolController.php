@@ -7,10 +7,12 @@ use App\Interfaces\Repositories\MessageToolRepositoryInterface;
 use Log;
 class MessageToolController extends Controller
 {
-    public function index(MessageToolRepositoryInterface $messageToolRepository)
+    public function index(Request $request, MessageToolRepositoryInterface $messageToolRepository)
     {
         // $data = $messageToolRepository->getAllMessages();
         // Log::info($data);
-        return view("sample");
+        
+        $userId = session()->get('user_id');
+        return view("sample", compact('userId'));
     }
 }

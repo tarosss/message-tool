@@ -11,16 +11,29 @@ import { storeToRefs } from 'pinia';
 import Header from './components/Header.vue'
 import Body from './components/Body.vue'
 import { useChannels } from './store/channels';
+import { useMessages } from './store/messages';
+
+const props = defineProps<{
+  userId: string,
+}>()
+
 onBeforeMount(()=> {
 
   const promise = Promise.all([
-    useFetch('/api/channel', { method: 'GET' })
+    useFetch('/api/channel').post({})
       .then(res => res.data.value)
       .then(jsonText => JSON.parse(jsonText as string))
       .then(json => {
         useChannels().setChannels(json.channels)
+      }),
+    useFetch('api/message').post({userId: props.userId})
+      .then(res => res.data.value)
+      .then(jsonText => JSON.parse(jsonText as string))
+      .then(json => {
+        useMessages().setMessages(json.messages)
       })
   ])
+
 
   // promise.then(v => {
   //   const channels = useChannels()

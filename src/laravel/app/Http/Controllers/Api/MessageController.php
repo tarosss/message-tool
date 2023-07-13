@@ -103,9 +103,24 @@ class MessageController extends \App\Http\Controllers\Controller
      * @param  \App\Models\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function show(Todo $todo)
+    public function show(Request $request, MessageToolRepositoryInterface $messageToolRepository)
     {
         //
+        try {
+            $messages = $messageToolRepository->getMessages([
+                'user_id' => $request->input('userId'),
+            ]);
+
+            return response()->json([
+                'error' => false,
+                'messages' => $messages,
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**

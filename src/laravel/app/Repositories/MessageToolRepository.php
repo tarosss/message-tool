@@ -47,6 +47,23 @@ class MessageToolRepository implements MessageToolRepositoryInterface
         Member::insert($data);
     }
 
+    public function getMessage()
+    {
+
+    }
+
+    public function getMessages(array $wheres)
+    {
+        $data = Message::select('*');
+
+        if (isset($wheres['user_id'])) {
+            $data->where('user_id');
+        }
+
+        $data->orderBy('created_at');
+        return $data->count() ? $data->get()->toArray() : [];
+    }
+
     public function createMessage($data): Message
     {
         return Message::create($data);

@@ -11,7 +11,7 @@
     <div class="wrapper">
         <div id="app">
             <!-- @yield('App') -->
-            <route></route>
+            <route :user-id="'{{$userId}}'"></route>
         </div>
         <div class="modals">
             <div class="sub-modals"></div>
