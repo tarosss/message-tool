@@ -1,4 +1,6 @@
 .left-nav{
+    height: inherit;
+    color: rgb(197, 197, 197);
     background-color: rgb(66, 65, 65);
     &-top {
         display: grid;
@@ -38,11 +40,21 @@
 
     }
 
+    &-direct {
+
+    }
+
     &-row {
         display: grid;
         grid-template-columns: 20px 1fr;
+        border-radius: 5px;
         &:hover{
             opacity: 0.5;
         }
+        &-showing {
+            background-color: #1164A3;
+            opacity: 1 !important;
+        }
     }
+
 }

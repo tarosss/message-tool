@@ -1,12 +1,13 @@
 body {
   width: 100%;
-  height: 44px;
+  height: 100vh;
   margin-top: 0;
 
 }
 
 .wrapper {
   width: 100%;
+  height: inherit;
 }
 
 p {
@@ -25,6 +26,10 @@ p {
   display: none;
 }
 
+#app {
+  width: inherit;
+  height: inherit;
+}
 @for $i from 1 to 200 {
   .font-#{$i} { font-size:  #{$i}px};
   .margin-#{$i} { margin: #{$i}px}

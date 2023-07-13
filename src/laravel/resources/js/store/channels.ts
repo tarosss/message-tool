@@ -18,9 +18,11 @@ export const useChannels = defineStore('channels', () => {
   const channels: Ref<Channel[]> = ref([])
 
   const setChannels = (newChannels: Channel[]) => {
-    console.log(newChannels)
     channels.value = newChannels
   }
 
-  return { channels: computed(() => channels.value), setChannels }
+  return {
+    channels: computed(() => channels.value),
+    setChannels,
+  }
 })
