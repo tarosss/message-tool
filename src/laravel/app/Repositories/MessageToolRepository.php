@@ -57,7 +57,7 @@ class MessageToolRepository implements MessageToolRepositoryInterface
         $data = Message::select('*');
 
         if (isset($wheres['user_id'])) {
-            $data->where('user_id');
+            $data->where('user_id', $wheres['user_id']);
         }
 
         $data->orderBy('created_at');

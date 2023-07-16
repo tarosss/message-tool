@@ -26,11 +26,15 @@ onBeforeMount(()=> {
       .then(json => {
         useChannels().setChannels(json.channels)
       }),
-    useFetch('api/message').post({userId: props.userId})
+    useFetch('api/message').post({
+      userId: props.userId, 
+      by: 'user_id', 
+      messageKey: '_id',
+    })
       .then(res => res.data.value)
       .then(jsonText => JSON.parse(jsonText as string))
       .then(json => {
-        useMessages().setMessages(json.messages)
+        useMessages().setMessagesByChannelId(json.messages)
       })
   ])
 

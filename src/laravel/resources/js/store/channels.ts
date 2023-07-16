@@ -1,28 +1,23 @@
-import { computed, ref, unref, Ref, onBeforeMount } from 'vue'
-import { useFetch } from '@vueuse/core'
-import { isString } from '../common/assertions'
+import { computed, ref, Ref } from 'vue'
 import { defineStore } from 'pinia'
-
-type Response = {
-  error: boolean,
-  channel_type: number,
-  channels: Channel[]
-}
-type Channel = {
-  _id: string,
-  channel_type: number,
-  channel_name: string,
+type Channels = {
+  [key in string]: Channel
 }
 
 export const useChannels = defineStore('channels', () => {
-  const channels: Ref<Channel[]> = ref([])
+  const channels: Ref<Channels[]> = ref([])
 
-  const setChannels = (newChannels: Channel[]) => {
+  const setChannels = (newChannels: Channels[]) => {
     channels.value = newChannels
+  }
+
+  const setChannel = (newChannel: Channel) => {
+    channels.value[newChannel._id] = newChannel
   }
 
   return {
     channels: computed(() => channels.value),
     setChannels,
+    setChannel,
   }
 })

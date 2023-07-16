@@ -23,6 +23,8 @@ module.exports = {
     '@typescript-eslint/semi': ['warn', 'never'],
     indent: 'warn',
     'object-curly-newline': 'warn',
-    'import/prefer-default-export': 'off'
+    'import/prefer-default-export': 'off',
+    'no-underscore-dangle': 'off',
+    'no-restricted-syntax': 'off'
   },
 }

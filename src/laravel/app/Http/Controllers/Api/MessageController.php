@@ -51,6 +51,7 @@ class MessageController extends \App\Http\Controllers\Controller
             $now = Date::getNow();
 
             $insertFiles = [];
+            Log::info($request->file());
             foreach($request['data'] as $data) {
                 $insertedMessage = $messageToolRepository->createMessage([
                     'message' => $data['message'],
@@ -59,7 +60,7 @@ class MessageController extends \App\Http\Controllers\Controller
                     'sended' => $data['sended']
                 ]);
 
-                foreach($data['files'] as $file) {
+                foreach($data['files'] ?? [] as $file) {
                     $fileName = (function () use ($file) {
                         $fileName = StringUtils::getRandomString(30);
                         $extention = MimeType::getExtentionFromMimeType($file->getMimeType());
@@ -107,9 +108,18 @@ class MessageController extends \App\Http\Controllers\Controller
     {
         //
         try {
+            Log::info($request->input('userId'));
             $messages = $messageToolRepository->getMessages([
                 'user_id' => $request->input('userId'),
             ]);
+
+            if ($request->has('by')) {
+                $messages = \App\Facades\ArrayUtils::commonKey(
+                    $messages, 
+                    $request->input('by'),
+                    $request->has('messageKey') ? $request->input('messageKey') : null
+                );
+            }
 
             return response()->json([
                 'error' => false,

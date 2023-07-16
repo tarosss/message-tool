@@ -64,11 +64,10 @@ class ChannelController extends \App\Http\Controllers\Controller
      */
     public function show(Request $request, MessageToolRepositoryInterface $messageToolRepository)
     {
-        Log::info("message");
         try {
             $channels = $messageToolRepository->getChannels([]);
 
-            Log::info($channels);
+            $channels = array_column($channels, null, '_id');
             return response()->json([
                 'error' => false,
                 'channels' => $channels

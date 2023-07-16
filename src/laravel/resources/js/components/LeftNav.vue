@@ -23,7 +23,7 @@
                 :title="'チャンネル'" 
                 @click="selectedDetail = 'channel'"></LeftNavTitleRow>
             <LeftNavRow 
-                v-for="channel in storeChannels.channels.value" 
+                v-for="channel in refChannels.channels.value" 
                 :key="'chanel' + channel._id" 
                 :_id="channel._id"
                 :title="channel.channel_name">
@@ -42,7 +42,7 @@
                 @click="selectedDetail = 'direct'"></LeftNavTitleRow>
             <!-- FIXME -->
             <LeftNavRow 
-                v-for="channel in storeChannels.channels.value" 
+                v-for="channel in refChannels.channels.value" 
                 :key="'chanel' + channel._id" 
                 :_id="channel._id"
                 :title="channel.channel_name">
@@ -57,12 +57,13 @@ import LeftNavTitleRow from './LeftNavTitleRow.vue';
 import LeftNavRow from './LeftNavRow.vue';
 import { useChannels } from '../store/channels';
 import { useShowing } from '../store/showing';
-
+import { useMessages } from '../store/messages';
 
 const workspaceName = 'ワークスペースめい'
-const storeChannels = storeToRefs(useChannels())
+const refChannels = storeToRefs(useChannels())
 const showing = storeToRefs(useShowing())
-
 const selectedDetail = ref('')
+
+// useMessages().set('mvaklmkl')
 
 </script>

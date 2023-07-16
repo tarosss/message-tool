@@ -41,6 +41,7 @@
   },
   "dependencies": {
     "@vueuse/core": "^10.2.1",
+    "date-fns": "^2.30.0",
     "laravel-echo": "^1.15.1",
     "pinia": "^2.1.4",
     "socket.io": "^4.7.1",

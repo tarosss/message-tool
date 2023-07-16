@@ -1,26 +1,19 @@
-import { computed, ref, unref, Ref, onBeforeMount } from 'vue'
-import { useFetch } from '@vueuse/core'
-import { isString } from '../common/assertions'
-import { defineStore } from 'pinia'
+import { computed, ref, Ref } from 'vue'
 
-type Message = {
-  _id: string,
-  message: string,
-  storage: string,
-  userId: string,
-  createdAt: string,
-  updatedAt: string,
-}
+export const useMessages = () => {
+  const messages: Ref<Message[]> = ref([])
 
-export const useChannels = defineStore('messages', () => {
-  const channels: Ref<Message[]> = ref([])
+  const setMessages = (newMessages: Message[]) => {
+    messages.value = newMessages
+  }
 
-  const setChannels = (newChannels: Message[]) => {
-    channels.value = newChannels
+  const pushMessage = (newMessage: Message) => {
+    messages.value.push(newMessage)
   }
 
   return {
-    channels: computed(() => channels.value),
-    setChannels,
+    messages: computed(() => messages.value),
+    setMessages,
+    pushMessage,
   }
-})
+}
