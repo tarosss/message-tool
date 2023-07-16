@@ -1,10 +1,6 @@
 import { computed, ref, Ref } from 'vue'
 import { defineStore } from 'pinia'
-import { useMessages as messages } from '../composables/useMessages'
-
-// type MessagesByChannelId = {
-//   [key in string]: Message[]
-// }
+import { useMessages as composableUseMessage } from '../composables/useMessages'
 
 type PostData = {
   [channelId in string]: PostedMessage
@@ -14,36 +10,30 @@ type PostedMessage = {
   [messageId in string]: Message
 }
 
-export const useMessages = defineStore('messages', () => {
-  const messagesByChannelId = ref(new Map<string, Map<string, Message>>())
+type TypeReturnComposableUseMessage = ReturnType<typeof composableUseMessage>
 
+export const useMessages = defineStore('messages', () => {
+  // eslint-disable-next-line max-len
+  const messagesByChannelId: Ref<Map<string, TypeReturnComposableUseMessage>> = ref(new Map<string, TypeReturnComposableUseMessage>())
   /**
    * すでにchannel_id別になっているものをいれる
    * 新規のMaoを作成する
    */
   // eslint-disable-next-line max-len
   const setMessagesByChannelId = (newMessagesByChannelId: PostData) => {
-    const tempMap = new Map<string, Map<string, Message>>()
+    const tempMap = new Map<string, TypeReturnComposableUseMessage>()
     for (const [channelId, messageByMessageId] of Object.entries(newMessagesByChannelId)) {
-      tempMap.set(channelId, new Map(Object.entries(messageByMessageId)))
+      const composableMessage = composableUseMessage()
+      composableMessage.setMessages(messageByMessageId)
+      tempMap.set(channelId, composableMessage)
     }
     messagesByChannelId.value = tempMap
-    // console.log(messagesByChannelId.value.get('649c0ca38a43f8c5c28b5318'))
-    console.log(messagesByChannelId.value.get('649c0ca38a43f8c5c28b5318')?.get("64b137936b34f084340acf12")?._id)
   }
 
   /**
-   * 既存のチャンネルとダイレクトメッセージにメッセージを追加する
+   * チャンネルに関係なく全てのメッセージを返す
    */
-  const pushMessage = (
-    { channelId, newMessage }:{ channelId: string, newMessage: Message },
-  ) => {
-    messagesByChannelId.value.get(channelId)?.push(newMessage)
-  }
-
-  const deleteMessage = (
-    {}:{}
-  ) => {
+  const getAllMessages = () => {
 
   }
 
@@ -51,38 +41,29 @@ export const useMessages = defineStore('messages', () => {
    * 新しいチャンネル、ダイレクトメッセージが追加されたらキーを追加する
    */
   const pushChannel = (
-    { newChannelId, newMessages = [] }:{ newChannelId: string, newMessages: Message[] },
+    { newChannelKey, newMessages = {} }:{ newChannelKey: string, newMessages: MapMessage },
   ) => {
-    messagesByChannelId.value.set(newChannelId, newMessages)
+    const newComposableMessage = composableUseMessage()
+    newComposableMessage.setMessages(newMessages)
+    messagesByChannelId.value.set(newChannelKey, newComposableMessage)
+  }
+
+  /**
+   * 既存のチャンネルとダイレクトメッセージにメッセージを追加する
+   */
+  const pushMessage = (
+    { channelKey, messageKey = undefined, newMessage }
+    :{ channelKey: string, messageKey: string | undefined, newMessage: Message },
+  ) => {
+    messagesByChannelId.value
+      .get(channelKey)?.pushMessage({ newMessage, key: messageKey ?? newMessage._id })
   }
 
   return {
-    messagesByChannelId: computed(() => messagesByChannelId.value),
+    messages: computed((key: string) => messagesByChannelId.value.get(key)),
     setMessagesByChannelId,
+    getAllMessages,
     pushChannel,
     pushMessage,
   }
 })
-
-// export const useMessages = defineStore('messages', () => {
-//   const messagesByChannelId: Ref<MessagesByChannelId[]> = ref([])
-
-//   const setMessagesByChannelId = (newMessagesByChannelId: MessagesByChannelId[]) => {
-//     messagesByChannelId.value = newMessagesByChannelId
-//   }
-
-//   const setMessages = (channelId: string, newMessages: Message[]) => {
-//     messagesByChannelId.value[channelId] = newMessages
-//   }
-
-//   const setMessage = (channelId: string, newMessage: Message) => {
-//     (messagesByChannelId.value[channelId] as Message[]).push(newMessage)
-//   }
-
-//   return {
-//     messagesByChannelId: computed(() => messagesByChannelId.value),
-//     setMessagesByChannelId,
-//     setMessages,
-//     setMessage,
-//   }
-// })
