@@ -12,7 +12,6 @@ import Header from './components/Header.vue'
 import Body from './components/Body.vue'
 import { useChannels } from './store/channels';
 import { useMessages } from './store/messages';
-
 const props = defineProps<{
   userId: string,
 }>()
@@ -34,7 +33,9 @@ onBeforeMount(()=> {
       .then(res => res.data.value)
       .then(jsonText => JSON.parse(jsonText as string))
       .then(json => {
-        useMessages().setMessagesByChannelId(json.messages)
+        for (const [channelId, messageByMessageId] of Object.entries(json.messages as FetchMessage)) {
+          useMessages('message-' + channelId).setMessages(messageByMessageId)
+        }
       })
   ])
 
@@ -61,3 +62,4 @@ onBeforeMount(()=> {
 // }>()
 // console.log(props.data);
 </script>
+./store/messages

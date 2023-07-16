@@ -5,3 +5,9 @@ declare type MapMessage = {
 declare type MapChannel = {
   [channelId in string]: Channel
 }
+
+declare type FetchMessage = {
+  [channelId in string] : {
+    [messageId in string] :Message
+  }
+}
