@@ -1,7 +1,8 @@
-import { computed, ref, Ref } from 'vue'
+import { computed, isReactive, ref, Ref, watchEffect } from 'vue'
 
 export const useMessages = () => {
   const messages: Ref<Map<string, Message>> = ref(new Map<string, Message>())
+  console.log('isrecvnaknvjknasvnss', isReactive(messages.value))
 
   /**
    * 連想配列からMapを生成する
@@ -16,10 +17,15 @@ export const useMessages = () => {
     messages.value.set(key ?? newMessage._id, newMessage)
   }
 
+  const add = () => {
+    messages.value.set('aaa', {_id: "ac", message:"", createdAt:'', updatedAt:'', storage: 1, })
+  }
+
   return {
     messages: computed(() => messages.value),
     setMessages,
     pushMessage,
+    add,
   }
 }
 // export const useMessages = () => {

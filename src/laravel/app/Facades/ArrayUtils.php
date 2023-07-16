@@ -26,9 +26,6 @@ class ArrayUtils
             }
         }
 
-
-        Log::info('jvak');
-        Log::info($temp);
         return $temp;
     }
 }

@@ -28,7 +28,7 @@ onBeforeMount(()=> {
       }),
     useFetch('api/message').post({
       userId: props.userId, 
-      by: 'user_id', 
+      by: 'channel_id', 
       messageKey: '_id',
     })
       .then(res => res.data.value)

@@ -1,23 +1,27 @@
 import { computed, ref, Ref } from 'vue'
 import { defineStore } from 'pinia'
-type Channels = {
-  [key in string]: Channel
-}
 
 export const useChannels = defineStore('channels', () => {
-  const channels: Ref<Channels[]> = ref([])
+  const channels: Ref<Map<string, Channel>> = ref(new Map<string, Channel>())
 
-  const setChannels = (newChannels: Channels[]) => {
-    channels.value = newChannels
+  const getChannel = (key: string) => channels.value.get(key) as Channel
+
+  /**
+   * 新しいMapを生成する
+   */
+  const setChannels = (channelObjects: MapChannel) => {
+    channels.value = new Map(Object.entries(channelObjects))
   }
 
-  const setChannel = (newChannel: Channel) => {
-    channels.value[newChannel._id] = newChannel
+  const pushChannel = ({ newChannel, key = undefined }: { newChannel: Channel, key?: string }) => {
+    channels.value.set(key ?? newChannel._id, newChannel)
   }
 
   return {
     channels: computed(() => channels.value),
+    channelIds: computed(() => channels.value.keys()),
+    getChannel,
     setChannels,
-    setChannel,
+    pushChannel,
   }
 })

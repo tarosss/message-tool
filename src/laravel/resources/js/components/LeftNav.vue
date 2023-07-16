@@ -23,7 +23,7 @@
                 :title="'チャンネル'" 
                 @click="selectedDetail = 'channel'"></LeftNavTitleRow>
             <LeftNavRow 
-                v-for="channel in refChannels.channels.value" 
+                v-for="[chanelKey, channel] in refChannels.channels.value" 
                 :key="'chanel' + channel._id" 
                 :_id="channel._id"
                 :title="channel.channel_name">
@@ -41,12 +41,7 @@
                 :title="'ダイレクトメッセージ'" 
                 @click="selectedDetail = 'direct'"></LeftNavTitleRow>
             <!-- FIXME -->
-            <LeftNavRow 
-                v-for="channel in refChannels.channels.value" 
-                :key="'chanel' + channel._id" 
-                :_id="channel._id"
-                :title="channel.channel_name">
-            </LeftNavRow>
+
         </div>
     </div>
 </template>
@@ -61,7 +56,7 @@ import { useMessages } from '../store/messages';
 
 const workspaceName = 'ワークスペースめい'
 const refChannels = storeToRefs(useChannels())
-const showing = storeToRefs(useShowing())
+const refShowing = storeToRefs(useShowing())
 const selectedDetail = ref('')
 
 // useMessages().set('mvaklmkl')

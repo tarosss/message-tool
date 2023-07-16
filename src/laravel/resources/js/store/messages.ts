@@ -1,4 +1,4 @@
-import { computed, ref, Ref } from 'vue'
+import { computed, isReactive, ref, Ref, watchEffect } from 'vue'
 import { defineStore } from 'pinia'
 import { useMessages as composableUseMessage } from '../composables/useMessages'
 
@@ -15,6 +15,9 @@ type TypeReturnComposableUseMessage = ReturnType<typeof composableUseMessage>
 export const useMessages = defineStore('messages', () => {
   // eslint-disable-next-line max-len
   const messagesByChannelId: Ref<Map<string, TypeReturnComposableUseMessage>> = ref(new Map<string, TypeReturnComposableUseMessage>())
+
+  const getMessages = (key: string) => messagesByChannelId.value.get(key)
+
   /**
    * すでにchannel_id別になっているものをいれる
    * 新規のMaoを作成する
@@ -41,7 +44,7 @@ export const useMessages = defineStore('messages', () => {
    * 新しいチャンネル、ダイレクトメッセージが追加されたらキーを追加する
    */
   const pushChannel = (
-    { newChannelKey, newMessages = {} }:{ newChannelKey: string, newMessages: MapMessage },
+    { newChannelKey, newMessages = {} }:{ newChannelKey: string, newMessages?: MapMessage },
   ) => {
     const newComposableMessage = composableUseMessage()
     newComposableMessage.setMessages(newMessages)
@@ -59,11 +62,18 @@ export const useMessages = defineStore('messages', () => {
       .get(channelKey)?.pushMessage({ newMessage, key: messageKey ?? newMessage._id })
   }
 
+  watchEffect(() => {
+    console.log('store')
+    console.log(messagesByChannelId.value)
+    // messagesByChannelId.value.get('649c101eb13442cd850140e4')?.pushMessage({_id: "ac", message:"", createdAt:'', updatedAt:'', storage: 1, })
+  })
   return {
-    messages: computed((key: string) => messagesByChannelId.value.get(key)),
+    messages: computed(() => messagesByChannelId.value),
+    getMessages,
     setMessagesByChannelId,
     getAllMessages,
     pushChannel,
     pushMessage,
+    add: (key: string) => { messagesByChannelId.value.get(key)?.add() },
   }
 })

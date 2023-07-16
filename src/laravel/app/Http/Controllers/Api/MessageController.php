@@ -51,7 +51,6 @@ class MessageController extends \App\Http\Controllers\Controller
             $now = Date::getNow();
 
             $insertFiles = [];
-            Log::info($request->file());
             foreach($request['data'] as $data) {
                 $insertedMessage = $messageToolRepository->createMessage([
                     'message' => $data['message'],
@@ -80,7 +79,6 @@ class MessageController extends \App\Http\Controllers\Controller
 
 
             // ファイルの保存
-            Log::info('in controller');
             broadcast(new \App\Events\SampleEvent);
             // テキストベースのデータ   
             $messageToolRepository->createFiles($insertFiles);
@@ -108,7 +106,6 @@ class MessageController extends \App\Http\Controllers\Controller
     {
         //
         try {
-            Log::info($request->input('userId'));
             $messages = $messageToolRepository->getMessages([
                 'user_id' => $request->input('userId'),
             ]);
