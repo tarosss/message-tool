@@ -59,7 +59,7 @@ class MessageController extends \App\Http\Controllers\Controller
                     'sended' => $data['sended']
                 ]);
 
-                foreach($data['files'] as $file) {
+                foreach($data['files'] ?? [] as $file) {
                     $fileName = (function () use ($file) {
                         $fileName = StringUtils::getRandomString(30);
                         $extention = MimeType::getExtentionFromMimeType($file->getMimeType());
@@ -79,7 +79,6 @@ class MessageController extends \App\Http\Controllers\Controller
 
 
             // ファイルの保存
-            Log::info('in controller');
             broadcast(new \App\Events\SampleEvent);
             // テキストベースのデータ   
             $messageToolRepository->createFiles($insertFiles);
@@ -103,9 +102,32 @@ class MessageController extends \App\Http\Controllers\Controller
      * @param  \App\Models\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function show(Todo $todo)
+    public function show(Request $request, MessageToolRepositoryInterface $messageToolRepository)
     {
         //
+        try {
+            $messages = $messageToolRepository->getMessages([
+                'user_id' => $request->input('userId'),
+            ]);
+
+            if ($request->has('by')) {
+                $messages = \App\Facades\ArrayUtils::commonKey(
+                    $messages, 
+                    $request->input('by'),
+                    $request->has('messageKey') ? $request->input('messageKey') : null
+                );
+            }
+
+            return response()->json([
+                'error' => false,
+                'messages' => $messages,
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**

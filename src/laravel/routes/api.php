@@ -22,8 +22,21 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/reaction', '\App\Http\Controllers\Api\ReactionController@store');
         Route::post('/reaction-kind', '\App\Http\Controllers\Api\ReactionKindController@store');
     });
+
+    Route::group(['prefix' => 'show', 'middleware' => ['abilities:collection:show']], function () {
+        Route::post('/user', '\App\Http\Controllers\Api\MemberController@store');
+        Route::post('/message', '\App\Http\Controllers\Api\MessageController@show');
+        Route::post('/channel', '\App\Http\Controllers\Api\ChannelController@show');
+        Route::post('/reaction', '\App\Http\Controllers\Api\ReactionController@store');
+        Route::post('/reaction-kind', '\App\Http\Controllers\Api\ReactionKindController@store');
+    });
+    
+    
     Route::post('/post', '\App\Http\Controllers\Api\@index');
 });
+// 一時的
+Route::post('/channel', '\App\Http\Controllers\Api\ChannelController@show');
+Route::post('/message', '\App\Http\Controllers\Api\MessageController@show');
 
 Route::group(['prefix' => 'tokens'], function () {
     Route::post('/create', '\App\Http\Controllers\Api\TokenController@create');

@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
-    @vite(['resources/js/app.ts', 'resources/scss/app.scss', 'resources/scss/header.scss'])
+    @vite(['resources/js/app.ts', 'resources/scss/app.scss', 'resources/scss/header.scss', 'resources/scss/left-nav.scss'])
 </head>
 <body>
     <div class="wrapper">
         <div id="app">
             <!-- @yield('App') -->
-            <route></route>
+            <route :user-id="'{{$userId}}'"></route>
         </div>
         <div class="modals">
             <div class="sub-modals"></div>

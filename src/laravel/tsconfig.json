@@ -13,11 +13,20 @@
     "moduleResolution": "node",
     "target": "es6",
     "lib": ["ES2023", "dom"],
-    
+    // "baseUrl": ".",
+    "paths": {
+      "@": ["./resources/js/"],
+      // "*": ["./resources/ls/@types/*"],
+    },
+    "typeRoots": [
+      "node_modules/@types/*",
+      // "./resources/js/@types/*"
+    ]
   },
   "include": ["resources/js/**/*"],
   "ts-node": {
     "esm": true,
-    "experimentalSpecifierResolution": "node"
+    "experimentalSpecifierResolution": "node",
+    "files": true,
   }
 }

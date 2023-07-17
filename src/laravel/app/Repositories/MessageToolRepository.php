@@ -10,6 +10,7 @@ use App\Models\ReactionKind;
 
 use App\Models\File;
 use App\Interfaces\Repositories\MessageToolRepositoryInterface;
+use Exception;
 
 class MessageToolRepository implements MessageToolRepositoryInterface
 {
@@ -46,6 +47,23 @@ class MessageToolRepository implements MessageToolRepositoryInterface
         Member::insert($data);
     }
 
+    public function getMessage()
+    {
+
+    }
+
+    public function getMessages(array $wheres)
+    {
+        $data = Message::select('*');
+
+        if (isset($wheres['user_id'])) {
+            $data->where('user_id', $wheres['user_id']);
+        }
+
+        $data->orderBy('created_at');
+        return $data->count() ? $data->get()->toArray() : [];
+    }
+
     public function createMessage($data): Message
     {
         return Message::create($data);
@@ -74,6 +92,17 @@ class MessageToolRepository implements MessageToolRepositoryInterface
     public function createChannels($data): void
     {
         Channel::insert($data);
+    }
+
+    public function getChannels($wheres): array
+    {
+        $channels = Channel::where($wheres);
+        
+        if ($channels->count() <= 0) {
+            throw new Exception();
+        }
+
+        return $channels->get()->toArray();
     }
 
     public function createReaction($data): Reaction

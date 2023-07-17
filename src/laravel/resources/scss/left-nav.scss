@@ -1,0 +1,60 @@
+.left-nav{
+    height: inherit;
+    color: rgb(197, 197, 197);
+    background-color: rgb(66, 65, 65);
+    &-top {
+        display: grid;
+        $height: 34px;
+        grid-template-columns: 1fr $height;
+        border-bottom: white solid 1px;
+        &-warkspace-name {
+            color: white;
+            position: relative;
+            &-detail {
+                position: absolute;
+            }
+        }
+        &-new-message {
+            background-color: gray;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            span {
+                width: $height;
+                height: $height;
+                line-height: $height;
+                display: inline-block;
+                border-radius: 5%;
+                text-align: center;
+            }
+
+            &-detail {
+
+            }
+        }
+    }
+
+    &-channels {
+
+    }
+
+    &-direct {
+
+    }
+
+    &-row {
+        display: grid;
+        grid-template-columns: 20px 1fr;
+        border-radius: 5px;
+        &:hover{
+            opacity: 0.5;
+        }
+        &-showing {
+            background-color: #1164A3;
+            opacity: 1 !important;
+        }
+    }
+
+}

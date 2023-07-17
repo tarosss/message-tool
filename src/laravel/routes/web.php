@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', 'App\Http\Controllers\MessageToolController@index');
+Route::get('/', 'App\Http\Controllers\MessageToolController@index')->middleware(['login']);
 Route::view('/sample', 'sample');
 
 Route::get('/mongo', 'App\Http\Controllers\SampleController@index');
