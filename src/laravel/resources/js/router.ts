@@ -1,14 +1,14 @@
 import { createRouter, createWebHistory, createWebHashHistory, RouteRecordRaw } from 'vue-router'
-import Message from './Message.vue'
+import Route from './Route.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
-    component: Message,
+    component: Route,
   },
   {
     path: '/about',
-    component: Message,
+    component: Route,
   },
 ]
 

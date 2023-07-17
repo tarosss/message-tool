@@ -1,4 +1,4 @@
-import { ref, computed ,watchEffect} from 'vue'
+import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 
 /**
@@ -6,17 +6,25 @@ import { defineStore } from 'pinia'
  */
 export const useShowing = defineStore('showing', () => {
   const showingId = ref('')
-  
+  const component = ref('')
   const setShowing = (newShowing: string) => {
     showingId.value = newShowing
+    switch (newShowing) {
+      case '':
+        component.value = 'nothing'
+        break
+      case 'message':
+        component.value = 'message'
+        break
+      default:
+        component.value = 'channel'
+        break
+    }
   }
-
-  watchEffect(() => {
-    console.log('showing id is ' + showingId.value)
-  })
 
   return {
     showing: computed(() => showingId.value),
+    component: computed(() => component.value),
     setShowing,
   }
 })

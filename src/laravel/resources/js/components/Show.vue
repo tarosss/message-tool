@@ -1,10 +1,11 @@
 <template>
     <div>
-        <ShowChannel 
-            v-for="[chanelKey] in refChannels.channels.value"
-            :channelId="chanelKey">
-            
+        <ShowChannel
+            v-if="refShowing.component.value === 'channel'"
+            :channelId="refShowing.showing.value"
+            >
         </ShowChannel>
+        <ShowNothing v-else="refShowing.component.value === ''"></ShowNothing>
     </div>
 </template>
 <script lang="ts" setup>
@@ -12,8 +13,12 @@ import { storeToRefs } from 'pinia';
 import { useChannels } from '../store/channels';
 import { useShowing } from '../store/showing';
 import ShowChannel from './ShowChannel.vue';
+import ShowNothing from './ShowNothing.vue'
+import essage from './Message.vue'
 import { computed, watchEffect } from 'vue';
 
-const refShowing = storeToRefs(useChannels())
+const refShowing = storeToRefs(useShowing())
 const refChannels = storeToRefs(useChannels())
-</script>../store/old-messages
+
+// sample[0] = ShowChannel
+</script>

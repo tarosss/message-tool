@@ -53,7 +53,7 @@ import LeftNavRow from './LeftNavRow.vue';
 import { useChannels } from '../store/channels';
 import { useShowing } from '../store/showing';
 import { useMessages } from '../store/messages';
-
+import router from '../router'
 const workspaceName = 'ワークスペースめい'
 const refChannels = storeToRefs(useChannels())
 const refShowing = storeToRefs(useShowing())
@@ -61,5 +61,7 @@ const selectedDetail = ref('')
 
 // useMessages().set('mvaklmkl')
 
+// const click = (path: string) => {
+//     router.push(path)
+// }
 </script>
-../store/old-messages
