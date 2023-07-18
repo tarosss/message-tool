@@ -1,0 +1,27 @@
+.body {
+    width: 100%;
+    background-color: #1d1c1d;
+    color: #fff;
+
+    &-channel {
+        > * {
+            padding-right: 20px;
+            padding-left: 20px;
+        }
+        &-header {
+            display: grid;
+            grid-template-columns: 1fr 100px;
+            &-right {
+                background-color: yellow;
+                &-members {
+                    &-icon {
+                        width: 20px;
+                        height: 20px;
+                        border-radius: 5px;
+                        border: 1px solid black;
+                    }
+                }
+            }
+        }
+    }
+}

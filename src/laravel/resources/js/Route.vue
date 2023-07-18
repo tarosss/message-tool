@@ -1,6 +1,6 @@
 <template>
   <Header></Header>
-  <Body></Body>
+  <Body :loging-user-id="props.logingUserId"></Body>
   <router-link to="/"></router-link>
   <!-- <router-link to="/about"></router-link> -->
 </template>
@@ -10,15 +10,22 @@ import { useFetch } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
 import Header from './components/Header.vue'
 import Body from './components/Body.vue'
+import { useLoging } from './store/loging';
+import { useUsers } from './store/users';
 import { useChannels } from './store/channels';
 import { useMessages } from './store/messages';
 const props = defineProps<{
-  userId: string,
+ logingUserId: string,
 }>()
 
 onBeforeMount(()=> {
-
-  const promise = Promise.all([
+  Promise.all([
+    useFetch('/api/user').post({})
+      .then(res => res.data.value)
+      .then(jsonText => JSON.parse(jsonText as string))
+      .then(json => {
+        useUsers().setUsers(json.users)
+      }),
     useFetch('/api/channel').post({})
       .then(res => res.data.value)
       .then(jsonText => JSON.parse(jsonText as string))
@@ -26,7 +33,7 @@ onBeforeMount(()=> {
         useChannels().setChannels(json.channels)
       }),
     useFetch('api/message').post({
-      userId: props.userId, 
+      userId: props.logingUserId, 
       by: 'channel_id', 
       messageKey: '_id',
     })
@@ -38,14 +45,6 @@ onBeforeMount(()=> {
         }
       })
   ])
-
-
-  // promise.then(v => {
-  //   const channels = useChannels()
-  //   const s = storeToRefs(channels)
-    
-  //   channels.setChannels(v[0])
-  // })
 })
 // import { defineProps } from 'vue';
 // props = defineProps
@@ -62,4 +61,3 @@ onBeforeMount(()=> {
 // }>()
 // console.log(props.data);
 </script>
-./store/messages

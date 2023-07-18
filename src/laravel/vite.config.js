@@ -11,6 +11,8 @@ export default defineConfig({
         'resources/scss/app.scss',
         'resources/scss/header.scss',
         'resources/scss/left-name.scss',
+        'resources/scss/body.scss',
+
         'resources/js/header.ts',
       ],
       refresh: true,

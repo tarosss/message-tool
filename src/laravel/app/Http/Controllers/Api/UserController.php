@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use \App\Interfaces\Repositories\MessageToolRepositoryInterface;
 use \App\Interfaces\Repositories\UserRepositoryInterface;
+use Exception;
 use Illuminate\Http\Response;
-
+use Illuminate\Support\Facades\Log;
 
 class UserController extends \App\Http\Controllers\Controller
 {
@@ -59,9 +60,20 @@ class UserController extends \App\Http\Controllers\Controller
      * @param  \App\Models\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function show(Todo $todo)
+    public function show(Request $request, UserRepositoryInterface $userRepository)
     {
-        //
+        try {
+            $users = $userRepository->getUsers([]);
+            Log::info($users);
+            return response()->json([
+                'error' => false,
+                'users' => array_column($users, null, '_id'),
+            ], Response::HTTP_CREATED);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => true
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
 
     /**

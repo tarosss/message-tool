@@ -12,6 +12,13 @@ class UserRepository implements UserRepositoryInterface
         
     }
 
+    public function getUsers(array $wheres = [])
+    {
+        $data = User::select('*');
+
+        return $data->count() ? $data->get()->toArray() : [];
+    }
+
     public function getDataById($id, $toArray = true)
     {
         $user = User::userId($id)

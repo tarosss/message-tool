@@ -34,7 +34,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     
     Route::post('/post', '\App\Http\Controllers\Api\@index');
 });
+
 // 一時的
+Route::post('/user', '\App\Http\Controllers\Api\UserController@show');
 Route::post('/channel', '\App\Http\Controllers\Api\ChannelController@show');
 Route::post('/message', '\App\Http\Controllers\Api\MessageController@show');
 
