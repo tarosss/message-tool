@@ -12,6 +12,7 @@ export default defineConfig({
         'resources/scss/header.scss',
         'resources/scss/left-name.scss',
         'resources/scss/body.scss',
+        'resources/scss/channel.scss',
 
         'resources/js/header.ts',
       ],

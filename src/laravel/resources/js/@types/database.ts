@@ -9,9 +9,9 @@ declare type Message = {
   _id: string,
   message: string,
   storage: string,
-  userId: string,
-  createdAt: string,
-  updatedAt: string,
+  user_id: string,
+  created_at: string,
+  updated_at: string,
 }
 
 declare type Channel = {

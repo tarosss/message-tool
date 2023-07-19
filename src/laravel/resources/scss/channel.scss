@@ -1,0 +1,27 @@
+.body-channel {
+    &-message {
+        height: 64px;
+        display: grid;
+        grid-template-columns: 36px 1fr;
+        grid-gap: 10px;
+        align-items: center;
+        &-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 5px;
+            background-color: aqua;
+        }
+
+        &-content {
+            &-detail {
+                display: flex;
+                align-items: center;
+            }
+
+            &-text {
+
+            }
+        }
+
+    }
+}

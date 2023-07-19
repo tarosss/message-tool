@@ -15,4 +15,3 @@ export const setLoging = (userId: string) => {
 export const useLoging = defineStore('loging', () => {
 
 })
-
