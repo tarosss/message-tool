@@ -107,9 +107,9 @@ class MessageController extends \App\Http\Controllers\Controller
         //
         try {
             $messages = $messageToolRepository->getMessages([
-                'user_id' => $request->input('userId'),
+                // 'user_id' => $request->input('userId'),
             ]);
-
+            Log::info($messages);
             if ($request->has('by')) {
                 $messages = \App\Facades\ArrayUtils::commonKey(
                     $messages, 

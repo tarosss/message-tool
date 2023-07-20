@@ -1,10 +1,10 @@
 <template>
-  <div class="body-channel-message">
-    <p class="body-channel-message-icon">
+  <div class="message">
+    <p class="message-icon">
 
     </p>
-    <div class="body-channel-message-content">
-      <div class="body-channel-message-content-detail">
+    <div class="message-content">
+      <div class="message-content-detail">
         <p class="margin-right-10">
           {{ user.display_name }}
         </p>
@@ -13,7 +13,7 @@
         </p>
         
       </div>
-      <p class="body-channel-message-content-text">
+      <p class="message-content-text">
         {{ message.message }}
       </p>
     </div>

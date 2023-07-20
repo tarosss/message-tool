@@ -1,7 +1,7 @@
 <template>
     <div v-if="channel" class="body-channel padding-top-10">
         <div class="body-channel-header">
-            <p class="font-20">
+            <p class="font-16">
                # {{ channel.channel_name }}
             </p>
             <div class="body-channel-header-right">
@@ -10,12 +10,20 @@
                 </div>
             </div>
         </div>
-        <p>
-            {{ format(new Date(channel.created_at), 'yyyy年MM月dd日') }}、
-            {{ channelCreateUserDisplayName }} がこのチャンネルを作成しました。チャンネルをどんどん活用していきましょう！ 
-        </p>
-        <div v-for="[date, messageIds] of messages.messageIdsByDay">
-            <p> {{ specialFormat(date) }} </p>
+        <div class="margin-bottom-30">
+            <p class="font-20">
+                # {{ channel.channel_name }}
+            </p>
+            <p>
+                {{ specialFormat(channel.created_at) }}、
+                {{ channelCreateUserDisplayName }} がこのチャンネルを作成しました。チャンネルをどんどん活用していきましょう！ 
+            </p>
+        </div>
+        <div class="body-channel-messages-by-day"
+            v-for="[date, messageIds] of messages.messageIdsByDay">
+            <p class="body-channel-messages-by-day-date pointer"> 
+                {{ specialFormat(date, true) }} 
+            </p>
             <Message v-for="messageId of messageIds" :key="'message' + messageId"
                 :message="(messages.messages.get(messageId) as Message)">
             </Message>
@@ -29,6 +37,7 @@ import { useChannels } from '../store/channels';
 import { useMessages } from '../store/messages';
 import { useShowing } from '../store/showing';
 import { format, isThisYear } from 'date-fns'
+import { ja } from 'date-fns/locale';
 import { storeToRefs } from 'pinia';
 import Message from './Message.vue'
 const props = defineProps<{
@@ -50,11 +59,14 @@ const channelCreateUserDisplayName = computed(() => {
     return refUsers.users.value.get(props.logingUserId)?.display_name + 'さん'
 })
 
-const specialFormat = (date: string) => {
+const specialFormat = (date: string, includeDay: boolean = false) => {
     const tempDate = new Date(date)
-    const dateFormat = isThisYear(tempDate) ? 'MM月dd日' : 'yyyy年MM月dd日'
+    let dateFormat = isThisYear(tempDate) ? 'MM月dd日' : 'yyyy年MM月dd日'
 
-    return format(tempDate, dateFormat)
+    if (includeDay) {
+        dateFormat = dateFormat + ' (E)'
+    }
+    return format(tempDate, dateFormat, { locale:ja })
 }
 
 const getMessage = (messageId: string) => {

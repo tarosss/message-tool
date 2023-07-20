@@ -1,27 +1,17 @@
+@use 'variables';
+
 .body-channel {
-    &-message {
-        height: 64px;
-        display: grid;
-        grid-template-columns: 36px 1fr;
-        grid-gap: 10px;
-        align-items: center;
-        &-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 5px;
-            background-color: aqua;
+    &-messages-by-day {
+        position: relative;
+        border-top: rgb(171, 171, 171) 1px solid;
+        &-date {
+            position: absolute;
+            border-radius: 20px;
+            border: rgb(171, 171, 171) 1px solid;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: variables.$body-background-color;
+            padding: 0 20px;
         }
-
-        &-content {
-            &-detail {
-                display: flex;
-                align-items: center;
-            }
-
-            &-text {
-
-            }
-        }
-
     }
 }

@@ -13,6 +13,7 @@ export default defineConfig({
         'resources/scss/left-name.scss',
         'resources/scss/body.scss',
         'resources/scss/channel.scss',
+        'resources/scss/message.scss',
 
         'resources/js/header.ts',
       ],

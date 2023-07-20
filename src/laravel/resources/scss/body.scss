@@ -1,6 +1,8 @@
+@use 'variables';
+
 .body {
     width: 100%;
-    background-color: #1d1c1d;
+    background-color: variables.$body-background-color;
     color: #fff;
 
     &-channel {
