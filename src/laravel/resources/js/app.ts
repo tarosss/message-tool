@@ -6,11 +6,11 @@ import Message from './Message.vue'
 import Route from './Route.vue'
 
 const app = createApp({
-    components: {
-        message: Message,
-        route: Route,
-    },
+  components: {
+    message: Message,
+    route: Route,
+  },
 })
-    .use(createPinia())
-    .use(router)
-    .mount('#app')
+  .use(createPinia())
+  .use(router)
+  .mount('#app')
