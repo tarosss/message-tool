@@ -28,9 +28,15 @@
                 :message="(messages.messages.get(messageId) as Message)">
             </Message>
         </div>
+        <div>
+            <MessageInput>
+            </MessageInput>
+        </div>
     </div>
 </template>
 <script lang="ts" setup>
+import Message from './Message.vue'
+import MessageInput from './MessageInput.vue'
 import { computed, onMounted, watchEffect } from 'vue';
 import { useUsers } from '../store/users';
 import { useChannels } from '../store/channels';
@@ -39,7 +45,6 @@ import { useShowing } from '../store/showing';
 import { format, isThisYear } from 'date-fns'
 import { ja } from 'date-fns/locale';
 import { storeToRefs } from 'pinia';
-import Message from './Message.vue'
 const props = defineProps<{
     logingUserId: string,
     channelId: string,

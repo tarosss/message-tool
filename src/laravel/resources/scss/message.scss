@@ -23,3 +23,21 @@
     }
 
 }
+
+.message-input {
+    width: 100%;
+    background-color: white;
+    textarea {
+        $lineHeight: 1.5;
+        $height: 5em;
+        
+        resize: none;
+        min-height: 20px;
+        width: 100%;
+        // height: calc($lineHeight * $height);
+        line-height: $lineHeight;
+    }
+    &-file {
+        display: none;
+    }
+}
