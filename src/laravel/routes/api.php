@@ -31,7 +31,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/reaction-kind', '\App\Http\Controllers\Api\ReactionKindController@store');
     });
     
-    
     Route::post('/post', '\App\Http\Controllers\Api\@index');
 });
 

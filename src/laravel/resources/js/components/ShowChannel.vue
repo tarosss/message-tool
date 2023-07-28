@@ -29,7 +29,8 @@
             </Message>
         </div>
         <div>
-            <MessageInput>
+            <MessageInput
+                :channel="channel">
             </MessageInput>
         </div>
     </div>

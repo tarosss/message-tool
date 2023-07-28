@@ -43,6 +43,7 @@ class MessageController extends \App\Http\Controllers\Controller
     public function store(Request $request, MessageToolRepositoryInterface $messageToolRepository)
     {
 
+        Log::info($request);
         // データベースに入っている途中変更のメッセージを登録するさいの処理を追加する必要がある
 
         try {
@@ -109,7 +110,6 @@ class MessageController extends \App\Http\Controllers\Controller
             $messages = $messageToolRepository->getMessages([
                 // 'user_id' => $request->input('userId'),
             ]);
-            Log::info($messages);
             if ($request->has('by')) {
                 $messages = \App\Facades\ArrayUtils::commonKey(
                     $messages, 
@@ -118,6 +118,8 @@ class MessageController extends \App\Http\Controllers\Controller
                 );
             }
 
+            Log::info('ee');
+            Log::info($messages);
             return response()->json([
                 'error' => false,
                 'messages' => $messages,

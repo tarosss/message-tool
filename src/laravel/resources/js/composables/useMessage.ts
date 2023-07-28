@@ -1,5 +1,6 @@
-import { ref, Ref, watch } from 'vue'
+import { computed, ref, Ref, watch } from 'vue'
 import { useDropZone } from '@vueuse/core'
+import { boolean } from 'zod'
 
 export const useMessage = () => {
   const lineHeight = 1.5
@@ -33,6 +34,7 @@ export const useMessage = () => {
     files,
     dropZone,
     textZone,
+    canSend: computed(() => Boolean(message.value.length)),
     textZoneHeight,
     isOverDropZone,
   }

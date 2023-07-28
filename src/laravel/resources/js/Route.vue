@@ -40,6 +40,7 @@ onBeforeMount(()=> {
       .then(res => res.data.value)
       .then(jsonText => JSON.parse(jsonText as string))
       .then(json => {
+        console.log(json)
         for (const [channelId, messageByMessageId] of Object.entries(json.messages as FetchMessage)) {
           useMessages('message-' + channelId).setMessages(messageByMessageId)
         }
