@@ -26,7 +26,5 @@ class SendPodcastNotification
      */
     public function handle(\App\Events\SampleEvent $sampleEvent)
     {
-        Log::info('linstened');
-        Log::info($sampleEvent->a);
     }
 }

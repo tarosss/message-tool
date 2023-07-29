@@ -1,4 +1,4 @@
-import { computed, ref } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 import { defineStore } from 'pinia'
 import { format } from 'date-fns'
 
@@ -37,13 +37,22 @@ export const useMessages = (channelId: string) => {
 
       const date = format(new Date(newMessage.created_at), dateFormat)
       if (messageIdsByDay.value.has(date)) {
+        (messageIdsByDay.value.get(date) as string[]).push(newMessage._id)
+      } else {
         // キーが存在しない場合は新たに追加する
         messageIdsByDay.value.set(date, [newMessage._id])
-      } else {
-        (messageIdsByDay.value.get(date) as string[]).push(newMessage._id)
       }
     }
 
+    watchEffect(() => {
+      console.log('messages')
+      console.log(messages.value)
+    })
+
+    watchEffect(() => {
+      console.log('by id')
+      console.log(messageIdsByDay.value)
+    })
     return {
       messages: computed(() => messages.value),
       messageIdsByDay: computed(() => messageIdsByDay.value),

@@ -10,6 +10,7 @@ declare type Message = {
   message: string,
   storage: string,
   user_id: string,
+  channel_id: string,
   created_at: string,
   updated_at: string,
 }

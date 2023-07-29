@@ -29,44 +29,30 @@
 </template>
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from 'vue'
-import { BeforeFetchContext, createFetch } from '@vueuse/core';
 import { mdiSendVariant } from '@mdi/js';
 import { useMessage } from '../composables/useMessage'
-import { useDropZone } from '../composables/useDropZone';
-
+import { getFetch } from '../common/fetches'
+import  { messageStoreUrl } from '../consts/fetches'
+import { inject } from 'vue';
 const { message, files, dropZone, textZone, textZoneHeight, canSend, isOverDropZone} = useMessage()
 
 const props = defineProps<{
-    channel: Channel
+    channel: Channel,
 }>()
 
-const injectToken = function ({ options }: BeforeFetchContext) {
-  options.headers = {
-    ...options.headers,
-    Authorization: `649c0e13f397e2b93b0bb862|1Q80MexMcGX3c4wiW6cjhzVmrxQcrAuwfXqSr2SV`
-  }
+const logingUserId = inject('loging-user-id', '')
+const token = inject('token', '')
+const storage = inject('storage', 1)
 
-  return { options }
-}
+const sendMessage = async () => {
+    const fetch = getFetch({token})
+    const posts: FetchStoreMessage[] = [{
+        channelId: props.channel._id,
+        message: message.value,
+        userId: logingUserId,
+        storage: storage,
+    }]
 
-const sendMessage = () => {
-    if (!canSend) {
-        return
-    }
-    // useFetch('api/store/message')
-    const fetch = createFetch({
-        // baseUrl: 'api',
-        options: {
-            async beforeFetch({ options }) {
-                const myToken = '649c0e13f397e2b93b0bb862|1Q80MexMcGX3c4wiW6cjhzVmrxQcrAuwfXqSr2SV'
-                options.headers.Authorization = `Bearer ${myToken}`
-
-                return { options }
-            },
-        }
-    })
-
-    const a = fetch('api/store/message').post({c:'a'})
-    console.log(a)
+    const { onFetchResponse, statusCode } = await fetch(messageStoreUrl).post({data: posts})
 }
 </script>

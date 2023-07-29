@@ -12,12 +12,12 @@ class Message extends Moloquent
         'message',
         'user_id',
         'storage',
-        'sended'
+        'sended',
+        'channel_id',
     ];
 
     protected $dispatchesEvents = [
-        // 'created' => \App\Events\SampleEvent::class,
-        'created' => \App\Events\PublicEvent::class
+        // 'created' => \App\Events\CreateMessage::class
     ];
 
     public function user()

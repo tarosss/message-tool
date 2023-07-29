@@ -33,8 +33,8 @@ class PublicEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        Log::info('broadcastOn');
-        return new Channel('event-lib');
+        Log::info('broadcastOnだよ');
+        return new Channel('event_lib');
     }
 
     public function broadcastWith()
@@ -46,6 +46,6 @@ class PublicEvent implements ShouldBroadcast
 
     public function broadcastAs()
     {
-        return 'sample';
+        return 's';
     }
 }

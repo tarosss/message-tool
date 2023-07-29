@@ -28,7 +28,7 @@ const app = createApp({
     route: Route,
   },
 })
-  .use(createPinia())
-  .use(vuetify)
-  .use(router)
-  .mount('#app')
+.use(createPinia())
+.use(vuetify)
+.use(router)
+.mount('#app')

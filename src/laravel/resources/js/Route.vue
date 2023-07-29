@@ -5,7 +5,7 @@
   <!-- <router-link to="/about"></router-link> -->
 </template>
 <script setup lang="ts">
-import { onBeforeMount, onMounted } from 'vue';
+import { onBeforeMount, onMounted, provide } from 'vue';
 import { useFetch } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
 import Header from './components/Header.vue'
@@ -17,6 +17,10 @@ import { useMessages } from './store/messages';
 const props = defineProps<{
  logingUserId: string,
 }>()
+
+provide('loging-user-id', props.logingUserId)
+provide('token', '649c0e13f397e2b93b0bb862|1Q80MexMcGX3c4wiW6cjhzVmrxQcrAuwfXqSr2SV')
+provide('storage', 1)
 
 onBeforeMount(()=> {
   Promise.all([
@@ -40,7 +44,6 @@ onBeforeMount(()=> {
       .then(res => res.data.value)
       .then(jsonText => JSON.parse(jsonText as string))
       .then(json => {
-        console.log(json)
         for (const [channelId, messageByMessageId] of Object.entries(json.messages as FetchMessage)) {
           useMessages('message-' + channelId).setMessages(messageByMessageId)
         }

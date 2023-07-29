@@ -23,7 +23,7 @@ class Handler extends ExceptionHandler
      */
     protected $dontReport = [
         //
-        \App\Exceptions\SampleException::class
+        // \App\Exceptions\SampleException::class
     ];
 
     /**
