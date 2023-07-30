@@ -42,21 +42,20 @@ class MessageController extends \App\Http\Controllers\Controller
      */
     public function store(Request $request, MessageToolRepositoryInterface $messageToolRepository)
     {
-
         // データベースに入っている途中変更のメッセージを登録するさいの処理を追加する必要がある
-
         try {
             $storage = \App\Factories\StorageFactory::getStorage();
 
             $now = Date::getNow();
 
-            $insertFiles = [];
+            $insertedMessages = [];
+            $insertedFiles = [];
             foreach($request['data'] as $data) {
                 $insertedMessage = $messageToolRepository->createMessage([
                     'message' => $data['message'],
-                    'user_id' => $data['user_id'],
+                    'user_id' => $data['userId'],
                     'storage' => $storage->getDisk(),
-                    'sended' => $data['sended']
+                    'channel_id' => $data['channelId'],
                 ]);
 
                 foreach($data['files'] ?? [] as $file) {
@@ -68,20 +67,24 @@ class MessageController extends \App\Http\Controllers\Controller
                     // ファイルを保存する
                     $storage->putFileAs('message', $file, $fileName);
                     
-                    $insertFiles[] = [
+                    $insertedFiles[] = [
                         'user_id' => $insertedMessage->_id,
                         'original_file_name' => $file->getClientOriginalName(),
                         'file_name' => $fileName,
                         'created_at' => $now,
                     ];
                 }
+
+                $insertedMessages[] = $insertedMessage;
             }
 
 
             // ファイルの保存
-            broadcast(new \App\Events\SampleEvent);
-            // テキストベースのデータ   
-            $messageToolRepository->createFiles($insertFiles);
+            broadcast(new \App\Events\CreateMessage($insertedMessages));
+            if ($insertedFiles) {
+                $messageToolRepository->createFiles($insertedFiles);
+            }
+            // テキストベースのデータ
             // event()
             // ファイルの保存
             return response()->json([
@@ -89,6 +92,7 @@ class MessageController extends \App\Http\Controllers\Controller
             ], Response::HTTP_CREATED);
 
         } catch (Exception $e) {
+            Log::error($e);
             return response()->json([
                 'error' => true,
                 'message' => $e->getMessage()
@@ -104,12 +108,10 @@ class MessageController extends \App\Http\Controllers\Controller
      */
     public function show(Request $request, MessageToolRepositoryInterface $messageToolRepository)
     {
-        //
         try {
             $messages = $messageToolRepository->getMessages([
-                'user_id' => $request->input('userId'),
+                // 'user_id' => $request->input('userId'),
             ]);
-
             if ($request->has('by')) {
                 $messages = \App\Facades\ArrayUtils::commonKey(
                     $messages, 
@@ -123,6 +125,7 @@ class MessageController extends \App\Http\Controllers\Controller
                 'messages' => $messages,
             ]);
         } catch (Exception $e) {
+            Log::error($e);
             return response()->json([
                 'error' => true,
                 'message' => $e->getMessage()

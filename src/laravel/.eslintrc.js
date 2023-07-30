@@ -11,7 +11,7 @@ module.exports = {
     project: './tsconfig.eslint.json',
     tsconfigRootDir: __dirname,
   },
-  ignorePatterns: ['resource/built', './.eslintrc.js', './vite.config.js'],
+  ignorePatterns: ['resource/built', '.eslintrc.js', 'vite.config.js', 'bootstrap.js', 'broadcasts.ts'],
   extends: [
     'airbnb-base',
     'airbnb-typescript/base',

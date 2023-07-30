@@ -1,3 +1,4 @@
+import './broadcasts'
 import _ from 'lodash'
 window._ = _
 
@@ -11,16 +12,28 @@ import axios from 'axios'
 window.axios = axios
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
-import Echo from 'laravel-echo'
-import io from 'socket.io-client'
-window.io = io
-window.Echo = new Echo({
-  broadcaster: 'socket.io',
-  host: window.location.hostname + ':6001',
-  forceTLS: true,
-})
 
-window.Echo.channel('laravel_database_channel-name').listen('SampleEvent', (e) => {
-  console.log(',la;cv')
-})
-console.log()
+// import Echo from 'laravel-echo'
+// import io from 'socket.io-client'
+// window.io = io
+// window.Echo = new Echo({
+//   broadcaster: 'socket.io',
+//   host: window.location.hostname + ':6001',
+//   forceTLS: true,
+// })
+
+// window.Echo.channel('laravel_database_channel_name').listen('SampleEvent', (e) => {
+//   console.log('sample event')
+//   console.log(',la;cv')
+// })
+
+// window.Echo.channel('laravel_database_event_lib').listen('sample', (e) => {
+//   console.log('puvlic event')
+//   console.log(e)
+// })
+
+// window.Echo.channel('laravel_database_create_message').listen('CreateMessage', (data) => {
+//   for (data.messages of message) {
+    
+//   }
+// })

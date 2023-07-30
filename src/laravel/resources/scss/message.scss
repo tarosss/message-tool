@@ -1,0 +1,60 @@
+@use 'variables';
+
+.message {
+    height: 64px;
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    grid-gap: 10px;
+    align-items: center;
+    &-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 5px;
+        background-color: aqua;
+    }
+
+    &-content {
+        &-detail {
+            display: flex;
+            align-items: center;
+        }
+
+        &-text {
+
+        }
+    }
+
+}
+
+.message-input {
+    width: 100%;
+    background-color: black;
+    textarea {
+        $lineHeight: 1.5;
+        $height: 5em;
+        
+        resize: none;
+        min-height: 20px;
+        width: 100%;
+        // height: calc($lineHeight * $height);
+        line-height: $lineHeight;
+        background-color: black;
+        color: white;
+        border: none;
+        &:focus {
+            border: none;
+        }
+    }
+    &-file {
+        display: none;
+    }
+
+    &-header {
+
+    }
+
+    &-footer {
+        display: grid;
+        grid-template-columns: 1fr 70px;
+    }
+}

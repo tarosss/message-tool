@@ -10,20 +10,21 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Log;
-class SampleEvent implements ShouldBroadcast
+
+class CreateMessage implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
+
+    protected $messages;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-
-     public $a;
-    public function __construct()
+    public function __construct($messages)
     {
         //
-        Log::info('sample event');
+        $this->messages = $messages;
     }
 
     /**
@@ -33,13 +34,18 @@ class SampleEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('channel_name');
+        return new Channel('create_message');
     }
 
     public function broadcastWith()
     {
         return [
-            'messages' => 'jvamk',
+            'messages' => $this->messages,
         ];
     }
+
+    // public function broadcastAs()
+    // {
+    //     return 'ssssssss';
+    // }
 }

@@ -23,7 +23,7 @@ class Handler extends ExceptionHandler
      */
     protected $dontReport = [
         //
-        \App\Exceptions\SampleException::class
+        // \App\Exceptions\SampleException::class
     ];
 
     /**
@@ -48,24 +48,24 @@ class Handler extends ExceptionHandler
         //     Log::info("mcvakmfnjkdnvkancjks");
         // });
 
-        $this->reportable(function (\App\Exceptions\SampleException $e) {
+        // $this->reportable(function (\App\Exceptions\SampleException $e) {
             
-        });
+        // });
 
-        $this->renderable(function (\Exception $e) {
-            return response()->json([
-                'error' => true,
-                'message' => $e->getMessage()
-            ], 500);
-        });
+        // $this->renderable(function (\Exception $e) {
+        //     return response()->json([
+        //         'error' => true,
+        //         'message' => $e->getMessage()
+        //     ], 500);
+        // });
 
-        $this->reportable(function (Throwable $e) {
-            //
-            return response()->json([
-                'error' => true,
-                'message' => 'internal server_error'
-            ], 500);
-            // return true;
-        });
+        // $this->reportable(function (Throwable $e) {
+        //     //
+        //     return response()->json([
+        //         'error' => true,
+        //         'message' => 'internal server_error'
+        //     ], 500);
+        //     // return true;
+        // });
     }
 }
