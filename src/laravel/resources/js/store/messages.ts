@@ -1,4 +1,4 @@
-import { computed, ref, watchEffect } from 'vue'
+import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import { format } from 'date-fns'
 
@@ -44,15 +44,6 @@ export const useMessages = (channelId: string) => {
       }
     }
 
-    watchEffect(() => {
-      console.log('messages')
-      console.log(messages.value)
-    })
-
-    watchEffect(() => {
-      console.log('by id')
-      console.log(messageIdsByDay.value)
-    })
     return {
       messages: computed(() => messages.value),
       messageIdsByDay: computed(() => messageIdsByDay.value),

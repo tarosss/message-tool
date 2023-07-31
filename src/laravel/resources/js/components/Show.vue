@@ -1,12 +1,12 @@
 <template>
     <div>
         <ShowChannel
-            v-if="refShowing.component.value === 'channel'"
+            v-for="channelId of refChannels.channelIds.value"
+            v-show="refShowing.component.value === 'channel' && channelId === refShowing.showing.value"
             :loging-user-id="props.logingUserId"
-            :channelId="refShowing.showing.value"
-            >
+            :channelId="channelId">
         </ShowChannel>
-        <ShowNothing v-else="refShowing.component.value === ''"></ShowNothing>
+        <ShowNothing v-show="refShowing.component.value === ''"></ShowNothing>
     </div>
 </template>
 <script lang="ts" setup>
@@ -25,5 +25,6 @@ const props = defineProps<{
 const refShowing = storeToRefs(useShowing())
 const refChannels = storeToRefs(useChannels())
 
+console.log(refChannels.channelIds.value)
 // sample[0] = ShowChannel
 </script>

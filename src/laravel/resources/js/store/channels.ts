@@ -11,6 +11,7 @@ export const useChannels = defineStore('channels', () => {
    */
   const setChannels = (channelObjects: MapChannel) => {
     channels.value = new Map(Object.entries(channelObjects))
+    console.log(channels.value.keys())
   }
 
   const pushChannel = ({ newChannel, key = undefined }: { newChannel: Channel, key?: string }) => {
@@ -19,7 +20,7 @@ export const useChannels = defineStore('channels', () => {
 
   return {
     channels: computed(() => channels.value),
-    channelIds: computed(() => channels.value.keys()),
+    channelIds: computed(() => Array.from(channels.value.keys())),
     getChannel,
     setChannels,
     pushChannel,
