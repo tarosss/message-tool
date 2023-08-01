@@ -38,7 +38,7 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { onUpdated } from 'vue';
+import { onUpdated, inject } from 'vue';
 import { storeToRefs } from 'pinia';
 import Message from './Message.vue'
 import MessageInput from './MessageInput.vue'
@@ -50,10 +50,10 @@ import { useShowing } from '../store/showing';
 import { useScrollIntoViewOnce } from '../composables/useScrollIntoViewOnce'
 import { specialFormat } from '../common/dateFormats'
 const props = defineProps<{
-    logingUserId: string,
     channelId: string,
 }>()
 
+const logingUserId = inject('loging-user-id', '')
 const users = useUsers()
 const refUsers = storeToRefs(users)
 const refShowing = storeToRefs(useShowing())
@@ -70,11 +70,11 @@ onUpdated(() => {
 })
 
 const channelCreateUserDisplayName = computed(() => {
-    if (channel.value.create_user === props.logingUserId) {
+    if (channel.value.create_user === logingUserId) {
         return 'あなた'
     }
 
-    return refUsers.users.value.get(props.logingUserId)?.display_name + 'さん'
+    return refUsers.users.value.get(logingUserId)?.display_name + 'さん'
 })
 
 </script>

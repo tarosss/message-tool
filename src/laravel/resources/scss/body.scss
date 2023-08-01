@@ -1,10 +1,12 @@
 @use 'variables';
 
 .body {
+    $resizer-width: 5px;
     width: 100%;
     background-color: variables.$body-background-color;
     color: #fff;
-
+    display: grid;
+    grid-template-columns: 300px $resizer-width 1fr;
     &-channel {
         > * {
             padding-right: 20px;
@@ -25,5 +27,14 @@
                 }
             }
         }
+    }
+}
+
+.resizer {
+    &:hover {
+        $color: rgb(5, 201, 255);
+        border: $color 2px solid;
+        background-color: $color;
+        cursor: col-resize;
     }
 }

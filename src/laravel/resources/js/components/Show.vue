@@ -3,7 +3,6 @@
         <ShowChannel
             v-for="channelId of refChannels.channelIds.value"
             v-show="refShowing.component.value === 'channel' && channelId === refShowing.showing.value"
-            :loging-user-id="props.logingUserId"
             :channelId="channelId">
         </ShowChannel>
         <ShowNothing v-show="refShowing.component.value === ''"></ShowNothing>
@@ -18,9 +17,6 @@ import ShowNothing from './ShowNothing.vue'
 import essage from './Message.vue'
 import { computed, watchEffect } from 'vue';
 
-const props = defineProps<{
- logingUserId: string,
-}>()
 
 const refShowing = storeToRefs(useShowing())
 const refChannels = storeToRefs(useChannels())
