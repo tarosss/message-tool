@@ -22,3 +22,12 @@ declare type Channel = {
   created_at: string,
   create_user: string,
 }
+
+declare type Reaction = {
+  _id: string,
+  reaction_name: string,
+  reaction_kinds: any[],
+  icon_path: string,
+  create_user: string,
+  created_at: string
+}

@@ -1,5 +1,5 @@
 <template>
-  <div class="message">
+  <div class="message" >
     <p class="message-icon">
 
     </p>
@@ -17,10 +17,15 @@
         {{ message.message }}
       </p>
     </div>
+    <div class="reaction-">
+
+    </div>
+    <Reaction></Reaction>
   </div>
 </template>
 <script lang="ts" setup>
 import { computed, onMounted } from 'vue'
+import Reaction from './ReactionBar.vue'
 import { format } from 'date-fns'
 import { useUsers } from '../store/users';
 // import socket from './socket';
@@ -29,4 +34,6 @@ const props = defineProps<{
 }>()
 
 const user = computed(() => useUsers().getUser(props.message.user_id) as User)
+
+
 </script>

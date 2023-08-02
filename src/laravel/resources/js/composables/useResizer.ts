@@ -19,11 +19,12 @@ export const useResizer = () => {
   const mouseDown1 = () => {
     unwatch = watchEffect(() => {
       if (x.value >= minWidth) {
-          leftNavWidth.value = x.value
+        leftNavWidth.value = x.value
       }
     })
   }
 
+  // eslint-disable-next-line arrow-body-style
   const style = computed(() => {
     return {
       'grid-template-columns': `${leftNavWidth.value}px ${resizerWidth}px 1fr ${resizerWidth}px  ${rightNavWidth.value}`,

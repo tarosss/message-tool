@@ -7,6 +7,7 @@
 <script setup lang="ts">
 import { onBeforeMount, onMounted, provide } from 'vue';
 import { useFetch } from '@vueuse/core';
+import { getFetch } from './common/fetches';
 import { storeToRefs } from 'pinia';
 import Header from './components/Header.vue'
 import Body from './components/Body.vue'
@@ -14,12 +15,15 @@ import { useLoging } from './store/loging';
 import { useUsers } from './store/users';
 import { useChannels } from './store/channels';
 import { useMessages } from './store/messages';
+import { useReactions } from './store/reactions';
+import { reactionGetUrl } from './consts/fetches'
 const props = defineProps<{
  logingUserId: string,
+ token: string,
 }>()
 
 provide('loging-user-id', props.logingUserId)
-provide('token', '649c0e13f397e2b93b0bb862|1Q80MexMcGX3c4wiW6cjhzVmrxQcrAuwfXqSr2SV')
+provide('token', props.token)
 provide('storage', 1)
 
 onBeforeMount(()=> {
@@ -47,7 +51,17 @@ onBeforeMount(()=> {
         for (const [channelId, messageByMessageId] of Object.entries(json.messages as FetchMessage)) {
           useMessages('message-' + channelId).setMessages(messageByMessageId)
         }
+      }),
+
+    getFetch({ token: props.token})(reactionGetUrl).post({
+      by: '_id'
+    })
+      .then(res => res.data.value)
+      .then(jsonText => JSON.parse(jsonText as string))
+      .then(json => {
+        useReactions().setReactions({newReactions: json.reactions})
       })
+    
   ])
 })
 // import { defineProps } from 'vue';

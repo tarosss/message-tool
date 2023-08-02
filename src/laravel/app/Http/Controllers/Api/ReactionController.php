@@ -9,6 +9,8 @@ use App\Interfaces\Repositories\MessageToolRepositoryInterface;
 use App\Facades\StringUtils;
 use App\Facades\MimeType;
 use App\Facades\Date;
+use App\Facades\ArrayUtils;
+use Exception;
 use Log;
 class ReactionController extends \App\Http\Controllers\Controller
 {
@@ -87,10 +89,25 @@ class ReactionController extends \App\Http\Controllers\Controller
      * @param  \App\Models\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function show(Todo $todo)
+    public function show(Request $request, MessageToolRepositoryInterface $messageToolRepository)
     {
-        //
+        try {
+            $reactions = $messageToolRepository->getReactions();
+            if ($request->has('by')) {
+                $reactions = array_column($reactions, null, $request->input('by'));
+            }
+            return response()->json([
+                'error' => false,
+                'reactions' => $reactions,
+            ], Response::HTTP_OK);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+        }
     }
+    
 
     /**
      * Show the form for editing the specified resource.

@@ -19,16 +19,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/user', '\App\Http\Controllers\Api\MemberController@store');
         Route::post('/message', '\App\Http\Controllers\Api\MessageController@store');
         Route::post('/channel', '\App\Http\Controllers\Api\ChannelController@store');
-        Route::post('/reaction', '\App\Http\Controllers\Api\ReactionController@store');
-        Route::post('/reaction-kind', '\App\Http\Controllers\Api\ReactionKindController@store');
     });
 
     Route::group(['prefix' => 'show', 'middleware' => ['abilities:collection:show']], function () {
         Route::post('/user', '\App\Http\Controllers\Api\MemberController@store');
         Route::post('/message', '\App\Http\Controllers\Api\MessageController@show');
         Route::post('/channel', '\App\Http\Controllers\Api\ChannelController@show');
-        Route::post('/reaction', '\App\Http\Controllers\Api\ReactionController@store');
-        Route::post('/reaction-kind', '\App\Http\Controllers\Api\ReactionKindController@store');
+        Route::post('/reaction', '\App\Http\Controllers\Api\ReactionController@show');
+        Route::post('/reaction-kind', '\App\Http\Controllers\Api\ReactionKindController@show');
     });
     
     Route::post('/post', '\App\Http\Controllers\Api\@index');

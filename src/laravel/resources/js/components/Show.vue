@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="show">
         <ShowChannel
             v-for="channelId of refChannels.channelIds.value"
             v-show="refShowing.component.value === 'channel' && channelId === refShowing.showing.value"

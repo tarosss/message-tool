@@ -115,6 +115,13 @@ class MessageToolRepository implements MessageToolRepositoryInterface
         Reaction::insert($data);
     }
 
+    public function getReactions(array $wheres = [])
+    {
+        $data = Reaction::select('*');
+
+        return $data->count() ? $data->get()->toArray() : [];
+    }
+
     public function createReactionKind($data): ReactionKind
     {
         return ReactionKind::create($data);
