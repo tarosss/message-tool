@@ -20,12 +20,12 @@
     <div class="reaction-">
 
     </div>
-    <Reaction></Reaction>
+    <ReactionBar></ReactionBar>
   </div>
 </template>
 <script lang="ts" setup>
 import { computed, onMounted } from 'vue'
-import Reaction from './ReactionBar.vue'
+import ReactionBar from './ReactionBar.vue'
 import { format } from 'date-fns'
 import { useUsers } from '../store/users';
 // import socket from './socket';

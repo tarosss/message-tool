@@ -29,5 +29,6 @@ declare type Reaction = {
   reaction_kinds: any[],
   icon_path: string,
   create_user: string,
+  bar: number,
   created_at: string
 }

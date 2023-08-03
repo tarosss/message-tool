@@ -12,7 +12,9 @@ class Reaction extends Moloquent
         'reaction_kinds',
         'icon_path',
         'create_user',
+        'bar',
         'created_at',
         'updated_at',
+        
     ];
 }

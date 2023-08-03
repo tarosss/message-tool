@@ -12,7 +12,7 @@ export const useResizer = () => {
   const leftNavWidth = ref(minWidth)
   const rightNavWidth = ref(0)
   const resizerWidth = 5
-  
+
   const { x } = useMouse()
   let unwatch: WatchStopHandle
 
@@ -30,7 +30,12 @@ export const useResizer = () => {
       'grid-template-columns': `${leftNavWidth.value}px ${resizerWidth}px 1fr ${resizerWidth}px  ${rightNavWidth.value}`,
     }
   })
+
   const mouseUp1 = () => {
+    if (unwatch === undefined) {
+      return
+    }
+
     unwatch()
   }
 

@@ -17,8 +17,12 @@ class StorageLocal implements StorageInterface
         return $this->disk;
     }
 
-    public function putFileAs(string $path, $file, string $fileName): void
+    public function putFileAs(string $path, $file, string $fileName, $public = true): void
     {
+        if ($public) {
+            $path = 'public/' . $path;
+        }
+
         Storage::disk($this->disk)
             ->putFileAs($path, $file, $fileName);
     }

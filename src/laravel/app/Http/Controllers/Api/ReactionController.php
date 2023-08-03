@@ -48,7 +48,7 @@ class ReactionController extends \App\Http\Controllers\Controller
     
             $insertedReactions = [];
             foreach($request['data'] as $data) {
-                $file = $data['file'];
+                $file = $data['icon_path'];
                 // $data['file'] 
                 $fileName = (function () use ($file) {
                     $fileName = StringUtils::getRandomString(30);
@@ -63,7 +63,8 @@ class ReactionController extends \App\Http\Controllers\Controller
                     'reaction_name' => $data['reaction_name'],
                     'reaction_kinds' => $data['reaction_kinds'] ?? [],
                     'icon_path' => $fileName,
-                    'create_user' => $data['create_user'],
+                    // 'create_user' => $data['create_user'],
+                    'createbard_at' => $data['bar'],
                     'created_at' => $now
                 ];
             }
