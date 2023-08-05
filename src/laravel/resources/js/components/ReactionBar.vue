@@ -1,6 +1,6 @@
 <template>
     <div class="reaction-bar">
-        <Reaction 
+        <Reaction
             v-for="bar in bars" :key="'barreaction-' + bar"
             :reaction-id="bar">
         </Reaction>

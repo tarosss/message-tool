@@ -14,10 +14,7 @@
 
             </div>
             <p>
-                <v-icon
-                    :icon="mdiSendVariant"
-                    @click="sendMessage">
-                </v-icon>  
+                <i class="bi bi-send"></i>
             </p>
         </div>
 

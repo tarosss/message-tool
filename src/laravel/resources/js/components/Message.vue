@@ -1,5 +1,5 @@
 <template>
-  <div class="message" >
+  <div class="message position-relative" ref="element">
     <p class="message-icon">
 
     </p>
@@ -17,23 +17,27 @@
         {{ message.message }}
       </p>
     </div>
-    <div class="reaction-">
-
-    </div>
-    <ReactionBar></ReactionBar>
+    <ReactionBar 
+      v-if="isHoverd"
+      class="position-absolute top-0 end-0">
+    </ReactionBar>
   </div>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted } from 'vue'
+import { Ref } from 'vue';
+import { computed, onMounted, watch } from 'vue'
 import ReactionBar from './ReactionBar.vue'
 import { format } from 'date-fns'
 import { useUsers } from '../store/users';
+import { test } from '../store/test'
+import { useElementHover } from '../composables/useElementHover'
+
 // import socket from './socket';
 const props = defineProps<{
   message: Message,
 }>()
 
+const { element, isHoverd } = useElementHover()
 const user = computed(() => useUsers().getUser(props.message.user_id) as User)
-
 
 </script>

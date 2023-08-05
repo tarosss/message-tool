@@ -1,6 +1,5 @@
-import { Ref, ref, computed, watchEffect, WatchStopHandle } from 'vue'
-import { useResizeObserver, useMouse } from '@vueuse/core'
-import { isNumber } from '../common/assertions'
+import { ref, computed, watchEffect, WatchStopHandle } from 'vue'
+import { useMouse } from '@vueuse/core'
 
 export const useResizer = () => {
   const minWidth = 300
