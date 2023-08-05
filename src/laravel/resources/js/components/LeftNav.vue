@@ -23,7 +23,7 @@
                 :title="'チャンネル'" 
                 @click="selectedDetail = 'channel'"></LeftNavTitleRow>
             <LeftNavRow 
-                v-for="[chanelKey, channel] in refChannels.channels.value" 
+                v-for="[chanelKey, channel] in channels.channels.value" 
                 :key="'chanel' + channel._id" 
                 :_id="channel._id"
                 :title="channel.channel_name">
@@ -47,7 +47,6 @@
 </template>
 <script lang="ts" setup>
 import { onMounted, ref, watchEffect } from 'vue';
-import { storeToRefs } from 'pinia';
 import LeftNavTitleRow from './LeftNavTitleRow.vue';
 import LeftNavRow from './LeftNavRow.vue';
 import { useChannels } from '../store/channels';
@@ -55,9 +54,9 @@ import { useShowing } from '../store/showing';
 import { useMessages } from '../store/messages';
 import router from '../router'
 const workspaceName = 'ワークスペースめい'
-const refChannels = storeToRefs(useChannels())
-const refShowing = storeToRefs(useShowing())
+const channels = useChannels()
 const selectedDetail = ref('')
+
 
 // useMessages().set('mvaklmkl')
 

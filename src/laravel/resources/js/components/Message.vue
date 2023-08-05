@@ -9,17 +9,18 @@
           {{ user.display_name }}
         </p>
         <p class="font-10">
-          {{ format(new Date(message.created_at), 'HH:mm') }}
+          {{ format({date: message.created_at, formatString: 'HH:mm' }) }}
         </p>
         
       </div>
-      <p class="message-content-text">
+      <p class="message-content-text font-16">
         {{ message.message }}
       </p>
     </div>
     <ReactionBar 
       v-if="isHoverd"
-      class="position-absolute top-0 end-0">
+      class="position-absolute top-0 end-0"
+      :message-id="message._id">
     </ReactionBar>
   </div>
 </template>
@@ -27,12 +28,10 @@
 import { Ref } from 'vue';
 import { computed, onMounted, watch } from 'vue'
 import ReactionBar from './ReactionBar.vue'
-import { format } from 'date-fns'
+import { format } from '../common/dateFormats'
 import { useUsers } from '../store/users';
-import { test } from '../store/test'
 import { useElementHover } from '../composables/useElementHover'
 
-// import socket from './socket';
 const props = defineProps<{
   message: Message,
 }>()

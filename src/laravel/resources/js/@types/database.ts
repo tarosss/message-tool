@@ -11,6 +11,10 @@ declare type Message = {
   storage: string,
   user_id: string,
   channel_id: string,
+  reactions: {
+    userId: string,
+    reactionId: string,
+  }[],
   created_at: string,
   updated_at: string,
 }

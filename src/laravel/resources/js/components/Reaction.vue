@@ -1,17 +1,30 @@
 <template>
-    <img :src="publicReactionsStorage + reaction.icon_path" class="reaction-image pointer">
+    <img 
+        :src="publicReactionsStorage + reaction.icon_path" 
+        class="reaction-image pointer"
+        @click="clicked">
 </template>
 <script lang="ts" setup>
 import { mdiSendVariant } from '@mdi/js';
+import { useMessages } from '../store/messages'
 import { useReactions } from '../store/reactions'
-import { storeToRefs } from 'pinia';
+import { useShowing } from '../store/showing'
 import { publicReactionsStorage } from '../consts/paths'
-import { test } from '../store/test'
+import { inject } from 'vue';
+
 const props = defineProps<{
-    reactionId: string
+    reactionId: string,
+    messageId: string,
 }>()
+
+const logingUserId = inject('loging-user-id', '')
 
 const reaction = useReactions().getReaction(props.reactionId)
 
-// console.log(reaction.reaction_name)
+const clicked = () => {
+    const { showing } = useShowing()
+    const { addReaction } = useMessages('message-' + showing.value)
+    
+    addReaction({ userId: logingUserId, messageId: props.messageId, reactionId: props.reactionId })
+}
 </script>

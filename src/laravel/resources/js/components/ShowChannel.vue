@@ -21,12 +21,12 @@
         </div>
         <div class="body-channel-messages-by-day-wrapper" ref="htmlElement">
             <div class="body-channel-messages-by-day"
-                v-for="[date, messageIds] of messages.messageIdsByDay">
+                v-for="[date, messageIds] of messages.messageIdsByDay.value">
                 <p class="body-channel-messages-by-day-date pointer"> 
                     {{ specialFormat(date, true) }} 
                 </p>
                 <Message v-for="messageId of messageIds" :key="'message' + messageId"
-                    :message="(messages.messages.get(messageId) as Message)">
+                    :message="(messages.messages.value.get(messageId) as Message)">
                 </Message>
             </div>
         </div>
@@ -39,7 +39,6 @@
 </template>
 <script lang="ts" setup>
 import { onUpdated, inject } from 'vue';
-import { storeToRefs } from 'pinia';
 import Message from './Message.vue'
 import MessageInput from './MessageInput.vue'
 import { computed, onMounted, ref, watchEffect } from 'vue';
@@ -55,16 +54,14 @@ const props = defineProps<{
 
 const logingUserId = inject('loging-user-id', '')
 const users = useUsers()
-const refUsers = storeToRefs(users)
-const refShowing = storeToRefs(useShowing())
-const channel = computed(() => useChannels().getChannel(refShowing.showing.value))
-const messages =  computed(() => useMessages('message-' + refShowing.showing.value))
+const showing = useShowing()
+const channel = computed(() => useChannels().getChannel(showing.showing.value))
+const messages =  computed(() => useMessages('message-' + showing.showing.value))
 const { htmlElement, bottom } = useScrollIntoViewOnce()
 
 onUpdated(() => {
-    if (props.channelId === refShowing.showing.value) {
+    if (props.channelId === showing.showing.value) {
         // 表示中のものだけ実行する
-        console.log(props.channelId + 'update')
         bottom()
     }
 })
@@ -74,7 +71,7 @@ const channelCreateUserDisplayName = computed(() => {
         return 'あなた'
     }
 
-    return refUsers.users.value.get(logingUserId)?.display_name + 'さん'
+    return users.users.value.get(logingUserId)?.display_name + 'さん'
 })
 
 </script>

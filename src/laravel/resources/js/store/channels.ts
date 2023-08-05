@@ -1,7 +1,7 @@
 import { computed, ref, Ref } from 'vue'
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 
-export const useChannels = defineStore('channels', () => {
+const store = defineStore('channels', () => {
   const channels: Ref<Map<string, Channel>> = ref(new Map<string, Channel>())
 
   const getChannel = (key: string) => channels.value.get(key) as Channel
@@ -11,7 +11,6 @@ export const useChannels = defineStore('channels', () => {
    */
   const setChannels = (channelObjects: MapChannel) => {
     channels.value = new Map(Object.entries(channelObjects))
-    console.log(channels.value.keys())
   }
 
   const pushChannel = ({ newChannel, key = undefined }: { newChannel: Channel, key?: string }) => {
@@ -26,3 +25,12 @@ export const useChannels = defineStore('channels', () => {
     pushChannel,
   }
 })
+
+export const useChannels = () => {
+  const s = store()
+
+  return {
+    ...s,
+    ...storeToRefs(s),
+  }
+}

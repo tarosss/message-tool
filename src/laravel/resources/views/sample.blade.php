@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     @vite(['resources/js/app.ts', 'resources/scss/app.scss', 'resources/scss/header.scss', 'resources/scss/left-nav.scss', 'resources/scss/body.scss', 'resources/scss/channel.scss', 'resources/scss/message.scss', 'resources/scss/reaction.scss'])
+    <style></style>
 </head>
 <body>
     <div class="wrapper">

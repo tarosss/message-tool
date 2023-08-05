@@ -2,7 +2,6 @@ import { computed, isReactive, ref, Ref, watchEffect } from 'vue'
 
 export const useMessages = () => {
   const messages: Ref<Map<string, Message>> = ref(new Map<string, Message>())
-  console.log('isrecvnaknvjknasvnss', isReactive(messages.value))
 
   /**
    * 連想配列からMapを生成する

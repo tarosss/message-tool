@@ -1,7 +1,7 @@
 import { Ref, ref } from 'vue'
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 
-export const useReactions = defineStore('reactions', () => {
+const store = defineStore('reactions', () => {
   const reactions: Ref<Map<string, Reaction>> = ref(new Map<string, Reaction>())
   const bars: Ref<string[]> = ref([])
 
@@ -25,3 +25,12 @@ export const useReactions = defineStore('reactions', () => {
     getReaction,
   }
 })
+
+export const useReactions = () => {
+  const s = store()
+
+  return {
+    ...s,
+    ...storeToRefs(s),
+  }
+}

@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 
-export const useUsers = defineStore('users', () => {
+export const store = defineStore('users', () => {
   const users = ref(new Map<string, User>())
 
   const getUser = (userId: string) => users.value.get(userId)
@@ -16,3 +16,12 @@ export const useUsers = defineStore('users', () => {
     setUsers,
   }
 })
+
+export const useUsers = () => {
+  const s = store()
+
+  return {
+    ...s,
+    ...storeToRefs(s),
+  }
+}

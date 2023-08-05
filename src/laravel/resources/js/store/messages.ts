@@ -1,7 +1,6 @@
 import { computed, ref } from 'vue'
-import { defineStore } from 'pinia'
-import { format } from 'date-fns'
-
+import { defineStore, storeToRefs } from 'pinia'
+import { format } from '../common/dateFormats'
 /**
  * チャンネル別にメッセージを保存
  * @param channelId
@@ -21,7 +20,7 @@ export const useMessages = (channelId: string) => {
 
       const temp: { [date in string]: string[] } = {}
       for (const [messageId, message] of messages.value) {
-        const date = format(new Date(message.created_at), dateFormat)
+        const date = format({ date: message.created_at, formatString: dateFormat })
         if (temp[date] === undefined) {
           temp[date] = [messageId]
         } else {
@@ -35,7 +34,7 @@ export const useMessages = (channelId: string) => {
     const pushMessage = ({ newMessage, key }:{ newMessage: Message, key?: string }) => {
       messages.value.set(key ?? newMessage._id, newMessage)
 
-      const date = format(new Date(newMessage.created_at), dateFormat)
+      const date = format({ date: newMessage.created_at, formatString: dateFormat })
       if (messageIdsByDay.value.has(date)) {
         (messageIdsByDay.value.get(date) as string[]).push(newMessage._id)
       } else {
@@ -44,14 +43,31 @@ export const useMessages = (channelId: string) => {
       }
     }
 
+    const addReaction = (
+      { userId, reactionId, messageId }: { userId: string, reactionId: string, messageId: string },
+    ) => {
+      const m = messages.value.get(messageId) as Message
+      if (m.reactions === undefined) {
+        m.reactions = []
+      }
+      m.reactions.push({ userId, reactionId })
+      messages.value.set(messageId, m)
+    }
+
     return {
       messages: computed(() => messages.value),
       messageIdsByDay: computed(() => messageIdsByDay.value),
       setMessages,
       pushMessage,
+      addReaction,
     }
   })
 
   // piniaのdefineStoreを返す
-  return store()
+  const s = store()
+
+  return {
+    ...s,
+    ...storeToRefs(s),
+  }
 }

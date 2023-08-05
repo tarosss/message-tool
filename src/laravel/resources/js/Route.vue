@@ -8,7 +8,6 @@
 import { onBeforeMount, onMounted, provide } from 'vue';
 import { useFetch } from '@vueuse/core';
 import { getFetch } from './common/fetches';
-import { storeToRefs } from 'pinia';
 import Header from './components/Header.vue'
 import Body from './components/Body.vue'
 import { useLoging } from './store/loging';

@@ -1,10 +1,10 @@
 import { ref, computed } from 'vue'
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 
 /**
  * 左ナビなど、商事されるコンテンツのフラグを管理
  */
-export const useShowing = defineStore('showing', () => {
+const store = defineStore('showing', () => {
   const showingId = ref('')
   const component = ref('')
   const setShowing = (newShowing: string) => {
@@ -28,3 +28,12 @@ export const useShowing = defineStore('showing', () => {
     setShowing,
   }
 })
+
+export const useShowing = () => {
+  const s = store()
+
+  return {
+    ...s,
+    ...storeToRefs(s),
+  }
+}

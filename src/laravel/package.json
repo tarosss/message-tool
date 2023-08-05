@@ -47,6 +47,7 @@
     "date-fns": "^2.30.0",
     "laravel-echo": "^1.15.1",
     "pinia": "^2.1.4",
+    "reset-css": "^5.0.2",
     "socket.io": "^4.7.1",
     "socket.io-client": "^2.4.0",
     "ts-node": "^10.9.1",
