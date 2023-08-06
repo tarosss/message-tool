@@ -16,15 +16,10 @@ export const useMessages = () => {
     messages.value.set(key ?? newMessage._id, newMessage)
   }
 
-  const add = () => {
-    messages.value.set('aaa', {_id: "ac", message:"", createdAt:'', updatedAt:'', storage: 1, })
-  }
-
   return {
     messages: computed(() => messages.value),
     setMessages,
     pushMessage,
-    add,
   }
 }
 // export const useMessages = () => {

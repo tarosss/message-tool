@@ -5,16 +5,16 @@ declare type User = {
   email: string,
 }
 
+declare type MessageReactions = {
+  [reactionId in string]: string[],
+}
 declare type Message = {
   _id: string,
   message: string,
   storage: string,
   user_id: string,
   channel_id: string,
-  reactions: {
-    userId: string,
-    reactionId: string,
-  }[],
+  reactions: MessageReactions,
   created_at: string,
   updated_at: string,
 }

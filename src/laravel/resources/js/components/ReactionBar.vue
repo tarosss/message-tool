@@ -1,19 +1,30 @@
 <template>
     <div class="reaction-bar">
         <Reaction
-            v-for="bar in bars" :key="'barreaction-' + bar"
-            :reaction-id="bar"
-            :message-id="props.messageId">
+            v-for="reactionId in bars" :key="'barreaction-' + props.message._id + reactionId"
+            :reaction-id="reactionId"
+            @click="addReaction({ userId: logingUserId, token, reactionId, messageId: props.message._id})">
         </Reaction>
     </div>
 </template>
 <script lang="ts" setup>
+import { inject } from 'vue';
 import Reaction from './Reaction.vue'
-import { useReactions } from '../store/reactions';
+import { useMessages } from '../store/messages'
+import { useReactions } from '../store/reactions'
+import { useShowing } from '../store/showing'
+import { deepCopy } from '../common/objectUtils'
+import { getFetch } from '../common/fetches'
+import { messageUpdateUrl } from '../consts/fetches'
+import { addReaction } from '../common/updateMessages'
 const { bars } = useReactions()
 
 const props = defineProps<{
-    messageId: string,
+    message: Message,
 }>()
+
+const logingUserId = inject('loging-user-id', '')
+const token = inject('token', '')
+const { showing } = useShowing()
 
 </script>

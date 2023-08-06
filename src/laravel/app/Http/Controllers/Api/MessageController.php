@@ -159,6 +159,7 @@ class MessageController extends \App\Http\Controllers\Controller
     {
         try {
             foreach($request['data'] as $data) {
+                Log::info($data);
                 $messageToolRepository->updateMessage($data['_id'], $data);
             }
 

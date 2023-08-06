@@ -16,20 +16,22 @@
       <p class="message-content-text font-16">
         {{ message.message }}
       </p>
-      <div
-        v-if="message.reactions.length">
-      </div>
+      <UserReactionBar
+        v-if="Object.keys(message.reactions).length"
+        :message="message">
+      </UserReactionBar>
     </div>
     <ReactionBar 
       v-if="isHoverd"
       class="position-absolute top-0 end-0"
-      :message-id="message._id">
+      :message="message">
     </ReactionBar>
   </div>
 </template>
 <script lang="ts" setup>
 import { Ref, computed, onMounted, watch } from 'vue'
 import ReactionBar from './ReactionBar.vue'
+import UserReactionBar from './UserReactionBar.vue'
 import Reaction from './ReactionBar.vue'
 import { format } from '../common/dateFormats'
 import { useUsers } from '../store/users';
