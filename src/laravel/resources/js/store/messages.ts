@@ -43,6 +43,10 @@ export const useMessages = (channelId: string) => {
       }
     }
 
+    const updateMessage = ({ updatedMessage, key }: { updatedMessage: Message, key?: string }) => {
+      messages.value.set(key ?? updatedMessage._id, updatedMessage)
+    }
+
     const addReaction = (
       { userId, reactionId, messageId }: { userId: string, reactionId: string, messageId: string },
     ) => {
@@ -59,6 +63,7 @@ export const useMessages = (channelId: string) => {
       messageIdsByDay: computed(() => messageIdsByDay.value),
       setMessages,
       pushMessage,
+      updateMessage,
       addReaction,
     }
   })

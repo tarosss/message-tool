@@ -1,4 +1,4 @@
-import { computed, isReactive, ref, Ref, watchEffect } from 'vue'
+import { computed, ref, Ref } from 'vue'
 
 export const useMessages = () => {
   const messages: Ref<Map<string, Message>> = ref(new Map<string, Message>())

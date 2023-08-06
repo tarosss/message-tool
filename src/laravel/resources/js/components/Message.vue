@@ -16,6 +16,9 @@
       <p class="message-content-text font-16">
         {{ message.message }}
       </p>
+      <div
+        v-if="message.reactions.length">
+      </div>
     </div>
     <ReactionBar 
       v-if="isHoverd"
@@ -25,9 +28,9 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { Ref } from 'vue';
-import { computed, onMounted, watch } from 'vue'
+import { Ref, computed, onMounted, watch } from 'vue'
 import ReactionBar from './ReactionBar.vue'
+import Reaction from './ReactionBar.vue'
 import { format } from '../common/dateFormats'
 import { useUsers } from '../store/users';
 import { useElementHover } from '../composables/useElementHover'

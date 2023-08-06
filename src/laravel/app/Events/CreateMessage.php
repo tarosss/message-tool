@@ -23,7 +23,6 @@ class CreateMessage implements ShouldBroadcast
      */
     public function __construct($messages)
     {
-        //
         $this->messages = $messages;
     }
 

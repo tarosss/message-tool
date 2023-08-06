@@ -14,6 +14,10 @@ use Log;
 
 class MessageController extends \App\Http\Controllers\Controller
 {
+    private $error = false;
+    private $code = Response::HTTP_OK;
+    private $message;
+
     /**
      * Display a listing of the resource.
      *
@@ -56,6 +60,7 @@ class MessageController extends \App\Http\Controllers\Controller
                     'user_id' => $data['userId'],
                     'storage' => $storage->getDisk(),
                     'channel_id' => $data['channelId'],
+                    'reactions' => $data['reactions'] ?? [],
                 ]);
 
                 foreach($data['files'] ?? [] as $file) {
@@ -79,7 +84,6 @@ class MessageController extends \App\Http\Controllers\Controller
             }
 
 
-            // ファイルの保存
             broadcast(new \App\Events\CreateMessage($insertedMessages));
             if ($insertedFiles) {
                 $messageToolRepository->createFiles($insertedFiles);
@@ -151,9 +155,25 @@ class MessageController extends \App\Http\Controllers\Controller
      * @param  \App\Models\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Todo $todo)
+    public function update(Request $request, MessageToolRepositoryInterface $messageToolRepository)
     {
-        //
+        try {
+            foreach($request['data'] as $data) {
+                $messageToolRepository->updateMessage($data['_id'], $data);
+            }
+
+            broadcast(new \App\Events\UpdateMessage($request['data']));
+        } catch (Exception $e) {
+            $this->error = true;
+            $this->code = Response::HTTP_BAD_REQUEST;
+            $this->message = $e->getMessage();
+            Log::error($e);
+        } finally {
+            return response()->json([
+                'error' => $this->error,
+                'message' => $this->message
+            ], $this->code);
+        }
     }
 
     /**

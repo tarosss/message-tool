@@ -11,7 +11,7 @@ use App\Models\ReactionKind;
 use App\Models\File;
 use App\Interfaces\Repositories\MessageToolRepositoryInterface;
 use Exception;
-
+use Log;
 class MessageToolRepository implements MessageToolRepositoryInterface
 {
     public function getAllData()
@@ -74,6 +74,13 @@ class MessageToolRepository implements MessageToolRepositoryInterface
         Message::insert($data);
     }
 
+    public function updateMessage(string $id, array $data)
+    {
+        unset($data['_id']);
+        return Message::where('_id', $id)
+            ->update($data);
+    }
+    
     public function createFile($data): File
     {
         return File::create($data);

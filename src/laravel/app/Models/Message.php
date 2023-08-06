@@ -13,6 +13,8 @@ class Message extends Moloquent
         'user_id',
         'storage',
         'sended',
+        'files',
+        'reactions',
         'channel_id',
     ];
 
@@ -33,5 +35,10 @@ class Message extends Moloquent
     public function files()
     {
         return $this->hasMany(\App\Models\File::class, '_ids', 'message_id');
+    }
+
+    public function reactions()
+    {
+        return $this->hasMany(\App\Models\Reaction::class, '_ids', 'rection4_id');
     }
 }

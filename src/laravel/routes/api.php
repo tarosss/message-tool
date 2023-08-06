@@ -30,6 +30,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/reaction-kind', '\App\Http\Controllers\Api\ReactionKindController@show');
     });
     
+    Route::group(['prefix' => 'update', 'middleware' => ['abilities:collection:update']], function () {
+        Route::post('/user', '\App\Http\Controllers\Api\MemberController@update');
+        Route::post('/message', '\App\Http\Controllers\Api\MessageController@update');
+        Route::post('/channel', '\App\Http\Controllers\Api\ChannelController@update');
+        Route::post('/reaction', '\App\Http\Controllers\Api\ReactionController@update');
+        Route::post('/reaction-kind', '\App\Http\Controllers\Api\ReactionKindController@update');
+    });
+
     Route::post('/post', '\App\Http\Controllers\Api\@index');
 });
 

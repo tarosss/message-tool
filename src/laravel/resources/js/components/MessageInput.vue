@@ -14,7 +14,7 @@
 
             </div>
             <p>
-                <i class="bi bi-send"></i>
+                <i class="bi bi-send" @click="sendMessage"></i>
             </p>
         </div>
 

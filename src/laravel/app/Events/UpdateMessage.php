@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\Models\Message;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -11,21 +10,20 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Log;
-class CreateMessage implements ShouldBroadcast
+
+class UpdateMessage implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    protected $messages;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-
-    protected $insertedMessages;
-    public function __construct($insertedMessages)
+    public function __construct($messages)
     {
-        Log::info('create message event');
-        $this->insertedMessages = $insertedMessages;
+        $this->messages = $messages;
     }
 
     /**
@@ -35,21 +33,18 @@ class CreateMessage implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        Log::info('cats');
-        return new Channel('create_message');
+        return new Channel('update_message');
     }
 
     public function broadcastWith()
     {
-        Log::info('with');
         return [
-            'message' => 'a',
+            'messages' => $this->messages,
         ];
     }
 
     // public function broadcastAs()
     // {
-    //     Log::info('with');
-    //     return 'message';
+    //     return 'ssssssss';
     // }
 }
