@@ -5,6 +5,10 @@
             :reaction-id="reactionId"
             @click="addReaction({ userId: logingUserId, token, reactionId, messageId: props.message._id})">
         </Reaction>
+        <div v-if="!props.message.isThread" @click="setThread({ newChannelId: showingChannelId, newThreadMessageId: props.message._id})"
+            class="pointer">
+            ス
+        </div>
     </div>
 </template>
 <script lang="ts" setup>
@@ -25,6 +29,6 @@ const props = defineProps<{
 
 const logingUserId = inject('loging-user-id', '')
 const token = inject('token', '')
-const { showing } = useShowing()
+const { showing, showingChannelId, setThread } = useShowing()
 
 </script>

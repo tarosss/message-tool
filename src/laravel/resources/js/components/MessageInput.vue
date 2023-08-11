@@ -11,7 +11,7 @@
         </textarea>
         <div class="message-input-footer">
             <div>
-
+                
             </div>
             <p>
                 <i class="bi bi-send" @click="sendMessage"></i>

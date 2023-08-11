@@ -15,6 +15,8 @@ declare type Message = {
   user_id: string,
   channel_id: string,
   reactions: MessageReactions,
+  thread: string[],
+  isThread?: number,
   created_at: string,
   updated_at: string,
 }
