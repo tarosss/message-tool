@@ -1,9 +1,19 @@
 @use 'variables';
 
 .body-channel {
+    // &-messages-by-day-wrapper {
+    //     // display: flex;
+    //     // flex-direction: column-reverse;
+    //     height: 100vh;
+    //     overflow: scroll;
+        
+    // }
+
     &-messages-by-day {
         position: relative;
         border-top: rgb(171, 171, 171) 1px solid;
+        // overflow: scroll;
+
         &-date {
             position: absolute;
             border-radius: 20px;

@@ -11,13 +11,10 @@
         </textarea>
         <div class="message-input-footer">
             <div>
-
+                
             </div>
             <p>
-                <v-icon
-                    :icon="mdiSendVariant"
-                    @click="sendMessage">
-                </v-icon>  
+                <i class="bi bi-send" @click="sendMessage"></i>
             </p>
         </div>
 

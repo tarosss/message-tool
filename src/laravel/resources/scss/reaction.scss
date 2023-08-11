@@ -1,0 +1,17 @@
+.reaction {
+
+}
+
+.reaction-bar {
+    width: 300px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background-color: rgb(61, 61, 61);
+    border-radius: 5px;
+}
+
+.reaction-image {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+}

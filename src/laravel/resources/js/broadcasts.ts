@@ -24,3 +24,9 @@ window.Echo.channel('laravel_database_create_message').listen('CreateMessage', (
     useMessages('message-' + message.channel_id).pushMessage({ newMessage: message })
   }
 })
+
+window.Echo.channel('laravel_database_update_message').listen('UpdateMessage', (data) => {
+  for (const message  of data.messages as Message[]) {
+    useMessages('message-' + message.channel_id).updateMessage({ updatedMessage: message })
+  }
+})

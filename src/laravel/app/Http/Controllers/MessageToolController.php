@@ -13,6 +13,7 @@ class MessageToolController extends Controller
         // Log::info($data);
         
         $userId = session()->get('user_id');
-        return view("sample", compact('userId'));
+        $token = session()->get('token');
+        return view("sample", compact('userId', 'token'));
     }
 }

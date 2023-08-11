@@ -64,7 +64,6 @@ class UserController extends \App\Http\Controllers\Controller
     {
         try {
             $users = $userRepository->getUsers([]);
-            Log::info($users);
             return response()->json([
                 'error' => false,
                 'users' => array_column($users, null, '_id'),

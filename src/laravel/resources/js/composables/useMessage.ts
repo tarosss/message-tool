@@ -16,6 +16,7 @@ export const useMessage = () => {
     }
   }
 
+  // テキストエリアの自動変形
   watch(message, () => {
     const reset = new Promise((resolve) => {
       resolve(textZoneHeight.value = 'auto')

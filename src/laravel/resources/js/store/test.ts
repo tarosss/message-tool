@@ -1,13 +1,32 @@
-import { useLocalStorage } from '@vueuse/core'
+import { defineStore, storeToRefs } from 'pinia'
+import { ref } from 'vue'
+
+const store = defineStore('test', () => {
+  const a = ref(0)
+  const b = ref(0)
+
+  const setA = (newA: number) => {
+    a.value = newA
+  }
+
+  const setB = (newB: number) => {
+    b.value = newB
+  }
+
+  return {
+    a,
+    setA,
+    b,
+    setB,
+  }
+})
 
 export function test() {
-  const store = useLocalStorage('msssss92', {
-    name: 'name1',
-    name2: 'name2',
-  })
+  const t = store()
+  const refT = storeToRefs(t)
 
-  const setName = (newName: string) => {
-    store.value.name = newName
+  return {
+    ...t,
+    ...refT,
   }
-  return {store, setName}
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="message">
+  <div class="message position-relative" ref="element">
     <p class="message-icon">
 
     </p>
@@ -9,24 +9,39 @@
           {{ user.display_name }}
         </p>
         <p class="font-10">
-          {{ format(new Date(message.created_at), 'HH:mm') }}
+          {{ format({date: message.created_at, formatString: 'HH:mm' }) }}
         </p>
         
       </div>
-      <p class="message-content-text">
+      <p class="message-content-text font-16">
         {{ message.message }}
       </p>
+      <UserReactionBar
+        v-if="Object.keys(message.reactions).length"
+        :message="message">
+      </UserReactionBar>
     </div>
+    <ReactionBar 
+      v-if="isHoverd"
+      class="position-absolute top-0 end-0"
+      :message="message">
+    </ReactionBar>
   </div>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted } from 'vue'
-import { format } from 'date-fns'
+import { Ref, computed, onMounted, watch } from 'vue'
+import ReactionBar from './ReactionBar.vue'
+import UserReactionBar from './UserReactionBar.vue'
+import Reaction from './ReactionBar.vue'
+import { format } from '../common/dateFormats'
 import { useUsers } from '../store/users';
-// import socket from './socket';
+import { useElementHover } from '../composables/useElementHover'
+
 const props = defineProps<{
   message: Message,
 }>()
 
+const { element, isHoverd } = useElementHover()
 const user = computed(() => useUsers().getUser(props.message.user_id) as User)
+
 </script>

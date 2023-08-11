@@ -1,7 +1,7 @@
 <template>
     <div 
         class="left-nav-row pointer"
-        :class="{'left-nav-row-showing': showing.showing == props._id}"
+        :class="{'left-nav-row-showing': showing.showing.value == props._id}"
         @click="clicked">
         <p>
             ＠
@@ -14,10 +14,6 @@
 </template>
 <script lang="ts" setup>
 import { useShowing } from '../store/showing'
-
-import { useChannels } from '../store/channels';
-import { storeToRefs } from 'pinia';
-const refChannels = storeToRefs(useChannels())
 
 const props = defineProps<{
     _id: string,

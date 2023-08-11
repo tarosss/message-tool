@@ -19,14 +19,16 @@
                 {{ channelCreateUserDisplayName }} がこのチャンネルを作成しました。チャンネルをどんどん活用していきましょう！ 
             </p>
         </div>
-        <div class="body-channel-messages-by-day"
-            v-for="[date, messageIds] of messages.messageIdsByDay">
-            <p class="body-channel-messages-by-day-date pointer"> 
-                {{ specialFormat(date, true) }} 
-            </p>
-            <Message v-for="messageId of messageIds" :key="'message' + messageId"
-                :message="(messages.messages.get(messageId) as Message)">
-            </Message>
+        <div class="body-channel-messages-by-day-wrapper" ref="htmlElement">
+            <div class="body-channel-messages-by-day"
+                v-for="[date, messageIds] of messages.messageIdsByDay.value">
+                <p class="body-channel-messages-by-day-date pointer"> 
+                    {{ specialFormat(date, true) }} 
+                </p>
+                <Message v-for="messageId of messageIds" :key="'message' + messageId"
+                    :message="(messages.messages.value.get(messageId) as Message)">
+                </Message>
+            </div>
         </div>
         <div>
             <MessageInput
@@ -36,47 +38,40 @@
     </div>
 </template>
 <script lang="ts" setup>
+import { onUpdated, inject } from 'vue';
 import Message from './Message.vue'
 import MessageInput from './MessageInput.vue'
-import { computed, onMounted, watchEffect } from 'vue';
+import { computed, onMounted, ref, watchEffect } from 'vue';
 import { useUsers } from '../store/users';
 import { useChannels } from '../store/channels';
 import { useMessages } from '../store/messages';
 import { useShowing } from '../store/showing';
-import { format, isThisYear } from 'date-fns'
-import { ja } from 'date-fns/locale';
-import { storeToRefs } from 'pinia';
+import { useScrollIntoViewOnce } from '../composables/useScrollIntoViewOnce'
+import { specialFormat } from '../common/dateFormats'
 const props = defineProps<{
-    logingUserId: string,
     channelId: string,
 }>()
 
+const logingUserId = inject('loging-user-id', '')
 const users = useUsers()
-const refUsers = storeToRefs(users)
-const refShowing = storeToRefs(useShowing())
-const channel = computed(() => useChannels().getChannel(refShowing.showing.value))
-const messages =  computed(() => useMessages('message-' + refShowing.showing.value))
+const showing = useShowing()
+const channel = computed(() => useChannels().getChannel(showing.showing.value))
+const messages =  computed(() => useMessages('message-' + showing.showing.value))
+const { htmlElement, bottom } = useScrollIntoViewOnce()
+
+onUpdated(() => {
+    if (props.channelId === showing.showing.value) {
+        // 表示中のものだけ実行する
+        bottom()
+    }
+})
 
 const channelCreateUserDisplayName = computed(() => {
-    if (channel.value.create_user === props.logingUserId) {
+    if (channel.value.create_user === logingUserId) {
         return 'あなた'
     }
 
-    return refUsers.users.value.get(props.logingUserId)?.display_name + 'さん'
+    return users.users.value.get(logingUserId)?.display_name + 'さん'
 })
-
-const specialFormat = (date: string, includeDay: boolean = false) => {
-    const tempDate = new Date(date)
-    let dateFormat = isThisYear(tempDate) ? 'MM月dd日' : 'yyyy年MM月dd日'
-
-    if (includeDay) {
-        dateFormat = dateFormat + ' (E)'
-    }
-    return format(tempDate, dateFormat, { locale:ja })
-}
-
-const getMessage = (messageId: string) => {
-    return messages.value.messages.get(messageId) as Message
-}
 
 </script>
