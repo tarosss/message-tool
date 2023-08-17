@@ -25,6 +25,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::group(['prefix' => 'show', 'middleware' => ['abilities:collection:show']], function () {
         Route::post('/user', '\App\Http\Controllers\Api\MemberController@store');
         Route::post('/message', '\App\Http\Controllers\Api\MessageController@show');
+        Route::post('/draft', '\App\Http\Controllers\Api\DraftController@show');
         Route::post('/channel', '\App\Http\Controllers\Api\ChannelController@show');
         Route::post('/reaction', '\App\Http\Controllers\Api\ReactionController@show');
         Route::post('/reaction-kind', '\App\Http\Controllers\Api\ReactionKindController@show');
@@ -33,6 +34,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::group(['prefix' => 'update', 'middleware' => ['abilities:collection:update']], function () {
         Route::post('/user', '\App\Http\Controllers\Api\MemberController@update');
         Route::post('/message', '\App\Http\Controllers\Api\MessageController@update');
+        Route::post('/draft', '\App\Http\Controllers\Api\DraftController@update');
         Route::post('/channel', '\App\Http\Controllers\Api\ChannelController@update');
         Route::post('/reaction', '\App\Http\Controllers\Api\ReactionController@update');
         Route::post('/reaction-kind', '\App\Http\Controllers\Api\ReactionKindController@update');

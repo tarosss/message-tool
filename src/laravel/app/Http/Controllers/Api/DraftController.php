@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
+use App\Interfaces\Repositories\MessageToolRepositoryInterface;
+use Illuminate\Http\Response;
+use Log;
 
-class DraftController extends Controller
+class DraftController extends \App\Http\Controllers\Controller
 {
     /**
      * Display a listing of the resource.
@@ -43,9 +46,31 @@ class DraftController extends Controller
      * @param  \App\Models\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function show(Todo $todo)
+    public function show(Request $request, MessageToolRepositoryInterface $messageToolRepository)
     {
-        //
+        $response = [
+            'error' => false,
+            'message' => '',
+            'drafts' => [],
+        ];
+        $code = Response::HTTP_OK;
+
+        try {
+            $drafts = $messageToolRepository->getDrafts([
+                'user_id' => $request->input('userId'),
+            ]);
+            
+            $response['drafts'] = array_column($drafts, null, 'draft_key');
+        } catch (Exception $e) {
+            $response = [
+                'error' => true,
+                'message' => $e->getMessage(),
+                'drafts' => [],
+            ];
+            $code = Response::HTTP_BAD_REQUEST;
+        } finally {
+            return response()->json($response, $code);
+        }
     }
 
     /**
@@ -66,9 +91,31 @@ class DraftController extends Controller
      * @param  \App\Models\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Todo $todo)
+    public function update(Request $request, MessageToolRepositoryInterface $messageToolRepository)
     {
-        //
+        $response = [
+            'error' => false,
+            'message' => '',
+        ];
+        $code = Response::HTTP_OK;
+
+        try {
+            foreach($request->input('data') as $data) {
+                $wheres = \App\Facades\DraftUtils::getUpsertKey($data);
+                $messageToolRepository->upsertDrafts(
+                    $data,
+                    $wheres,
+                );
+            }
+        } catch (Exception $e) {
+            $response = [
+                'error' => true,
+                'message' => $e->getMessage(),
+            ];
+            $code = Response::HTTP_BAD_REQUEST;
+        } finally {
+            return response()->json($response, $code);
+        }
     }
 
     /**

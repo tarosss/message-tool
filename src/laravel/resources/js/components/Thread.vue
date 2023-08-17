@@ -17,13 +17,14 @@
             :message="(messages.get(messageId) as Message)">
         </Message>
         <MessageInput
-            :channel="localChannel">
+            :channel="localChannel"
+            :message="localMessage">
         </MessageInput>
 
     </div>
 </template>
 <script lang="ts" setup>
-import { computed, ref, watchEffect, watch } from 'vue';
+import { ref, watchEffect } from 'vue';
 import Message from '../components/Message.vue'
 import MessageInput from '../components/MessageInput.vue'
 import { useChannels } from '../store/channels';

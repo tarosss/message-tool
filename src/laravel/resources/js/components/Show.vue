@@ -1,9 +1,9 @@
 <template>
     <div class="show">
         <ShowChannel
-            v-for="channelId of channels.channelIds.value"
-            v-show="showing.component.value === 'channel' && channelId === showing.showing.value"
-            :channelId="channelId">
+            v-for="[channelId, channel] of channels"
+            v-show="showing.component.value === 'channel' && channelId === showing.showingChannelId.value"
+            :channel="channel">
         </ShowChannel>
         <ShowNothing v-show="showing.component.value === ''"></ShowNothing>
     </div>
@@ -18,6 +18,5 @@ import { computed, watchEffect } from 'vue';
 
 
 const showing = useShowing()
-const channels = useChannels()
-
+const { channels } = useChannels()
 </script>

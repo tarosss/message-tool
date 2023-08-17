@@ -1,7 +1,7 @@
 <template>
     <div class="message-input" ref="dropZone">
         <textarea
-            v-model="message"
+            v-model="draft.message"
             ref="textZone"
             rows="1"
             :placeholder="props.channel.channel_name + 'へのメッセージ'"
@@ -31,11 +31,14 @@ import { useMessage } from '../composables/useMessage'
 import { getFetch } from '../common/fetches'
 import  { messageStoreUrl } from '../consts/fetches'
 import { inject } from 'vue';
-const { message, files, dropZone, textZone, textZoneHeight, canSend, isOverDropZone} = useMessage()
 
 const props = defineProps<{
     channel: Channel,
+    message?: Message,
 }>()
+
+const { draft, message, files, dropZone, textZone, textZoneHeight, canSend, isOverDropZone} = useMessage({ channelId: props.channel._id, messageId: props.message?._id })
+
 
 const logingUserId = inject('loging-user-id', '')
 const token = inject('token', '')

@@ -24,6 +24,6 @@ import { useResizer } from '../composables/useResizer'
 
 const { style, leftNav, show, thread, resizer1, resizer2, mouseDown1, mouseDown2, mouseUp} = useResizer()
 const { showing, showingChannelId, showingThreadMessageId, showThread, setShowingThread } = useShowing()
-const { messages } = useMessages('message-' + showingChannelId)
+const { messages } = useMessages('message-' + showingChannelId.value)
 const localShowThread = computed(() => showThread.value)
 </script>

@@ -10,7 +10,9 @@ use App\Models\ReactionKind;
 
 use App\Models\File;
 use App\Interfaces\Repositories\MessageToolRepositoryInterface;
+use App\Models\Draft;
 use Exception;
+use Illuminate\Support\Facades\Log as FacadesLog;
 use Log;
 class MessageToolRepository implements MessageToolRepositoryInterface
 {
@@ -80,7 +82,24 @@ class MessageToolRepository implements MessageToolRepositoryInterface
         return Message::where('_id', $id)
             ->update($data);
     }
+
+    public function getDrafts(array $wheres)
+    {
+        $data = Draft::select('*');
+        if (isset($wheres['user_id'])) {
+            $data->userId($wheres['user_id']);
+        }
+
+        return $data->count() ? $data->get()->toArray() : [];
+    }
     
+    public function upsertDrafts(array $data, array $wheres)
+    {
+        unset($data['_id']);
+        Draft::where($wheres)
+            ->update($data, ['upsert' => true]);
+    }
+
     public function createFile($data): File
     {
         return File::create($data);

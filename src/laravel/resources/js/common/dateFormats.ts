@@ -13,5 +13,8 @@ export const specialFormat = (date: string, includeDay: boolean = false) => {
 }
 
 export const format = (
-  { date, formatString } : { date: string, formatString: string },
-) => dataFnsFormat(new Date(date), formatString)
+  { date, formatString } : { date: string | null, formatString: string },
+) => {
+  const n = date === null ? new Date() : new Date(date)
+  return dataFnsFormat(n, formatString)
+}

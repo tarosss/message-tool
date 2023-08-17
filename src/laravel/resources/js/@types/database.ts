@@ -6,19 +6,27 @@ declare type User = {
 }
 
 declare type MessageReactions = {
-  [reactionId in string]: string[],
+  [reactionId in string]: string[]
 }
+
 declare type Message = {
   _id: string,
   message: string,
   storage: string,
   user_id: string,
   channel_id: string,
-  reactions: MessageReactions,
-  thread: string[],
+  reactions?: MessageReactions,
+  thread?: string[],
   isThread?: number,
+  files?: File[],
   created_at: string,
-  updated_at: string,
+  updated_at?: string,
+}
+
+declare type Draft = Omit<Message, '_id'> & {
+  _id: string | undefined
+  draft_key: string,
+  thread_message_id?: string,
 }
 
 declare type Channel = {

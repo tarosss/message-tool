@@ -25,6 +25,7 @@ module.exports = {
     'object-curly-newline': 'warn',
     'import/prefer-default-export': 'off',
     'no-underscore-dangle': 'off',
-    'no-restricted-syntax': 'off'
+    'no-restricted-syntax': 'off',
+    '@typescript-eslint/no-floating-promises': 'off',
   },
 }

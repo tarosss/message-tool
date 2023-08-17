@@ -21,8 +21,11 @@ const store = defineStore('showing', () => {
         component.value = 'message'
         break
       default:
+        if (!showThread.value) {
+          // スレッドが隠れている時に表示する
+          showingChannelId.value = newShowing
+        }
         component.value = 'channel'
-        showingChannelId.value = newShowing
         break
     }
   }

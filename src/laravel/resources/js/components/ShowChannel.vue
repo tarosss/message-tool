@@ -1,8 +1,8 @@
 <template>
-    <div v-if="channel" class="body-channel padding-top-10">
+    <div v-if="props.channel" class="body-channel padding-top-10">
         <div class="body-channel-header">
             <p class="font-16">
-               # {{ channel.channel_name }}
+               # {{ props.channel.channel_name }}
             </p>
             <div class="body-channel-header-right">
                 <div class="body-channel-header-right-members">
@@ -12,10 +12,10 @@
         </div>
         <div class="margin-bottom-30">
             <p class="font-20">
-                # {{ channel.channel_name }}
+                # {{ props.channel.channel_name }}
             </p>
             <p>
-                {{ specialFormat(channel.created_at) }}、
+                {{ specialFormat(props.channel.created_at) }}、
                 {{ channelCreateUserDisplayName }} がこのチャンネルを作成しました。チャンネルをどんどん活用していきましょう！ 
             </p>
         </div>
@@ -32,7 +32,7 @@
         </div>
         <div>
             <MessageInput
-                :channel="channel">
+                :channel="props.channel">
             </MessageInput>
         </div>
     </div>
@@ -49,9 +49,8 @@ import { useShowing } from '../store/showing';
 import { useScrollIntoViewOnce } from '../composables/useScrollIntoViewOnce'
 import { specialFormat } from '../common/dateFormats'
 const props = defineProps<{
-    channelId: string,
+    channel: Channel,
 }>()
-
 const logingUserId = inject('loging-user-id', '')
 const users = useUsers()
 const showing = useShowing()
@@ -60,14 +59,14 @@ const messages =  computed(() => useMessages('message-' + showing.showing.value)
 const { htmlElement, bottom } = useScrollIntoViewOnce()
 
 onUpdated(() => {
-    if (props.channelId === showing.showing.value) {
+    if (props.channel._id === showing.showing.value) {
         // 表示中のものだけ実行する
         bottom()
     }
 })
 
 const channelCreateUserDisplayName = computed(() => {
-    if (channel.value.create_user === logingUserId) {
+    if (props.channel.create_user === logingUserId) {
         return 'あなた'
     }
 
