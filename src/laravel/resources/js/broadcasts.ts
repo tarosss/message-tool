@@ -21,7 +21,8 @@ window.Echo.channel('laravel_database_event_lib').listen('sample', (e) => {
 
 window.Echo.channel('laravel_database_create_message').listen('CreateMessage', (data) => {
   for (const message  of data.messages as Message[]) {
-    useMessages('message-' + message.channel_id).pushMessage({ newMessage: message })
+    const { messages, pushMessage } = useMessages('message-' + message.channel_id)
+    pushMessage({ newMessage: message })
   }
 })
 

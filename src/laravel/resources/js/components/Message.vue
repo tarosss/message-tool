@@ -24,7 +24,8 @@
     <ReactionBar 
       v-if="isHoverd"
       class="position-absolute top-0 end-0"
-      :message="message">
+      :message="props.message"
+      :is-thread="props.isThread">
     </ReactionBar>
   </div>
 </template>
@@ -37,9 +38,12 @@ import { format } from '../common/dateFormats'
 import { useUsers } from '../store/users';
 import { useElementHover } from '../composables/useElementHover'
 
-const props = defineProps<{
-  message: Message,
-}>()
+const props = withDefaults(defineProps<{
+    message: Message,
+    isThread?: boolean,
+}>(), {
+    isThread: false
+})
 
 const { element, isHoverd } = useElementHover()
 const user = computed(() => useUsers().getUser(props.message.user_id) as User)

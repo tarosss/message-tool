@@ -13,5 +13,6 @@ declare type FetchStoreMessage = {
   userId: string,
   channelId: string,
   storage: 1 | 2,
+  threadMessageId?: string | undefined,
   files?: File[],
 }

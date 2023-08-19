@@ -10,11 +10,13 @@
             <!-- {{ Number(props.message.thread.length) }}件の返信 -->
         </p>
         <Message
-            :message="localMessage">
+            :message="localMessage"
+            :is-thread="false">
         </Message>
         <Message
             v-for="messageId in localMessage.thread" :key="'thread' + messageId"
-            :message="(messages.get(messageId) as Message)">
+            :message="(messages.get(messageId) as Message)"
+            :is-thread="false">
         </Message>
         <MessageInput
             :channel="localChannel"

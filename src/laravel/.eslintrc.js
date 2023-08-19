@@ -27,5 +27,6 @@ module.exports = {
     'no-underscore-dangle': 'off',
     'no-restricted-syntax': 'off',
     '@typescript-eslint/no-floating-promises': 'off',
+    'no-continue': 'off',
   },
 }

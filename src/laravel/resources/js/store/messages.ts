@@ -1,4 +1,4 @@
-import { computed, ref, watch, watchEffect } from 'vue'
+import { computed, ref } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 import { format } from '../common/dateFormats'
 /**
@@ -12,7 +12,7 @@ export const useMessages = (channelId: string) => {
   const store = defineStore(channelId, () => {
     const messages = ref(new Map<string, Message>())
 
-    // 日別のId
+    // 日別のId スレッドメッセージは除く
     const messageIdsByDay = ref(new Map<string, string[]>())
 
     const setMessages = (messagesObject: MapMessage) => {
@@ -20,6 +20,10 @@ export const useMessages = (channelId: string) => {
 
       const temp: { [date in string]: string[] } = {}
       for (const [messageId, message] of messages.value) {
+        if (message.thread_message_id) {
+          continue
+        }
+
         const date = format({ date: message.created_at, formatString: dateFormat })
         if (temp[date] === undefined) {
           temp[date] = [messageId]
@@ -33,6 +37,13 @@ export const useMessages = (channelId: string) => {
 
     const pushMessage = ({ newMessage, key }:{ newMessage: Message, key?: string }) => {
       messages.value.set(key ?? newMessage._id, newMessage)
+
+      if (newMessage.thread_message_id) {
+        // スレッドのメッセージの場合はスレッドの元の配列に追加
+        messages.value.get(newMessage.thread_message_id)?.thread.push(newMessage._id)
+        // 一覧としては表示しないためここで終了
+        return
+      }
 
       const date = format({ date: newMessage.created_at, formatString: dateFormat })
       if (messageIdsByDay.value.has(date)) {

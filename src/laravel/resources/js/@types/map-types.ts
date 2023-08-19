@@ -6,6 +6,10 @@ declare type MapMessage = {
   [messageId in string]: Message
 }
 
+declare type MapDraft = {
+  [messageId in string]: Draft
+}
+
 declare type MapChannel = {
   [channelId in string]: Channel
 }

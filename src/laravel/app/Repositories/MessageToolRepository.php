@@ -83,6 +83,13 @@ class MessageToolRepository implements MessageToolRepositoryInterface
             ->update($data);
     }
 
+    // カラムを指定してデータを追加する
+    public function pushMessage(string $id, string $column, $data)
+    {
+        return Message::where('_id', $id)
+            ->push($column, $data);
+    }
+
     public function getDrafts(array $wheres)
     {
         $data = Draft::select('*');

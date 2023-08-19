@@ -74,7 +74,6 @@ onBeforeMount(()=> {
       .then(json => {
         useReactions().setReactions({newReactions: json.reactions})
         showFlags.value.reaction = true
-
       }),
 
     getFetch({ token: props.token})(draftGetUrl).post({
