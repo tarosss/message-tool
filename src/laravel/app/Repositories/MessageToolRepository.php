@@ -107,6 +107,12 @@ class MessageToolRepository implements MessageToolRepositoryInterface
             ->update($data, ['upsert' => true]);
     }
 
+    public function deleteDraft(array $wheres)
+    {
+        Draft::where($wheres)
+            ->delete();
+    }
+
     public function createFile($data): File
     {
         return File::create($data);

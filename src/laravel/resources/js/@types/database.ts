@@ -18,16 +18,26 @@ declare type Message = {
   reactions?: MessageReactions,
   thread: string[],
   thread_message_id?: string,
-  isThread?: number,
-  files: File[],
+  files: string[],
   created_at: string,
   updated_at?: string,
 }
 
-declare type Draft = Omit<Message, '_id'> & {
-  _id: string | undefined
+declare type Draft = Omit<Message, '_id' | 'files'> & {
+  _id?: string,
   draft_key: string,
+  files: DraftFile[],
   thread_message_id?: string,
+}
+
+declare type DraftFile = {
+  _id?: string,
+  original_file_name?: string,
+  file_name?: string,
+  sended: 0 | 1,
+  file?: File,
+  created_at: string,
+  updated_at?: string,
 }
 
 declare type Channel = {

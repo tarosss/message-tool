@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
-use App\Interfaces\Repositories\MessageToolRepositoryInterface;
 use Illuminate\Http\Response;
+use App\Interfaces\Repositories\MessageToolRepositoryInterface;
+use App\Facades\FileUtils;
 use Log;
+use PhpParser\Node\Stmt\Foreach_;
 
 class DraftController extends \App\Http\Controllers\Controller
 {
@@ -98,16 +100,31 @@ class DraftController extends \App\Http\Controllers\Controller
             'message' => '',
         ];
         $code = Response::HTTP_OK;
+        $fileInfo = [];
 
         try {
-            foreach($request->input('data') as $data) {
-                $wheres = \App\Facades\DraftUtils::getUpsertKey($data);
-                $messageToolRepository->upsertDrafts(
-                    $data,
-                    $wheres,
-                );
+            $draft = $request->all();
+            $storage = \App\Factories\StorageFactory::getStorage();
+
+            // ファイルの保存
+            foreach($request->file('files') ?? [] as $fileData) {
+                $file = $fileData['file'];
+                $fileInfo[] = [
+                    'original_file_name' => $file->getClientOriginalName(),
+                    'file_name' => FileUtils::putFile($storage, 'message', $file),
+                ];
             }
+            
+            $wheres = \App\Facades\DraftUtils::getUpsertKey($request);
+            $messageToolRepository->upsertDrafts(
+                $draft,
+                $wheres,
+            );
+
+            $draft['files'] = $fileInfo;
+            $response['draft'] = $draft;
         } catch (Exception $e) {
+            Log::error($e);
             $response = [
                 'error' => true,
                 'message' => $e->getMessage(),
@@ -124,9 +141,32 @@ class DraftController extends \App\Http\Controllers\Controller
      * @param  \App\Models\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Todo $todo)
+    public function destroy(Request $request, MessageToolRepositoryInterface $messageToolRepository)
     {
-        //
+        $response = [
+            'error' => false,
+            'message' => '',
+        ];
+        $code = Response::HTTP_OK;
+
+        try {
+            foreach($request->input('data') as $draft) {
+                $wheres = \App\Facades\DraftUtils::getUpsertKey($draft);
+                $messageToolRepository->deleteDraft($wheres);
+            }
+
+            $storage = \App\Factories\StorageFactory::getStorage();
+            // ファイルを削除する
+            // $storage->deleteFile('draft');
+        } catch (Exception $e) {
+            $response = [
+                'error' => true,
+                'message' => $e->getMessage(),
+            ];
+            $code = Response::HTTP_BAD_REQUEST;
+        } finally {
+            return response()->json($response, $code);
+        }
     }
 
 }

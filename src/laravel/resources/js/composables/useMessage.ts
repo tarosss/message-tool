@@ -2,13 +2,14 @@ import { computed, ref, Ref, watch, inject } from 'vue'
 import { useDropZone } from '@vueuse/core'
 import { useDrafts } from '../store/drafts'
 import { format } from '../common/dateFormats'
-import { getFetch } from '../common/fetches';
-import { deepCopy } from '../common/objectUtils';
-import { draftUpdateUrl, messageStoreUrl } from '../consts/fetches'
+import { getFetch, getFetch2 } from '../common/fetches'
+import { deepCopy, toFormData } from '../common/objectUtils'
+import { validDraft, getPostDraft } from '../common/draftUtils'
+import { draftUpdateUrl, draftDeleteUrl, messageStoreUrl } from '../consts/fetches'
 import { Created } from '../consts/httpStatusCodes'
 
 const formatString = 'yyyy-MM-dd HH:mm:ss'
-
+const timeout = 1000
 type MessageType = {
   channelId: string,
   messageId?: string,
@@ -57,7 +58,8 @@ export const useMessage = ({ messageId, channelId }: MessageType) => {
   const userId = inject('loging-user-id', '')
   const token = inject('token', '')
   const storage = inject('storage', 1)
-  let fetchClearTimeout = null
+  let storeTimeout = null
+  let deleteTimeout = null
 
   // メッセージデータ関連
   const draft = ref(getDraftData({ draftKey, userId, messageId, channelId }))
@@ -67,16 +69,27 @@ export const useMessage = ({ messageId, channelId }: MessageType) => {
   const dropZone = ref<HTMLElement>()
   const textZone = ref<HTMLElement>()
   const textZoneHeight = ref((lineHeight * 2) + 'px')
+
   // ファイルのドロップ
   const droped = (dropedfiles: File[] | null) => {
-    if (dropedfiles) {
-      draft.value.files.push(...dropedfiles)
+    if (!dropedfiles) {
+      return
+    }
+
+    const now = format({ date: null, formatString })
+    // console.log(dropedfiles)
+    for (const file of dropedfiles) {
+      draft.value.files.push({
+        file,
+        sended: 0,
+        created_at: now,
+      })
     }
   }
 
   // メッセージの投稿
   const sendMessage = async () => {
-    getFetch({ token })(messageStoreUrl)
+    getFetch({ token, contentType: 'multipart/form-data' })(messageStoreUrl)
       .post({ data: [draft.value] })
       .then((res) => {
         if (res.statusCode.value !== Created) {
@@ -99,19 +112,42 @@ export const useMessage = ({ messageId, channelId }: MessageType) => {
       const h = textZone.value?.scrollHeight as number - 4
       textZoneHeight.value = h + 'px'
     })
+    if (!validDraft(draft.value)) {
+      // テキストとファイルがからの場合はstoreのドラフトをけす
+      deleteTimeout = setTimeout(() => {
+        getFetch({ token })(draftDeleteUrl).post({ data: [draft.value] })
+      }, timeout)
+      return
+    }
 
-    draft.value.updated_at = format({ date: null, formatString })
+    // 更新日を更新
+    // draft.value.updated_at = format({ date: null, formatString })
+    // ストアの更新
     pushDraft({ newDraft: draft.value, key: draftKey })
 
-    clearTimeout(fetchClearTimeout)
-    fetchClearTimeout = setTimeout(() => {
-      getFetch({ token })(draftUpdateUrl).post({ data: [draft.value] })
-        .then(res => res.data.value)
-        .then(jsonText => JSON.parse(jsonText as string))
-        .then(json => {
-          console.log(json)
-        })
-    }, 10000)
+    // console.log(toFormData(getPostDraft(draft.value)))
+    clearTimeout(storeTimeout)
+    clearTimeout(deleteTimeout)
+    getFetch2({
+      token,
+      body: toFormData(
+        getPostDraft(draft.value),
+        // { data: { 0: getPostDraft(draft.value) } },
+      ),
+      url: draftUpdateUrl,
+    })
+      .then((res) => res.json())
+      .then((json) => json.draft.files)
+      .then((files) => {
+        for (const [i ,fileInfo] of Object.entries(files)) {
+          for (const file of draft.value.files) {
+            if (file.file?.name === fileInfo.original_file_name) {
+              file.sended = 1
+              break
+            }
+          }
+        }
+      })
   }, { deep: true })
 
   const { isOverDropZone } = useDropZone(dropZone, droped)

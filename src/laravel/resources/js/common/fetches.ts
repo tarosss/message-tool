@@ -1,11 +1,23 @@
 import { createFetch } from '@vueuse/core';
 
-export const getFetch = ({ token }: { token: string }) => {
+type GetFetch2Args = {
+  // headers: {
+  //   Authorization: string,
+  //   'Content-Type'?: string,
+  // },
+  token: string,
+  body: FormData | string,
+  url: string,
+}
+
+const getContentType = (data: object | FormData) => {
+}
+export const getFetch = ({ token, contentType }: { token: string, contentType?: string | 'application/json' }) => {
   const fetch = createFetch({
     options: {
       async beforeFetch({ options }) {
         options.headers.Authorization = `Bearer ${token}`
-
+        // options.headers.ContentType = contentType
         return { options }
       },
       onFetchError: (response) => {
@@ -16,4 +28,16 @@ export const getFetch = ({ token }: { token: string }) => {
   })
 
   return fetch
+}
+
+export const getFetch2 = ({ body, url, token }: GetFetch2Args) => {
+  const f = fetch(url, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    method: 'POST',
+    body,
+  })
+
+  return f
 }

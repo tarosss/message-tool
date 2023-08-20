@@ -4,7 +4,7 @@ namespace App\Facades;
 use Log;
 class DraftUtils
 {
-    public static function getUpsertKey(array &$array): array
+    public static function getUpsertKey(&$array): array
     {
         if (isset($array['_id'])) {
             return ['_id' => $array['_id'], ];
@@ -26,5 +26,10 @@ class DraftUtils
         }
 
         return $channelId;
+    }
+
+    public function update(array $data) 
+    {
+
     }
 }

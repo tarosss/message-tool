@@ -3,10 +3,10 @@
 namespace App\Storages;
 
 use \App\Interfaces\Storages\StorageInterface;
+use Illuminate\Support\Facades\Storage as FacadesStorage;
 use Storage;
 class StorageLocal implements StorageInterface
 {
-
     private $disk;
     public function __construct()
     {
@@ -25,5 +25,14 @@ class StorageLocal implements StorageInterface
 
         Storage::disk($this->disk)
             ->putFileAs($path, $file, $fileName);
+    }
+
+    public function deleteFile(string $path, string $fileName, $public = true)
+    {
+        if ($public) {
+            $path = 'public/' . $path;
+        }
+        Log::info($path . '/' . $fileName);
+        Storage::delete($path . '/' . $fileName);
     }
 }

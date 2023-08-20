@@ -40,6 +40,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/reaction-kind', '\App\Http\Controllers\Api\ReactionKindController@update');
     });
 
+    Route::group(['prefix' => 'delete', 'middleware' => ['abilities:collection:destroy']], function () {
+        Route::post('/user', '\App\Http\Controllers\Api\MemberController@destroy');
+        Route::post('/message', '\App\Http\Controllers\Api\MessageController@destroy');
+        Route::post('/draft', '\App\Http\Controllers\Api\DraftController@destroy');
+        Route::post('/channel', '\App\Http\Controllers\Api\ChannelController@destroy');
+        Route::post('/reaction', '\App\Http\Controllers\Api\ReactionController@destroy');
+        Route::post('/reaction-kind', '\App\Http\Controllers\Api\ReactionKindController@destroy');
+    });
+
     Route::post('/post', '\App\Http\Controllers\Api\@index');
 });
 

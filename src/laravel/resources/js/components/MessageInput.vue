@@ -1,5 +1,5 @@
 <template>
-    <div class="message-input" ref="dropZone">
+    <div class="message-input" ref="dropZone" style="background-color: blue;">
         <textarea
             v-model="draft.message"
             ref="textZone"
