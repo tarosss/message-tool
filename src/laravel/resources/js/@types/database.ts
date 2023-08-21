@@ -26,7 +26,9 @@ declare type Message = {
 declare type Draft = Omit<Message, '_id' | 'files'> & {
   _id?: string,
   draft_key: string,
-  files: DraftFile[],
+  files: {
+    [originalFileName in string]: DraftFile
+  },
   thread_message_id?: string,
 }
 

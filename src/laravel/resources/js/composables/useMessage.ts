@@ -38,7 +38,7 @@ const getDraftData = ({ draftKey, userId, channelId, messageId } : GetDraftAttr)
       draft_key: draftKey,
       message: '',
       thread: [],
-      files: [],
+      files: {},
       storage: 'local',
       user_id: userId,
       channel_id: channelId,
@@ -79,11 +79,12 @@ export const useMessage = ({ messageId, channelId }: MessageType) => {
     const now = format({ date: null, formatString })
     // console.log(dropedfiles)
     for (const file of dropedfiles) {
-      draft.value.files.push({
-        file,
+      draft.value.files[file.name] = {
         sended: 0,
+        original_file_name: file.name,
         created_at: now,
-      })
+        file,
+      }
     }
   }
 
@@ -139,13 +140,17 @@ export const useMessage = ({ messageId, channelId }: MessageType) => {
       .then((res) => res.json())
       .then((json) => json.draft.files)
       .then((files) => {
-        for (const [i ,fileInfo] of Object.entries(files)) {
-          for (const file of draft.value.files) {
-            if (file.file?.name === fileInfo.original_file_name) {
-              file.sended = 1
-              break
-            }
-          }
+        console.log(files)
+        for (const [i, fileInfo] of Object.entries(files)) {
+          console.log(i)
+          console.log(fileInfo)
+          draft.value.files[fileInfo.original_file_name].sended = 1
+          // for (const file of draft.value.files) {
+          //   if (file.file?.name === fileInfo.original_file_name) {
+          //     file.sended = 1
+          //     break
+          //   }
+          // }
         }
       })
   }, { deep: true })

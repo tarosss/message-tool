@@ -32,4 +32,10 @@ class DraftUtils
     {
 
     }
+
+    public static function unsetFile(array $data)
+    {
+        unset($data['files']);
+        return $data;
+    }
 }

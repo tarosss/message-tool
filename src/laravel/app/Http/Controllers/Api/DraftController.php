@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Interfaces\Repositories\MessageToolRepositoryInterface;
 use App\Facades\FileUtils;
+use App\Facades\DraftUtils;
 use Log;
 use PhpParser\Node\Stmt\Foreach_;
 
@@ -100,29 +101,46 @@ class DraftController extends \App\Http\Controllers\Controller
             'message' => '',
         ];
         $code = Response::HTTP_OK;
+        
         $fileInfo = [];
 
         try {
             $draft = $request->all();
             $storage = \App\Factories\StorageFactory::getStorage();
+            $nowString = \App\Facades\Date::getNowString();
+            // Log::info($request);
+            // Log::info($request->file());
 
+            $wheres = DraftUtils::getUpsertKey($request);
+            $oldDraft = $messageToolRepository->getDraft($wheres);
+            // すでに登録してあるファイル
+            $draft['files'] = $oldDraft['files'];
             // ファイルの保存
             foreach($request->file('files') ?? [] as $fileData) {
                 $file = $fileData['file'];
-                $fileInfo[] = [
+
+                $t = [
                     'original_file_name' => $file->getClientOriginalName(),
                     'file_name' => FileUtils::putFile($storage, 'message', $file),
+                    'sended' => 1,
+                    'created_at' => $nowString,
                 ];
+
+                $fileInfo[] = $t;
+                $draft['files'][$t['original_file_name']] = $t;
             }
-            
-            $wheres = \App\Facades\DraftUtils::getUpsertKey($request);
+            // Log::info($draft);
+            // テキストデータなどを保存
             $messageToolRepository->upsertDrafts(
                 $draft,
                 $wheres,
             );
-
+                        
             $draft['files'] = $fileInfo;
             $response['draft'] = $draft;
+            Log::info($response);
+        } catch (Throwable $t) {
+            Log::error($t);
         } catch (Exception $e) {
             Log::error($e);
             $response = [

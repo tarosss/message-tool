@@ -90,6 +90,12 @@ class MessageToolRepository implements MessageToolRepositoryInterface
             ->push($column, $data);
     }
 
+    public function getDraft(array $wheres)
+    {
+        return Draft::where($wheres)
+             ->first();
+    }
+
     public function getDrafts(array $wheres)
     {
         $data = Draft::select('*');
@@ -100,6 +106,12 @@ class MessageToolRepository implements MessageToolRepositoryInterface
         return $data->count() ? $data->get()->toArray() : [];
     }
     
+    public function pushDraft(array $wheres, array $column, array $fileData)
+    {
+        Draft::where($wheres)
+            ->push($column, $fileData);
+    }
+
     public function upsertDrafts(array $data, array $wheres)
     {
         unset($data['_id']);
