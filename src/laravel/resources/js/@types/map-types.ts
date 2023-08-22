@@ -17,3 +17,7 @@ declare type MapChannel = {
 declare type MapReactions = {
   [reactionId in string]: Reaction
 }
+
+declare type MapFile = {
+  [fileId in string]: MessageFile
+}

@@ -5,7 +5,7 @@ import { format } from '../common/dateFormats'
 import { getFetch, getFetch2 } from '../common/fetches'
 import { deepCopy, toFormData } from '../common/objectUtils'
 import { validDraft, getPostDraft } from '../common/draftUtils'
-import { draftUpdateUrl, draftDeleteUrl, messageStoreUrl } from '../consts/fetches'
+import { draftUpdateUrl, draftDeleteUrl, messageStoreUrl2 } from '../consts/fetches'
 import { Created } from '../consts/httpStatusCodes'
 
 const formatString = 'yyyy-MM-dd HH:mm:ss'
@@ -75,7 +75,7 @@ export const useMessage = ({ messageId, channelId }: MessageType) => {
     if (!dropedfiles) {
       return
     }
-
+    
     const now = format({ date: null, formatString })
     // console.log(dropedfiles)
     for (const file of dropedfiles) {
@@ -90,21 +90,41 @@ export const useMessage = ({ messageId, channelId }: MessageType) => {
 
   // メッセージの投稿
   const sendMessage = async () => {
-    getFetch({ token, contentType: 'multipart/form-data' })(messageStoreUrl)
-      .post({ data: [draft.value] })
+    getFetch2({
+      token,
+      body: toFormData(
+        draft.value,
+      ),
+      url: messageStoreUrl2,
+    })
       .then((res) => {
-        if (res.statusCode.value !== Created) {
-          // 失敗
+        if (!res.ok) {
           throw new Error()
         }
-        // ドラフトのストアを削除
-        deleteDraft(draftKey)
-        draft.value = getDraftData({ draftKey, userId, messageId, channelId })
+        draft.value.message = ''
+        draft.value.files = {}
       })
+      .catch(res => {
+        console.error('send message is fail')
+      })
+
+    // getFetch({ token, contentType: 'multipart/form-data' })(messageStoreUrl2)
+    //   .post({ data: [draft.value] })
+    //   .then((res) => {
+    //     if (res.statusCode.value !== Created) {
+    //       // 失敗
+    //       throw new Error()
+    //     }
+    //     // ドラフトのストアを削除
+    //     deleteDraft(draftKey)
+    //     draft.value = getDraftData({ draftKey, userId, messageId, channelId })
+    //   })
   }
 
   // テキストエリアの自動変形とstoreの更新
   watch(draft, () => {
+    console.log(draft.value.files)
+
     const reset = new Promise((resolve) => {
       resolve(textZoneHeight.value = 'auto')
     })
@@ -120,7 +140,6 @@ export const useMessage = ({ messageId, channelId }: MessageType) => {
       }, timeout)
       return
     }
-
     // 更新日を更新
     // draft.value.updated_at = format({ date: null, formatString })
     // ストアの更新
@@ -137,13 +156,19 @@ export const useMessage = ({ messageId, channelId }: MessageType) => {
       ),
       url: draftUpdateUrl,
     })
-      .then((res) => res.json())
-      .then((json) => json.draft.files)
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error()
+        }
+        return res.json()
+      })
+      .then((json) => json.draft)
+      .then((draft) => {
+        console.log(draft)
+        return draft.files ?? []
+      })
       .then((files) => {
-        console.log(files)
         for (const [i, fileInfo] of Object.entries(files)) {
-          console.log(i)
-          console.log(fileInfo)
           draft.value.files[fileInfo.original_file_name].sended = 1
           // for (const file of draft.value.files) {
           //   if (file.file?.name === fileInfo.original_file_name) {

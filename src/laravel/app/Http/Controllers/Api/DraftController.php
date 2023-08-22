@@ -108,14 +108,14 @@ class DraftController extends \App\Http\Controllers\Controller
             $draft = $request->all();
             $storage = \App\Factories\StorageFactory::getStorage();
             $nowString = \App\Facades\Date::getNowString();
-            // Log::info($request);
             // Log::info($request->file());
 
             $wheres = DraftUtils::getUpsertKey($request);
             $oldDraft = $messageToolRepository->getDraft($wheres);
             // すでに登録してあるファイル
-            $draft['files'] = $oldDraft['files'];
+            $draft['files'] = $oldDraft['files'] ?? [];
             // ファイルの保存
+
             foreach($request->file('files') ?? [] as $fileData) {
                 $file = $fileData['file'];
 
@@ -129,7 +129,6 @@ class DraftController extends \App\Http\Controllers\Controller
                 $fileInfo[] = $t;
                 $draft['files'][$t['original_file_name']] = $t;
             }
-            // Log::info($draft);
             // テキストデータなどを保存
             $messageToolRepository->upsertDrafts(
                 $draft,
@@ -138,14 +137,12 @@ class DraftController extends \App\Http\Controllers\Controller
                         
             $draft['files'] = $fileInfo;
             $response['draft'] = $draft;
-            Log::info($response);
-        } catch (Throwable $t) {
-            Log::error($t);
         } catch (Exception $e) {
             Log::error($e);
             $response = [
                 'error' => true,
                 'message' => $e->getMessage(),
+                'draft' => []
             ];
             $code = Response::HTTP_BAD_REQUEST;
         } finally {

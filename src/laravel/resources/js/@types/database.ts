@@ -32,6 +32,9 @@ declare type Draft = Omit<Message, '_id' | 'files'> & {
   thread_message_id?: string,
 }
 
+/**
+ * draft状態のファイルの記録
+ */
 declare type DraftFile = {
   _id?: string,
   original_file_name?: string,
@@ -40,6 +43,21 @@ declare type DraftFile = {
   file?: File,
   created_at: string,
   updated_at?: string,
+}
+
+/**
+ * filesテーブル
+ */
+declare type MessageFile = {
+  _id: string,
+  original_file_name: string,
+  file_name: string,
+  mime_type: string,
+  user_id: string,
+  channel_id: string,
+  message_id: string,
+  created_at: string,
+  updated_at: string,
 }
 
 declare type Channel = {

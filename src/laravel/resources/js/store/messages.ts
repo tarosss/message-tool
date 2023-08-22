@@ -1,4 +1,4 @@
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 import { format } from '../common/dateFormats'
 /**
@@ -38,6 +38,7 @@ export const useMessages = (channelId: string) => {
     const pushMessage = ({ newMessage, key }:{ newMessage: Message, key?: string }) => {
       messages.value.set(key ?? newMessage._id, newMessage)
 
+      console.log(newMessage.thread_message_id)
       if (newMessage.thread_message_id) {
         // スレッドのメッセージの場合はスレッドの元の配列に追加
         messages.value.get(newMessage.thread_message_id)?.thread.push(newMessage._id)
@@ -46,6 +47,7 @@ export const useMessages = (channelId: string) => {
       }
 
       const date = format({ date: newMessage.created_at, formatString: dateFormat })
+      console.log(date)
       if (messageIdsByDay.value.has(date)) {
         (messageIdsByDay.value.get(date) as string[]).push(newMessage._id)
       } else {

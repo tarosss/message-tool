@@ -11,20 +11,18 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use Log;
 
-class CreateMessage implements ShouldBroadcast
+class CreateFile implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     protected $messages;
-    protected $files;
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($messages, $files = [])
+    public function __construct($files)
     {
-        $this->messages = $messages;
         $this->files = $files;
     }
 
@@ -35,13 +33,12 @@ class CreateMessage implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new Channel('create_message');
+        return new Channel('create_file');
     }
 
     public function broadcastWith()
     {
         return [
-            'messages' => $this->messages,
             'files' => $this->files,
         ];
     }

@@ -120,6 +120,81 @@ class MessageController extends \App\Http\Controllers\Controller
         }
     }
 
+    public function store2(Request $request, MessageToolRepositoryInterface $messageToolRepository)
+    {
+        Log::info($request);
+        $code = Response::HTTP_CREATED;
+        $response = [
+            'error' => false,
+            'message' => null,
+            'created_message' => [],
+        ];
+
+        try {
+            $storage = \App\Factories\StorageFactory::getStorage();
+            $nowString = \App\Facades\Date::getNowString();
+            $threadMessageId = $request->input('thread_message_id') ?? null;
+            $message = [
+                'message' => $request->input('message'),
+                'user_id' => $request->input('user_id'),
+                'storage' => $storage->getDisk(),
+                'channel_id' => $request->input('channel_id'),
+                'thread_message_id' => $threadMessageId,
+                'thread' => $request->input('thread') ?? [],
+                'files' => $request->input('files') ?? [],
+                'reactions' => $request->input('reactions') ?? [],
+            ];
+            
+
+            if ($threadMessageId) {
+                // スレッド元のメッセージのデータ変更
+                $messageToolRepository->pushMessage($threadMessageId, 'thread', $insertedMessage->_id);
+            }
+
+            // draftの時点で登録されてないファイルの確認
+            foreach($request->file() ?? [] as $fileData) {
+    
+                if ($fileData['sended'] == 1) {
+                    continue;
+                }
+                $file = $fileData['file'];
+                $originalFileName = $file->getClientOriginalName();
+                // ファイルを保存してファイル名を保存する
+                $message['files'][$originalFileName]['file_name'] = FileUtils::putFile($storage, 'message', $file);
+            }
+    
+            // messageテーブルようの_idの配列
+            $_ids = [];
+            // レスポンス用の作成されたFileのデータ
+            $createdFiles = [];
+            // ファイルデータをFileテーブルに保存
+            foreach($message['files'] as $fileData) {
+                $createdFile = $messageToolRepository->createFile($fileData);
+                $_ids[] = $createdFile['_id'];
+                $createdFiles[] = $createdFile;
+            }
+    
+            // メッセージのほうのファイルは_idの配列に変更
+            $message['files'] = $_ids;
+            $createdMessage = $messageToolRepository->createMessage($message);
+    
+            broadcast(new \App\Events\CreateMessage([$createdMessage], $createdFiles));
+            // if ($createdFiles) {
+            //     // ファイルありのメッセージの場合はファイルのEventを実行する
+            //     broadcast(new \App\Events\CreateFile($createdFiles));
+            // }
+        } catch (Exception $e){
+            Log::error($e);
+            $code = Response::HTTP_BAD_REQUEST;
+            $response = [
+                'error' => true,
+                'message' => $e->getMessage(),
+            ];
+        } finally {
+            return response()->json($response, $code);
+        }
+ 
+    }
     /**
      * Display the specified resource.
      *

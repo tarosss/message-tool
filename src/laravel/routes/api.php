@@ -18,6 +18,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::group(['prefix' => 'store', 'middleware' => ['abilities:collection:store']], function () {
         Route::post('/user', '\App\Http\Controllers\Api\MemberController@store');
         Route::post('/message', '\App\Http\Controllers\Api\MessageController@store');
+        Route::post('/message2', '\App\Http\Controllers\Api\MessageController@store2');
         Route::post('/channel', '\App\Http\Controllers\Api\ChannelController@store');
         Route::post('/reaction', '\App\Http\Controllers\Api\ReactionController@store');
     });
