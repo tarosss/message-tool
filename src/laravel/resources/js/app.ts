@@ -1,10 +1,12 @@
 import './bootstrap'
 import { createApp } from 'vue/dist/vue.esm-bundler.js'
 import { createPinia } from 'pinia'
+import { Quasar, Dialog, Notify } from 'quasar'
+import quasarLang from 'quasar/lang/ja'
 import '@mdi/font/css/materialdesignicons.css'
-import "bootstrap/dist/css/bootstrap.min.css"
-import 'bootstrap-icons/font/bootstrap-icons.css'
-import 'reset-css';
+import 'reset-css'
+import '@quasar/extras/material-icons/material-icons.css'
+import 'quasar/src/css/index.sass'
 // import { createVuetify } from 'vuetify';
 // import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
 // import 'vuetify/styles'
@@ -31,5 +33,9 @@ const app = createApp({
   },
 })
 .use(createPinia())
+.use(Quasar, {
+  plugins: [Dialog, Notify],
+  lang: quasarLang,
+})
 .use(router)
 .mount('#app')
