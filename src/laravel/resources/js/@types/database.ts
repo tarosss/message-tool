@@ -16,17 +16,48 @@ declare type Message = {
   user_id: string,
   channel_id: string,
   reactions?: MessageReactions,
-  thread?: string[],
-  isThread?: number,
-  files?: File[],
+  thread: string[],
+  thread_message_id?: string,
+  files: string[],
   created_at: string,
   updated_at?: string,
 }
 
-declare type Draft = Omit<Message, '_id'> & {
-  _id: string | undefined
+declare type Draft = Omit<Message, '_id' | 'files'> & {
+  _id?: string,
   draft_key: string,
+  files: {
+    [originalFileName in string]: DraftFile
+  },
   thread_message_id?: string,
+}
+
+/**
+ * draft状態のファイルの記録
+ */
+declare type DraftFile = {
+  _id?: string,
+  original_file_name?: string,
+  file_name?: string,
+  sended: 0 | 1,
+  file?: File,
+  created_at: string,
+  updated_at?: string,
+}
+
+/**
+ * filesテーブル
+ */
+declare type MessageFile = {
+  _id: string,
+  original_file_name: string,
+  file_name: string,
+  mime_type: string,
+  user_id: string,
+  channel_id: string,
+  message_id: string,
+  created_at: string,
+  updated_at: string,
 }
 
 declare type Channel = {

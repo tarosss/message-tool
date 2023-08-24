@@ -2,12 +2,14 @@ import { computed, ref, Ref, watch, inject } from 'vue'
 import { useDropZone } from '@vueuse/core'
 import { useDrafts } from '../store/drafts'
 import { format } from '../common/dateFormats'
-import { getFetch } from '../common/fetches';
-import { deepCopy } from '../common/objectUtils';
-import { draftUpdateUrl } from '../consts/fetches'
+import { getFetch, getFetch2 } from '../common/fetches'
+import { deepCopy, toFormData } from '../common/objectUtils'
+import { validDraft, getPostDraft } from '../common/draftUtils'
+import { draftUpdateUrl, draftDeleteUrl, messageStoreUrl2 } from '../consts/fetches'
+import { Created } from '../consts/httpStatusCodes'
 
 const formatString = 'yyyy-MM-dd HH:mm:ss'
-
+const timeout = 1000
 type MessageType = {
   channelId: string,
   messageId?: string,
@@ -16,6 +18,7 @@ type MessageType = {
 type GetDraftAttr = MessageType & {
   draftKey: string,
   userId: string,
+  default?: boolean
 }
 
 const getDraftKey = ({ messageId, channelId }: MessageType) => {
@@ -34,12 +37,13 @@ const getDraftData = ({ draftKey, userId, channelId, messageId } : GetDraftAttr)
       _id: undefined,
       draft_key: draftKey,
       message: '',
-      created_at: format({ date: null, formatString }),
-      files: [],
+      thread: [],
+      files: {},
       storage: 'local',
       user_id: userId,
       channel_id: channelId,
       thread_message_id: messageId ?? undefined,
+      created_at: format({ date: null, formatString }),
     }
 
     return d
@@ -49,29 +53,78 @@ const getDraftData = ({ draftKey, userId, channelId, messageId } : GetDraftAttr)
 }
 
 export const useMessage = ({ messageId, channelId }: MessageType) => {
-  const { pushDraft } = useDrafts()
+  const { pushDraft, deleteDraft } = useDrafts()
   const draftKey = getDraftKey({ messageId, channelId })
   const userId = inject('loging-user-id', '')
   const token = inject('token', '')
-  let fetchClearTimeout = null
+  const storage = inject('storage', 1)
+  let storeTimeout = null
+  let deleteTimeout = null
 
   // メッセージデータ関連
   const draft = ref(getDraftData({ draftKey, userId, messageId, channelId }))
-  const message = ref('')
-  const files: Ref<File[]> = ref([])
 
   // HTML関連
   const lineHeight = 1.5
   const dropZone = ref<HTMLElement>()
   const textZone = ref<HTMLElement>()
   const textZoneHeight = ref((lineHeight * 2) + 'px')
+
+  // ファイルのドロップ
   const droped = (dropedfiles: File[] | null) => {
-    if (dropedfiles) {
-      files.value.push(...dropedfiles)
+    if (!dropedfiles) {
+      return
+    }
+    
+    const now = format({ date: null, formatString })
+    // console.log(dropedfiles)
+    for (const file of dropedfiles) {
+      draft.value.files[file.name] = {
+        sended: 0,
+        original_file_name: file.name,
+        created_at: now,
+        file,
+      }
     }
   }
+
+  // メッセージの投稿
+  const sendMessage = async () => {
+    getFetch2({
+      token,
+      body: toFormData(
+        draft.value,
+      ),
+      url: messageStoreUrl2,
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error()
+        }
+        draft.value.message = ''
+        draft.value.files = {}
+      })
+      .catch(res => {
+        console.error('send message is fail')
+      })
+
+    // getFetch({ token, contentType: 'multipart/form-data' })(messageStoreUrl2)
+    //   .post({ data: [draft.value] })
+    //   .then((res) => {
+    //     if (res.statusCode.value !== Created) {
+    //       // 失敗
+    //       throw new Error()
+    //     }
+    //     // ドラフトのストアを削除
+    //     deleteDraft(draftKey)
+    //     draft.value = getDraftData({ draftKey, userId, messageId, channelId })
+    //   })
+  }
+
   // テキストエリアの自動変形とstoreの更新
   watch(draft, () => {
+    console.log(draft.value.files)
+
     const reset = new Promise((resolve) => {
       resolve(textZoneHeight.value = 'auto')
     })
@@ -80,51 +133,61 @@ export const useMessage = ({ messageId, channelId }: MessageType) => {
       const h = textZone.value?.scrollHeight as number - 4
       textZoneHeight.value = h + 'px'
     })
-
-    // const draft: Draft = {
-    //   _id: undefined,
-    //   message: message.value,
-    //   created_at: format({ date: null, formatString: 'yyyy-mm-dd' }),
-    //   storage: 'local',
-    //   user_id: userId,
-    //   channel_id: channelId,
-    //   thread_message_id: messageId ?? undefined,
-    // }
-    draft.value.updated_at = format({ date: null, formatString })
+    if (!validDraft(draft.value)) {
+      // テキストとファイルがからの場合はstoreのドラフトをけす
+      deleteTimeout = setTimeout(() => {
+        getFetch({ token })(draftDeleteUrl).post({ data: [draft.value] })
+      }, timeout)
+      return
+    }
+    // 更新日を更新
+    // draft.value.updated_at = format({ date: null, formatString })
+    // ストアの更新
     pushDraft({ newDraft: draft.value, key: draftKey })
 
-    clearTimeout(fetchClearTimeout)
-    fetchClearTimeout = setTimeout(() => {
-      getFetch({ token })(draftUpdateUrl).post({ data: [draft.value] })
-        .then(res => res.data.value)
-        .then(jsonText => JSON.parse(jsonText as string))
-        .then(json => {
-          console.log(json)
-        })
-    }, 10000)
+    // console.log(toFormData(getPostDraft(draft.value)))
+    clearTimeout(storeTimeout)
+    clearTimeout(deleteTimeout)
+    getFetch2({
+      token,
+      body: toFormData(
+        getPostDraft(draft.value),
+        // { data: { 0: getPostDraft(draft.value) } },
+      ),
+      url: draftUpdateUrl,
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error()
+        }
+        return res.json()
+      })
+      .then((json) => json.draft)
+      .then((draft) => {
+        console.log(draft)
+        return draft.files ?? []
+      })
+      .then((files) => {
+        for (const [i, fileInfo] of Object.entries(files)) {
+          draft.value.files[fileInfo.original_file_name].sended = 1
+          // for (const file of draft.value.files) {
+          //   if (file.file?.name === fileInfo.original_file_name) {
+          //     file.sended = 1
+          //     break
+          //   }
+          // }
+        }
+      })
   }, { deep: true })
-
-  // watchEffect(() => {
-  //   draftKey.value = getDraftKey({
-  //     messageId: showThread ? showingThreadMessageId.value : undefined,
-  //     channelId: showingChannelId.value,
-  //   })
-  // })
-
-
-  //   message.value = d.message
-  //   files.value = d.files ?? []
-  // })
 
   const { isOverDropZone } = useDropZone(dropZone, droped)
 
   return {
     draft,
-    message,
-    files,
     dropZone,
     textZone,
-    canSend: computed(() => Boolean(message.value.length)),
+    sendMessage,
+    canSend: computed(() => Boolean(draft.value.message.length)),
     textZoneHeight,
     isOverDropZone,
   }

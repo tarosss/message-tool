@@ -5,7 +5,7 @@
             :reaction-id="reactionId"
             @click="addReaction({ userId: logingUserId, token, reactionId, messageId: props.message._id})">
         </Reaction>
-        <div v-if="!props.message.isThread" @click="setThread({ newChannelId: showingChannelId, newThreadMessageId: props.message._id})"
+        <div v-if="!props.isThread" @click="setThread({ newChannelId: showingChannelId, newThreadMessageId: props.message._id})"
             class="pointer">
             ス
         </div>
@@ -23,9 +23,12 @@ import { messageUpdateUrl } from '../consts/fetches'
 import { addReaction } from '../common/updateMessages'
 const { bars } = useReactions()
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
     message: Message,
-}>()
+    isThread?: boolean,
+}>(), {
+    isThread: false
+})
 
 const logingUserId = inject('loging-user-id', '')
 const token = inject('token', '')

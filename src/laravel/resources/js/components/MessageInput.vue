@@ -1,5 +1,5 @@
 <template>
-    <div class="message-input" ref="dropZone">
+    <div class="message-input" ref="dropZone" style="background-color: blue;">
         <textarea
             v-model="draft.message"
             ref="textZone"
@@ -37,22 +37,22 @@ const props = defineProps<{
     message?: Message,
 }>()
 
-const { draft, message, files, dropZone, textZone, textZoneHeight, canSend, isOverDropZone} = useMessage({ channelId: props.channel._id, messageId: props.message?._id })
+const { draft, dropZone, textZone, textZoneHeight, canSend, isOverDropZone, sendMessage } = useMessage({ channelId: props.channel._id, messageId: props.message?._id })
 
 
 const logingUserId = inject('loging-user-id', '')
 const token = inject('token', '')
 const storage = inject('storage', 1)
 
-const sendMessage = async () => {
-    const fetch = getFetch({token})
-    const posts: FetchStoreMessage[] = [{
-        channelId: props.channel._id,
-        message: message.value,
-        userId: logingUserId,
-        storage: storage,
-    }]
+// const sendMessage = async () => {
+//     const fetch = getFetch({token})
+//     const posts: FetchStoreMessage[] = [{
+//         channelId: props.channel._id,
+//         message: draft.value.message,
+//         userId: logingUserId,
+//         storage: storage,
+//     }]
 
-    const { onFetchResponse, statusCode } = await fetch(messageStoreUrl).post({data: posts})
-}
+//     const { onFetchResponse, statusCode } = await fetch(messageStoreUrl).post({data: posts})
+// }
 </script>

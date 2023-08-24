@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import laravel from 'laravel-vite-plugin'
 import vue from '@vitejs/plugin-vue'
 import tsconfigPaths from 'vite-tsconfig-paths'
-
+import { quasar, transformAssetUrls } from '@quasar/vite-plugin'
 export default defineConfig({
   plugins: [
     laravel({
@@ -22,6 +22,9 @@ export default defineConfig({
     }),
     vue(),
     tsconfigPaths(),
+    quasar({
+      sassVariables: 'src/quasar-variables.sass'
+    })
   ],
   server: {
     // host: 'localhost',

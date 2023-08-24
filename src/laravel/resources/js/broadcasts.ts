@@ -1,6 +1,7 @@
 import Echo from 'laravel-echo'
 import io from 'socket.io-client'
 import { useMessages } from './store/messages'
+import { useFiles } from './store/files'
 
 window.io = io
 window.Echo = new Echo({
@@ -21,12 +22,25 @@ window.Echo.channel('laravel_database_event_lib').listen('sample', (e) => {
 
 window.Echo.channel('laravel_database_create_message').listen('CreateMessage', (data) => {
   for (const message  of data.messages as Message[]) {
-    useMessages('message-' + message.channel_id).pushMessage({ newMessage: message })
+    const { pushMessage } = useMessages('message-' + message.channel_id)
+    pushMessage({ newMessage: message })
+  }
+  console.log(data)
+  const { pushFile } = useFiles()
+  for (const file  of data.files as MessageFile[]) {
+    pushFile({ newFile: file })
   }
 })
 
 window.Echo.channel('laravel_database_update_message').listen('UpdateMessage', (data) => {
   for (const message  of data.messages as Message[]) {
     useMessages('message-' + message.channel_id).updateMessage({ updatedMessage: message })
+  }
+})
+
+window.Echo.channel('laravel_database_create_file').listen('CreateMessage', (data) => {
+  for (const message  of data.messages as MessageFile[]) {
+    const { messages, pushMessage } = useMessages('message-' + message.channel_id)
+    pushMessage({ newMessage: message })
   }
 })

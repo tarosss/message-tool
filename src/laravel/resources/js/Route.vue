@@ -12,10 +12,10 @@ import Header from './components/Header.vue'
 import Body from './components/Body.vue'
 import { useLoging } from './store/loging';
 import { useUsers } from './store/users';
-import { useChannels } from './store/channels';
-import { useMessages } from './store/messages';
-import { useDrafts } from './store/drafts';
-import { useReactions } from './store/reactions';
+import { useChannels } from './store/channels'
+import { useMessages } from './store/messages'
+import { useDrafts } from './store/drafts'
+import { useReactions } from './store/reactions'
 import { reactionGetUrl, draftGetUrl } from './consts/fetches'
 const props = defineProps<{
  logingUserId: string,
@@ -74,7 +74,6 @@ onBeforeMount(()=> {
       .then(json => {
         useReactions().setReactions({newReactions: json.reactions})
         showFlags.value.reaction = true
-
       }),
 
     getFetch({ token: props.token})(draftGetUrl).post({
