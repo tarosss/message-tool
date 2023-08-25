@@ -34,6 +34,14 @@ $header-content-height: 30px;
             }
         }
 
+        &-card {
+            // width: 500px;
+            height: 300px;
+            &-text {
+                width: 85%;
+            }
+        }
+
         &-box {
             $max-width: 684px;
             width: 100%;
