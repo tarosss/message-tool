@@ -13,7 +13,7 @@
 </template>
 <script setup lang="ts">
 import { computed, ref, watchEffect } from 'vue';
-import LeftNav from './LeftNav.vue';
+import LeftNav from './LeftNav2.vue';
 import Show from './Show.vue'
 import Thread from './Thread.vue'
 import Resizer from './Resizer.vue'
