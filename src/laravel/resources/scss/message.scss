@@ -63,3 +63,8 @@
         grid-template-columns: 1fr 70px;
     }
 }
+
+.q-editor__toolbar{
+    // grid-gap: 100px;
+    justify-content: space-between;
+}

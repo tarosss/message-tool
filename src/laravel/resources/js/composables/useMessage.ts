@@ -6,7 +6,6 @@ import { getFetch, getFetch2 } from '../common/fetches'
 import { deepCopy, toFormData } from '../common/objectUtils'
 import { validDraft, getPostDraft } from '../common/draftUtils'
 import { draftUpdateUrl, draftDeleteUrl, messageStoreUrl2 } from '../consts/fetches'
-import { Created } from '../consts/httpStatusCodes'
 
 const formatString = 'yyyy-MM-dd HH:mm:ss'
 const timeout = 1000
@@ -54,6 +53,7 @@ const getDraftData = ({ draftKey, userId, channelId, messageId } : GetDraftAttr)
 
 export const useMessage = ({ messageId, channelId }: MessageType) => {
   const { pushDraft, deleteDraft } = useDrafts()
+
   const draftKey = getDraftKey({ messageId, channelId })
   const userId = inject('loging-user-id', '')
   const token = inject('token', '')
@@ -107,18 +107,6 @@ export const useMessage = ({ messageId, channelId }: MessageType) => {
       .catch(res => {
         console.error('send message is fail')
       })
-
-    // getFetch({ token, contentType: 'multipart/form-data' })(messageStoreUrl2)
-    //   .post({ data: [draft.value] })
-    //   .then((res) => {
-    //     if (res.statusCode.value !== Created) {
-    //       // 失敗
-    //       throw new Error()
-    //     }
-    //     // ドラフトのストアを削除
-    //     deleteDraft(draftKey)
-    //     draft.value = getDraftData({ draftKey, userId, messageId, channelId })
-    //   })
   }
 
   // テキストエリアの自動変形とstoreの更新
@@ -182,6 +170,20 @@ export const useMessage = ({ messageId, channelId }: MessageType) => {
 
   const { isOverDropZone } = useDropZone(dropZone, droped)
 
+  // quasorのせってい
+  const definitions = {
+    send: {
+      tip: '送信する',
+      icon: 'send',
+      handler: sendMessage,
+    },
+  }
+
+  const toolBar = [
+    ['bold', 'italic', 'strike', 'underline', 'quote', 'unordered', 'ordered', 'outdent', 'indent'],
+    ['send'],
+  ]
+
   return {
     draft,
     dropZone,
@@ -190,5 +192,7 @@ export const useMessage = ({ messageId, channelId }: MessageType) => {
     canSend: computed(() => Boolean(draft.value.message.length)),
     textZoneHeight,
     isOverDropZone,
+    definitions,
+    toolBar,
   }
 }

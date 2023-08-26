@@ -40,7 +40,7 @@
 <script lang="ts" setup>
 import { onUpdated, inject } from 'vue';
 import Message from './Message2.vue'
-import MessageInput from './MessageInput.vue'
+import MessageInput from './MessageInput2.vue'
 import { computed, onMounted, ref, watchEffect } from 'vue';
 import { useUsers } from '../store/users';
 import { useChannels } from '../store/channels';
