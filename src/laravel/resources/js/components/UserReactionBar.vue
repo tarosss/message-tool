@@ -1,7 +1,8 @@
 <template>
     <Reaction
         v-for="(userIds, reactionId) in message.reactions" :key="'user-reaction-' + reactionId + message._id"
-        :reaction-id="reactionId">
+        :reaction-id="reactionId"
+        :user-ids="userIds">
     </Reaction>
 </template>
 <script lang="ts" setup>

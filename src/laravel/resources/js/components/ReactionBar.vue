@@ -1,7 +1,6 @@
 <template>
     <q-card 
-        class="bg-black" 
-        >
+        class="bg-black">
         <q-card-actions>
             <q-btn 
                 v-for="reaction of reactions" 

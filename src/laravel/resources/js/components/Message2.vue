@@ -1,24 +1,26 @@
 <template>
     <q-card 
-        class="row text-white relative-position" 
         style="background: inherit"
         ref="element">
-        <Avatar 
-            class="text-black q-mr-sm" 
-            :badge="false" :size="'md'">
-        </Avatar>
-        <div class="column">
-            <div class="col row items-end">
-                <span class="margin-right-10">
-                    {{ user.display_name }}
-                </span>
-                <span class="font-10">
-                    {{ format({date: message.created_at, formatString: 'HH:mm' }) }}
-                </span>
+        <div class="row text-white relative-position" >
+            <Avatar 
+                class="text-black q-mr-sm" 
+                :badge="false" :size="'md'">
+            </Avatar>
+            <div class="column">
+                <div class="col row items-end">
+                    <span class="margin-right-10">
+                        {{ user.display_name }}
+                    </span>
+                    <span class="font-10">
+                        {{ format({date: message.created_at, formatString: 'HH:mm' }) }}
+                    </span>
+                </div>
+                <div class="col-8">
+                    {{ props.message.message }}
+                </div>
             </div>
-            <div class="col-8">
-                {{ props.message.message }}
-            </div>
+
         </div>
         <UserReactionBar
             v-if="Object.keys(props.message.reactions).length"
