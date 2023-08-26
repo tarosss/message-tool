@@ -27,7 +27,7 @@
 </template>
 <script lang="ts" setup>
 import { ref, watchEffect } from 'vue';
-import Message from '../components/Message.vue'
+import Message from '../components/Message2.vue'
 import MessageInput from '../components/MessageInput.vue'
 import { useChannels } from '../store/channels';
 import { useMessages } from '../store/messages';

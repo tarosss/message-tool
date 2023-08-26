@@ -20,11 +20,11 @@
             </p>
         </div>
         <div class="body-channel-messages-by-day-wrapper" ref="htmlElement">
-            <div class="body-channel-messages-by-day"
+            <div class="body-channel-messages-by-day q-py-lg relative-position"
                 v-for="[date, messageIds] of messages.messageIdsByDay.value">
-                <p class="body-channel-messages-by-day-date pointer"> 
+                <span class="body-channel-messages-by-day-date pointer absolute-top-center"> 
                     {{ specialFormat(date, true) }} 
-                </p>
+                </span>
                 <Message v-for="messageId of messageIds" :key="'message' + messageId"
                     :message="(messages.messages.value.get(messageId) as Message)">
                 </Message>
@@ -39,7 +39,7 @@
 </template>
 <script lang="ts" setup>
 import { onUpdated, inject } from 'vue';
-import Message from './Message.vue'
+import Message from './Message2.vue'
 import MessageInput from './MessageInput.vue'
 import { computed, onMounted, ref, watchEffect } from 'vue';
 import { useUsers } from '../store/users';

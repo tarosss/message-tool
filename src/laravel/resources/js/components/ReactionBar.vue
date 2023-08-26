@@ -1,14 +1,15 @@
 <template>
     <q-card 
-        class="reaction-bar" 
-        dark>
+        class="bg-black" 
+        >
         <q-card-actions>
             <q-btn 
-                class="text-black"
                 v-for="reaction of reactions" 
                 :key="props.message._id + reaction.name"
                 :name="reaction.name" 
                 :icon="reaction.icon"
+                class="text-white"
+                :size="'xs'"
                 flat>
                 <q-tooltip>
                     {{ reaction.tip }}
