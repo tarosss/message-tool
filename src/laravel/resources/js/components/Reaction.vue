@@ -1,15 +1,28 @@
 <template>
-    <img 
-        :src="publicReactionsStorage + reaction.icon_path" 
-        class="reaction-image pointer">    
-    
+    <q-btn 
+        class="bg-black"
+        rounded
+        dense>
+        <q-icon :size="'sm'">
+            <img 
+                :src="publicReactionsStorage + reaction.icon_path" 
+                class="reaction-image pointer">    
+        </q-icon>
+        <q-badge
+            :color="'black'"
+            :text-color="'white'"
+            rounded>
+            {{ props.userIds.length }}
+        </q-badge>
+    </q-btn>
 </template>
 <script lang="ts" setup>
+import { computed } from 'vue';
 import { useReactions } from '../store/reactions'
 import { publicReactionsStorage } from '../consts/paths'
-import { computed } from 'vue';
 const props = defineProps<{
     reactionId: string,
+    userIds: string[],
 }>()
 
 const reaction = useReactions().getReaction(props.reactionId)

@@ -38,3 +38,13 @@ export const getPostDraft = (draft: Draft): Draft => {
 
   return d
 }
+
+export const getEditorId = (
+  { channelId, messageId } : { channelId: string, messageId: string | undefined },
+) => {
+  if (messageId) {
+    return `editor-${channelId}-${messageId}`
+  }
+
+  return `editor-${channelId}`
+}

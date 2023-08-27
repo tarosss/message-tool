@@ -63,3 +63,14 @@
         grid-template-columns: 1fr 70px;
     }
 }
+
+.q-editor__toolbar{
+    // grid-gap: 100px;
+    justify-content: space-between;
+}
+.message-input-files{
+    position: absolute;
+    left: 10px;
+    bottom: 15px;
+    gap: 10px;
+}

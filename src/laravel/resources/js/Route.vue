@@ -1,6 +1,6 @@
 <template>
   <Header></Header>
-  <Body v-if="show" :loging-user-id="props.logingUserId"></Body>
+  <Body v-if="show" ></Body>
   <router-link to="/"></router-link>
   <!-- <router-link to="/about"></router-link> -->
 </template>
@@ -8,7 +8,7 @@
 import { computed, onBeforeMount, onMounted, provide, ref } from 'vue';
 import { useFetch } from '@vueuse/core';
 import { getFetch } from './common/fetches';
-import Header from './components/Header.vue'
+import Header from './components/Header2.vue'
 import Body from './components/Body.vue'
 import { useLoging } from './store/loging';
 import { useUsers } from './store/users';

@@ -6,5 +6,8 @@ export const reactionGetUrl = 'api/show/reaction'
 
 export const draftStoreUrl = 'api/store/draft'
 export const draftUpdateUrl = 'api/update/draft'
+export const draftFilesUpdateUrl = 'api/update/draft/file'
 export const draftGetUrl = 'api/show/draft'
 export const draftDeleteUrl = 'api/delete/draft'
+
+export const draftFileDeleteUrl = 'api/delete/draft/file'

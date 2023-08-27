@@ -23,7 +23,7 @@ export default defineConfig({
     vue(),
     tsconfigPaths(),
     quasar({
-      sassVariables: 'src/quasar-variables.sass'
+      sassVariables: 'resources/sass/quasar-variables.sass'
     })
   ],
   server: {

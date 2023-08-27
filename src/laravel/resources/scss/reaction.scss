@@ -2,12 +2,12 @@
 
 }
 
-.reaction-bar {
-    width: 300px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    background-color: rgb(61, 61, 61);
-    border-radius: 5px;
+.reaction-bar-wrapper {
+    // width: auto;
+    height: 35px;
+    position: absolute;
+    top: -17px;
+    right: 0;
 }
 
 .reaction-image {

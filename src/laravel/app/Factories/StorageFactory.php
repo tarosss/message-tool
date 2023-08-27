@@ -2,6 +2,8 @@
 
 namespace App\Factories;
 
+use Exception;
+use Log;
 class StorageFactory 
 {
     public static function getStorage($storage = 'local'): \App\Interfaces\Storages\StorageInterface
@@ -11,7 +13,8 @@ class StorageFactory
                 return new \App\Storages\StorageLocal;
             case 's3':
                 return new \App\Storages\StorageS3;
-                
+            default:
+                throw new Exception();
         }
     }
 }

@@ -12,7 +12,6 @@ class FileUtils
             $extention = MimeType::getExtentionFromMimeType($file->getMimeType());
             return $fileName . '.' . $extention;
         })();
-        Log::info($fileName);
 
         // ファイルを保存する
         $storage->putFileAs($path, $file, $fileName);

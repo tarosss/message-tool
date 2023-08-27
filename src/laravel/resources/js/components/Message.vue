@@ -1,5 +1,5 @@
 <template>
-  <div class="message position-relative" ref="element">
+  <div class="message relative-position" ref="element">
     <p class="message-icon">
 
     </p>
@@ -23,7 +23,7 @@
     </div>
     <ReactionBar 
       v-if="isHoverd"
-      class="position-absolute top-0 end-0"
+      class="absolute-top-right"
       :message="props.message"
       :is-thread="props.isThread">
     </ReactionBar>
