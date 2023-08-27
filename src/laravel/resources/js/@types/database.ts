@@ -37,7 +37,7 @@ declare type Draft = Omit<Message, '_id' | 'files'> & {
  */
 declare type DraftFile = {
   _id?: string,
-  original_file_name?: string,
+  original_file_name: string,
   file_name?: string,
   sended: 0 | 1,
   file?: File,

@@ -36,6 +36,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/user', '\App\Http\Controllers\Api\MemberController@update');
         Route::post('/message', '\App\Http\Controllers\Api\MessageController@update');
         Route::post('/draft', '\App\Http\Controllers\Api\DraftController@update');
+        Route::post('/draft/file', '\App\Http\Controllers\Api\DraftController@updateFile');
         Route::post('/channel', '\App\Http\Controllers\Api\ChannelController@update');
         Route::post('/reaction', '\App\Http\Controllers\Api\ReactionController@update');
         Route::post('/reaction-kind', '\App\Http\Controllers\Api\ReactionKindController@update');
@@ -45,6 +46,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/user', '\App\Http\Controllers\Api\MemberController@destroy');
         Route::post('/message', '\App\Http\Controllers\Api\MessageController@destroy');
         Route::post('/draft', '\App\Http\Controllers\Api\DraftController@destroy');
+        Route::post('/draft/file', '\App\Http\Controllers\Api\DraftController@destroyFile');
         Route::post('/channel', '\App\Http\Controllers\Api\ChannelController@destroy');
         Route::post('/reaction', '\App\Http\Controllers\Api\ReactionController@destroy');
         Route::post('/reaction-kind', '\App\Http\Controllers\Api\ReactionKindController@destroy');

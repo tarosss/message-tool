@@ -32,7 +32,7 @@ class StorageLocal implements StorageInterface
         if ($public) {
             $path = 'public/' . $path;
         }
-        Log::info($path . '/' . $fileName);
+
         Storage::delete($path . '/' . $fileName);
     }
 }

@@ -1,6 +1,6 @@
 <template>
   <Header></Header>
-  <Body v-if="show" :loging-user-id="props.logingUserId"></Body>
+  <Body v-if="show" ></Body>
   <router-link to="/"></router-link>
   <!-- <router-link to="/about"></router-link> -->
 </template>

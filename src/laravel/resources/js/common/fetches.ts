@@ -8,6 +8,7 @@ type GetFetch2Args = {
   token: string,
   body: FormData | string,
   url: string,
+  contentType?: string
 }
 
 const getContentType = (data: object | FormData) => {
@@ -30,7 +31,8 @@ export const getFetch = ({ token, contentType }: { token: string, contentType?: 
   return fetch
 }
 
-export const getFetch2 = ({ body, url, token }: GetFetch2Args) => {
+export const getFetch2 = ({ body, url, token, contentType }: GetFetch2Args) => {
+  const t = contentType ?? 'multipart/form-data'
   const f = fetch(url, {
     headers: {
       Authorization: `Bearer ${token}`,

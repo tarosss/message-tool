@@ -106,7 +106,7 @@ class MessageToolRepository implements MessageToolRepositoryInterface
         return $data->count() ? $data->get()->toArray() : [];
     }
     
-    public function pushDraft(array $wheres, array $column, array $fileData)
+    public function pushDraft(array $wheres, string $column, array $fileData)
     {
         Draft::where($wheres)
             ->push($column, $fileData);
@@ -117,6 +117,15 @@ class MessageToolRepository implements MessageToolRepositoryInterface
         unset($data['_id']);
         Draft::where($wheres)
             ->update($data, ['upsert' => true]);
+    }
+
+    /**
+     * ファイルの追加が行われた時の処理
+     */
+    public function updateDraftFile(array $wheres, array $files)
+    {
+        Draft::where($wheres)
+            ->update(['files' => $files]);
     }
 
     public function deleteDraft(array $wheres)
