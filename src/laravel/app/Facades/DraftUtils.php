@@ -19,13 +19,13 @@ class DraftUtils
         return ['draft_key' => $array['channel_id']];
     }
 
-    public static function getDraftKey(string $channelId, ?string $threadMessageId)
+    public static function getDraftKey(string $userId, string $channelId, ?string $threadMessageId)
     {
         if ($threadMessageId) {
-            return $channelId . '-'. $threadMessageId;
+            return $userId . '-' . $channelId . '-'. $threadMessageId;
         }
 
-        return $channelId;
+        return $userId . '-' . $channelId;
     }
 
     public function update(array $data) 

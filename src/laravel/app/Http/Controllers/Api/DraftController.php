@@ -156,13 +156,13 @@ class DraftController extends \App\Http\Controllers\Controller
      * ファイルのアップロードをする
      */
     public function updateFile(Request $request, MessageToolRepositoryInterface $messageToolRepository)
-    {
+    {   
+        Log::info($request);
         $response = [
             'error' => false,
             'message' => '',
         ];
         $code = Response::HTTP_OK;
-
         $files = [];
         try {
             $nowString = \App\Facades\Date::getNowString();
@@ -171,6 +171,7 @@ class DraftController extends \App\Http\Controllers\Controller
 
             $wheres = [
                 'draft_key' => DraftUtils::getDraftKey(
+                    $request->input('user_id'),
                     $request->input('channel_id'),
                     $request->input('thread_message_id'),
                 ),
@@ -199,17 +200,18 @@ class DraftController extends \App\Http\Controllers\Controller
                 $draftFiles,
             );
 
-            $response['files'] = $files;
+            Log::info($files);
+            return response()->json([
+                'error' => false,
+                'files' => $files,
+            ], Response::HTTP_CREATED);
         } catch (Exception $e) {
             Log::error($e);
-            $response = [
+            return response()->json([
                 'error' => true,
                 'message' => $e->getMessage(),
                 'files' => $files,
-            ];
-            $code = Response::HTTP_BAD_REQUEST;
-        } finally {
-            return response()->json($response, $code);
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 
@@ -247,28 +249,37 @@ class DraftController extends \App\Http\Controllers\Controller
         }
     }
 
+    /**
+     * ドラフトのファイル削除
+     */
     public function destroyFile(Request $request, MessageToolRepositoryInterface $messageToolRepository)
     {
-        $response = [
-            'error' => false,
-            'message' => '',
-        ];
-        $code = Response::HTTP_OK;
-
         try {
+            $wheres = [
+                'draft_key' => $request->input('draft_key'),
+            ];
+
+            $fileName = $request->input('file_name');
+            
+            $currentDraftData = $messageToolRepository->getDraft($wheres);
+            $files = $currentDraftData['files'];
+            // 削除されるファイルを除く
+            unset($files[$fileName]);
+
+            $messageToolRepository->updateDraftFile($wheres, $files);
+
             $storage = StorageFactory::getStorage();
-            Log::info("val");
-            // ファイルを削除する
-            // $storage->deleteFile('message', $request->input('original_file_name'));
+            // データベースから指定のファイルを削除
+            $storage->deleteFile('message', $request->input('file_name'));
+            return response()->json([
+                'error' => false,
+            ], Response::HTTP_OK);
         } catch (Exception $e) {
             Log::error($e);
-            $response = [
-                'error' => true,
+            return response()->json([
+                'error' => false, 
                 'message' => $e->getMessage(),
-            ];
-            $code = Response::HTTP_BAD_REQUEST;
-        } finally {
-            return response()->json($response, $code);
+            ], Response::HTTP_OK);
         }
     }
 

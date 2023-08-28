@@ -26,7 +26,7 @@
                     floating
                     rounded
                     size="xs"
-                    @click="deleteFile({fileData})">
+                    @click="createDeleteDraftFileFetch(fileData)">
                     ×
                 </q-badge>
             </q-card>
@@ -46,7 +46,7 @@ const props = defineProps<{
     message?: Message,
 }>()
 
-const { draft, dummyMessage, setMessage, dropZone, editorId, displayFilesZone, deleteFile, definitions, toolBar } = useMessage({ channelId: props.channel._id, messageId: props.message?._id })
+const { draft, dummyMessage, setMessage, createDeleteDraftFileFetch, dropZone, editorId, displayFilesZone, definitions, toolBar } = useMessage({ channelId: props.channel._id, messageId: props.message?._id })
 
 const logingUserId = inject('loging-user-id', '')
 const token = inject('token', '')

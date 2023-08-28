@@ -120,7 +120,7 @@ class MessageToolRepository implements MessageToolRepositoryInterface
     }
 
     /**
-     * ファイルの追加が行われた時の処理
+     * ファイルの追加,削除が行われた時の処理
      */
     public function updateDraftFile(array $wheres, array $files)
     {
