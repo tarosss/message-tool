@@ -13,29 +13,18 @@
         <div
             class="message-input-files row"
             ref="displayFilesZone">
-            <q-card
+            <File
                 v-for="fileData of draft.files"
                 :key="props.channel._id + props.message?._id + fileData.original_file_name"
-                class="col q-py-sm q-px-xs bg-black"
-                dark>
+                :file-data="fileData">
                 {{ fileData.original_file_name }}
-                <q-badge
-                    class="cursor-pointer"
-                    color="white" 
-                    text-color="black"
-                    floating
-                    rounded
-                    size="xs"
-                    @click="createDeleteDraftFileFetch(fileData)">
-                    ×
-                </q-badge>
-            </q-card>
+            </File>
         </div>
     </div>
 </template>
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from 'vue'
-import { mdiSendVariant } from '@mdi/js';
+import File from './File.vue'
 import { useMessage } from '../composables/useMessage'
 import { getFetch } from '../common/fetches'
 import  { messageStoreUrl } from '../consts/fetches'

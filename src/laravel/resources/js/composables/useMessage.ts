@@ -195,8 +195,6 @@ export const useMessage = ({ messageId, channelId }: Omit<MessageType, 'userId'>
       .then((json) => json.files as { [key in string]: DraftFile })
       .then((uploadedfiles) => {
         for (const [fileName, draftFile] of Object.entries(uploadedfiles)) {
-          console.log(fileName)
-          console.log(draftFile)
           draft.value.files[fileName] = draftFile
         }
         console.log(draft.value.files)
