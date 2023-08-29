@@ -1,10 +1,10 @@
-import { computed, ref, Ref, watch, inject } from 'vue'
+import { computed, ref, Ref, watch, inject, onMounted, watchEffect } from 'vue'
 import { useDropZone } from '@vueuse/core'
 import { useDrafts } from '../store/drafts'
 import { format } from '../common/dateFormats'
 import { getFetch, getFetch2, fetchDeleteDraftFile } from '../common/fetches'
 import { deepCopy, toFormData } from '../common/objectUtils'
-import { validDraft, getPostDraft, getEditorId } from '../common/draftUtils'
+import { validDraft, getPostDraft, getEditorId, getDefaultDraft, getDraftData } from '../common/draftUtils'
 import { draftUpdateUrl, draftDeleteUrl, messageStoreUrl2, draftFileDeleteUrl, draftFilesUpdateUrl } from '../consts/fetches'
 import { oneOrMore } from '../common/regularExpression'
 
@@ -30,28 +30,6 @@ const getDraftKey = ({ userId, messageId, channelId }: MessageType) => {
   return `${userId}-${channelId}`
 }
 
-const getDraftData = ({ draftKey, userId, channelId, messageId } : GetDraftAttr): Draft => {
-  const { drafts } = useDrafts()
-  const draft = drafts.value.get(draftKey)
-  if (draft === undefined) {
-    const d: Draft = {
-      _id: undefined,
-      draft_key: draftKey,
-      message: '',
-      thread: [],
-      files: {},
-      storage: 'local',
-      user_id: userId,
-      channel_id: channelId,
-      thread_message_id: messageId ?? undefined,
-      created_at: format({ date: null, formatString }),
-    }
-
-    return d
-  }
-
-  return deepCopy<Draft>(draft)
-}
 
 export const useMessage = ({ messageId, channelId }: Omit<MessageType, 'userId'>) => {
   const { pushDraft, deleteDraft } = useDrafts()
@@ -64,16 +42,16 @@ export const useMessage = ({ messageId, channelId }: Omit<MessageType, 'userId'>
   let deleteDraftTimeout: any
 
   // メッセージデータ関連
-  const draft = ref(getDraftData({ draftKey, userId, messageId, channelId }))
+  const draft = ref(getDefaultDraft({ userId, channelId, threadMessageId: messageId }))
+  const dummyMessage = computed(() => draft.value.message)
   const existFile = computed(() => Boolean(Object.entries(draft.value.files).length))
   // HTML関連
-  const lineHeight = 1.5
   const dropZone = ref<HTMLElement>()
   const textZone = ref<HTMLElement>()
-  const textZoneHeight = ref((lineHeight * 2) + 'px')
-  const editorId = getEditorId({ messageId, channelId })
   const displayFilesZone = ref<HTMLElement>()
+  const editorId = getEditorId({ messageId, channelId })
 
+  const runAddPaddingBottom = computed(() => existFile.value && displayFilesZone.value)
   // メッセージの投稿
   const sendMessage = () => {
     getFetch2({
@@ -99,17 +77,24 @@ export const useMessage = ({ messageId, channelId }: Omit<MessageType, 'userId'>
    * ファイルが存在する時にpadding-bottomを追加する
    */
   const addPaddingBottom = () => {
-    let paddingBottom = 10
+    let paddingBottom = 20
     if (existFile.value) {
       // ファイルを表示するために空白を開ける
       paddingBottom += displayFilesZone.value?.offsetHeight as number
     }
     // エディタにpaddingを追加
-    const element = document.getElementById(editorId)?.getElementsByClassName('q-editor__content') as HTMLCollectionOf<HTMLElement>
-    for (let i = 0; i < element.length; i += 1) {
-      element[i].style.paddingBottom = `${paddingBottom}px`
+    const element = document.getElementById(editorId)?.getElementsByClassName('q-editor__content')
+    if (element === undefined) {
+      return
+    }
+
+    for (let i = 0; i < (element as HTMLCollectionOf<HTMLElement>).length; i += 1) {
+      (element as HTMLCollectionOf<HTMLElement>)[i].style.paddingBottom = `${paddingBottom}px`
     }
   }
+
+  const a = computed(() => displayFilesZone.value?.offsetHeight)
+
 
   /**
    * ファイル以外のデータをデータベースに保存するためのフェッチを作成する
@@ -141,7 +126,7 @@ export const useMessage = ({ messageId, channelId }: Omit<MessageType, 'userId'>
             draft.value._id = _id
           }
         })
-    }, timeout);
+    }, timeout)
   }
 
   /**
@@ -221,7 +206,6 @@ export const useMessage = ({ messageId, channelId }: Omit<MessageType, 'userId'>
           throw new Error()
         }
         delete draft.value.files[draftFile.file_name as string]
-        console.log(draft.value)
         addPaddingBottom()
       })
       .catch((res) => {
@@ -280,9 +264,23 @@ export const useMessage = ({ messageId, channelId }: Omit<MessageType, 'userId'>
     ['send'],
   ]
 
+  onMounted(() => {
+    draft.value = getDraftData({ userId, threadMessageId: messageId, channelId })
+    addPaddingBottom()
+  })
+
+  watch(dummyMessage, () => {
+    if (displayFilesZone === undefined) {
+      console.log('return0')
+      return 0
+    }
+    console.log('return', displayFilesZone.value?.offsetHeight)
+
+    return displayFilesZone.value?.offsetHeight
+  })
   return {
     draft,
-    dummyMessage: draft.value.message,
+    dummyMessage,
     setMessage,
     dropZone,
     textZone,
@@ -292,7 +290,6 @@ export const useMessage = ({ messageId, channelId }: Omit<MessageType, 'userId'>
     sendMessage,
     createDeleteDraftFileFetch,
     canSend: computed(() => Boolean(draft.value.message.length)),
-    textZoneHeight,
     isOverDropZone,
     definitions,
     toolBar,

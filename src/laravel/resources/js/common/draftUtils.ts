@@ -1,5 +1,51 @@
+import { useDrafts } from '../store/drafts'
 import { oneOrMore } from './regularExpression'
 import { deepCopy } from './objectUtils'
+import { format } from './dateFormats'
+
+type MessageType = {
+  userId: string,
+  channelId: string,
+  threadMessageId?: string,
+}
+const getDraftKey = ({ userId, threadMessageId, channelId }: MessageType) => {
+  if (threadMessageId) {
+    return `${userId}-${channelId}-${threadMessageId}`
+  }
+
+  return `${userId}-${channelId}`
+}
+// eslint-disable-next-line arrow-body-style
+export const getDefaultDraft = (
+  { userId, channelId, threadMessageId }: MessageType,
+): Draft => {
+  return {
+    _id: undefined,
+    user_id: userId,
+    channel_id: channelId,
+    thread_message_id: threadMessageId,
+    draft_key: getDraftKey({ userId, channelId, threadMessageId }),
+    message: '',
+    files: {},
+    reactions: {},
+    storage: 'local',
+    thread: [],
+    created_at: format({ date: null, formatString: 'yyyy-MM-dd HH:mm:ss' }),
+
+  }
+}
+
+export const getDraftData = (
+  { userId, channelId, threadMessageId }: MessageType): Draft => {
+  const draftKey = getDraftKey({ userId, channelId, threadMessageId })
+  const { drafts } = useDrafts()
+  const draft = drafts.value.get(draftKey)
+  if (draft === undefined) {
+    return getDefaultDraft({ userId, threadMessageId, channelId })
+  }
+
+  return deepCopy<Draft>(draft)
+}
 
 export const validDraft = (draft: Draft): boolean => {
   if (oneOrMore(draft.message)) {

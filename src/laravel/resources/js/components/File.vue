@@ -1,33 +1,35 @@
 <template>
     <q-card
+        class="row items-center text-black relative-position q-py-lg"
         ref="element"
-        class="row items-center text-black relative-position"
         flat
         bordered>
-        <q-icon 
-            class="text-black"
-            name="draft">
+        <q-icon
+            name="description">
+            <q-tooltip>
+                Some text as content of Tooltip
+            </q-tooltip>
         </q-icon>
-        <p>
+        <span>
             {{ props.fileData.original_file_name }}
-        </p>
-        <q-badge
-            class="cursor-pointer"
-            color="white" 
-            text-color="black"
-            floating
-            rounded
-            size="xs"
-            @click="createDeleteDraftFileFetch(fileData)">
-            ×
-        </q-badge>
+        </span>
         <q-card
             v-if="isHoverd"
-            class="absolute-right">
+            class="absolute file-actions">
             <q-card-actions>
                 <q-btn
                     icon="download"
                     flat>
+                    <q-tooltip>
+                        ダウンロード
+                    </q-tooltip>
+                </q-btn>
+                <q-btn
+                    icon="open_in_new"
+                    flat>
+                    <q-tooltip>
+                        新しいタブで開く
+                    </q-tooltip>
                 </q-btn>
             </q-card-actions>
         </q-card>

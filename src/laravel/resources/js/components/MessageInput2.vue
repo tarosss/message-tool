@@ -13,17 +13,24 @@
         <div
             class="message-input-files row"
             ref="displayFilesZone">
-            <File
+            <div
+                class="relative-position"
+                style="min-width: 300px;"
                 v-for="fileData of draft.files"
-                :key="props.channel._id + props.message?._id + fileData.original_file_name"
-                :file-data="fileData">
-                {{ fileData.original_file_name }}
-            </File>
+                :key="props.channel._id + props.message?._id + fileData.original_file_name + fileData.file_name">
+                <File :file-data="fileData"></File>
+                <q-icon
+                    name="close"
+                    class="text-black cursor-pointer absolute file-delete-icon"
+                    size="xs"
+                    @click="createDeleteDraftFileFetch(fileData)">
+                </q-icon>
+            </div>
         </div>
     </div>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, onUpdated, ref, watch } from 'vue'
 import File from './File.vue'
 import { useMessage } from '../composables/useMessage'
 import { getFetch } from '../common/fetches'
@@ -41,7 +48,4 @@ const logingUserId = inject('loging-user-id', '')
 const token = inject('token', '')
 const storage = inject('storage', 1)
 
-const a = (newString: string) => {
-    console.log(newString)
-}
 </script>
