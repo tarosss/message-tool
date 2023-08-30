@@ -28,5 +28,6 @@ module.exports = {
     'no-restricted-syntax': 'off',
     '@typescript-eslint/no-floating-promises': 'off',
     'no-continue': 'off',
+    'arrow-body-style': 'off',
   },
 }

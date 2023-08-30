@@ -9,33 +9,30 @@
             dark
             @update:model-value="s => setMessage(s, true)"
             ref="dropZone">
+            vaksllvpaokedsl,
         </q-editor>
         <div
             class="message-input-files row"
             ref="displayFilesZone">
-            <q-card
+            <div
+                class="relative-position"
+                style="min-width: 300px;"
                 v-for="fileData of draft.files"
-                :key="props.channel._id + props.message?._id + fileData.original_file_name"
-                class="col q-py-sm q-px-xs bg-black"
-                dark>
-                {{ fileData.original_file_name }}
-                <q-badge
-                    class="cursor-pointer"
-                    color="white" 
-                    text-color="black"
-                    floating
-                    rounded
+                :key="props.channel._id + props.message?._id + fileData.original_file_name + fileData.file_name">
+                <File :file-data="fileData"></File>
+                <q-icon
+                    name="close"
+                    class="text-black cursor-pointer absolute file-delete-icon"
                     size="xs"
-                    @click="deleteFile({fileData})">
-                    ×
-                </q-badge>
-            </q-card>
+                    @click="createDeleteDraftFileFetch(fileData)">
+                </q-icon>
+            </div>
         </div>
     </div>
 </template>
 <script lang="ts" setup>
-import { computed, onMounted, ref, watch } from 'vue'
-import { mdiSendVariant } from '@mdi/js';
+import { computed, onMounted, onUpdated, ref, watch } from 'vue'
+import File from './File.vue'
 import { useMessage } from '../composables/useMessage'
 import { getFetch } from '../common/fetches'
 import  { messageStoreUrl } from '../consts/fetches'
@@ -46,13 +43,10 @@ const props = defineProps<{
     message?: Message,
 }>()
 
-const { draft, dummyMessage, setMessage, dropZone, editorId, displayFilesZone, deleteFile, definitions, toolBar } = useMessage({ channelId: props.channel._id, messageId: props.message?._id })
+const { draft, dummyMessage, setMessage, createDeleteDraftFileFetch, dropZone, editorId, displayFilesZone, definitions, toolBar } = useMessage({ channelId: props.channel._id, messageId: props.message?._id })
 
-const logingUserId = inject('loging-user-id', '')
+const logingUserId = inject('logging-user-id', '')
 const token = inject('token', '')
 const storage = inject('storage', 1)
 
-const a = (newString: string) => {
-    console.log(newString)
-}
 </script>

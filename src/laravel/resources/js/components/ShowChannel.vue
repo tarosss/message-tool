@@ -51,7 +51,7 @@ import { specialFormat } from '../common/dateFormats'
 const props = defineProps<{
     channel: Channel,
 }>()
-const logingUserId = inject('loging-user-id', '')
+const logingUserId = inject('logging-user-id', '')
 const users = useUsers()
 const showing = useShowing()
 const channel = computed(() => useChannels().getChannel(showing.showing.value))
