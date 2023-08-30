@@ -18,7 +18,7 @@ import { useDrafts } from './store/drafts'
 import { useReactions } from './store/reactions'
 import { reactionGetUrl, draftGetUrl } from './consts/fetches'
 const props = defineProps<{
- logingUserId: string,
+ loggingUserId: string,
  token: string,
 }>()
 
@@ -30,7 +30,7 @@ const showFlags = ref({
   channel: false,
 })
 
-provide('loging-user-id', props.logingUserId)
+provide('logging-user-id', props.loggingUserId)
 provide('token', props.token)
 provide('storage', 1)
 

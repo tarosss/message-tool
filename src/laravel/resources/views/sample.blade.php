@@ -13,7 +13,7 @@
         <div id="app">
             <!-- @yield('App') -->
             <route 
-                :loging-user-id="'{{$userId}}'"
+                :logging-user-id="'{{$userId}}'"
                 :token="'{{$token}}'"></route>
         </div>
         <div class="modals">

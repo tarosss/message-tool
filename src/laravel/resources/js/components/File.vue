@@ -5,6 +5,8 @@
         flat
         bordered>
         <q-icon
+            class="q-mr-sm"
+            size="lg"
             name="description">
             <q-tooltip>
                 Some text as content of Tooltip

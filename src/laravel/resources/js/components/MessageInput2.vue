@@ -9,6 +9,7 @@
             dark
             @update:model-value="s => setMessage(s, true)"
             ref="dropZone">
+            vaksllvpaokedsl,
         </q-editor>
         <div
             class="message-input-files row"
@@ -44,7 +45,7 @@ const props = defineProps<{
 
 const { draft, dummyMessage, setMessage, createDeleteDraftFileFetch, dropZone, editorId, displayFilesZone, definitions, toolBar } = useMessage({ channelId: props.channel._id, messageId: props.message?._id })
 
-const logingUserId = inject('loging-user-id', '')
+const logingUserId = inject('logging-user-id', '')
 const token = inject('token', '')
 const storage = inject('storage', 1)
 

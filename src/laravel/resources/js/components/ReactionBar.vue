@@ -52,7 +52,7 @@ const props = withDefaults(defineProps<{
     isThread: false
 })
 
-const logingUserId = inject('loging-user-id', '')
+const logingUserId = inject('logging-user-id', '')
 const token = inject('token', '')
 const { showing, showingChannelId, setThread } = useShowing()
 const { reactions, thread } = useReactionBar()
