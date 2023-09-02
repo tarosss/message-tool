@@ -1,6 +1,6 @@
 <template>
-    <div v-if="props.channel" class="body-channel padding-top-10">
-        <div class="body-channel-header">
+    <div v-if="props.channel" class="body-channel padding-top-10 row justify-end" style="height: 100%">
+        <div class="body-channel-header col-12">
             <p class="font-16">
                # {{ props.channel.channel_name }}
             </p>
@@ -10,7 +10,7 @@
                 </div>
             </div>
         </div>
-        <div class="margin-bottom-30">
+        <div class="margin-bottom-30 col-12">
             <p class="font-20">
                 # {{ props.channel.channel_name }}
             </p>
@@ -19,7 +19,7 @@
                 {{ channelCreateUserDisplayName }} がこのチャンネルを作成しました。チャンネルをどんどん活用していきましょう！ 
             </p>
         </div>
-        <div class="body-channel-messages-by-day-wrapper" ref="htmlElement">
+        <div class="body-channel-messages-by-day-wrapper col-12" ref="htmlElement">
             <div class="body-channel-messages-by-day q-py-lg relative-position"
                 v-for="[date, messageIds] of messages.messageIdsByDay.value">
                 <span class="body-channel-messages-by-day-date pointer absolute-top-center"> 
@@ -30,7 +30,7 @@
                 </Message>
             </div>
         </div>
-        <div>
+        <div class="col-12">
             <MessageInput
                 :channel="props.channel">
             </MessageInput>

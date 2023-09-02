@@ -19,6 +19,7 @@ declare type Message = {
   thread: string[],
   thread_message_id?: string,
   files: string[],
+  mentions: string[],
   created_at: string,
   updated_at?: string,
 }

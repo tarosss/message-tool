@@ -19,6 +19,7 @@ class Draft extends Moloquent
         'isThread',
         'thread_message_id',
         'files',
+        'mentions',
         'created_at',
         'updated_at',
     ];

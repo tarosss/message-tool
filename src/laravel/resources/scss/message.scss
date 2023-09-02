@@ -75,3 +75,15 @@
     gap: 10px;
 }
 
+.mentions {
+    &-selector {
+        $height: 300px;
+        height: 300px;
+        top: calc(-300px);
+
+    }
+    &-show {
+        top: 30px;
+    }
+}   
+

@@ -4,32 +4,16 @@ import { useDrafts } from '../store/drafts'
 import { format } from '../common/dateFormats'
 import { getFetch, getFetch2, fetchDeleteDraftFile } from '../common/fetches'
 import { deepCopy, toFormData } from '../common/objectUtils'
-import { validDraft, getPostDraft, getEditorId, getDefaultDraft, getDraftData } from '../common/draftUtils'
+import { validDraft, getPostDraft, getEditorId, getDefaultDraft, getDraftData, getDraftKey } from '../common/draftUtils'
 import { draftUpdateUrl, draftDeleteUrl, messageStoreUrl2, draftFileDeleteUrl, draftFilesUpdateUrl } from '../consts/fetches'
 import { oneOrMore } from '../common/regularExpression'
 
-const formatString = 'yyyy-MM-dd HH:mm:ss'
 const timeout = 1000
 type MessageType = {
   userId: string,
   channelId: string,
   messageId?: string,
 }
-
-type GetDraftAttr = MessageType & {
-  draftKey: string,
-  userId: string,
-  default?: boolean
-}
-
-const getDraftKey = ({ userId, messageId, channelId }: MessageType) => {
-  if (messageId) {
-    return `${userId}-${channelId}-${messageId}`
-  }
-
-  return `${userId}-${channelId}`
-}
-
 
 export const useMessage = ({ messageId, channelId }: Omit<MessageType, 'userId'>) => {
   const { pushDraft, deleteDraft } = useDrafts()
@@ -45,9 +29,13 @@ export const useMessage = ({ messageId, channelId }: Omit<MessageType, 'userId'>
   const draft = ref(getDraftData({ userId, channelId, threadMessageId: messageId }))
   const dummyMessage = computed(() => draft.value.message)
   const existFile = computed(() => Boolean(Object.entries(draft.value.files).length))
+
   // HTML関連
   const dropZone = ref<HTMLElement>()
-  const textZone = ref<HTMLElement>()
+  /** メンションの表示枠 */
+  const mentionZone = ref<HTMLElement>()
+  const { height: mentionZoneHeight } = useElementSize(mentionZone)
+  const showMentions = ref(false)
   const displayFilesZone = ref<HTMLElement>()
   const { height: displayFilesZoneHeight } = useElementSize(displayFilesZone)
   const editorId = getEditorId({ messageId, channelId })
@@ -72,25 +60,6 @@ export const useMessage = ({ messageId, channelId }: Omit<MessageType, 'userId'>
       })
   }
 
-  /**
-   * ファイルが存在する時にpadding-bottomを追加する
-   */
-  watch(displayFilesZoneHeight, () => {
-    let paddingBottom = 20
-    if (existFile.value) {
-      // ファイルを表示するために空白を開ける
-      paddingBottom += displayFilesZoneHeight.value
-    }
-    // エディタにpaddingを追加
-    const element = document.getElementById(editorId)?.getElementsByClassName('q-editor__content')
-    if (element === undefined) {
-      return
-    }
-
-    for (let i = 0; i < (element as HTMLCollectionOf<HTMLElement>).length; i += 1) {
-      (element as HTMLCollectionOf<HTMLElement>)[i].style.paddingBottom = `${paddingBottom}px`
-    }
-  })
   /**
    * ファイル以外のデータをデータベースに保存するためのフェッチを作成する
    */
@@ -148,7 +117,7 @@ export const useMessage = ({ messageId, channelId }: Omit<MessageType, 'userId'>
         .catch((e) => {
           console.error(e)
         })
-    }, timeout);
+    }, timeout)
   }
 
   /**
@@ -231,6 +200,31 @@ export const useMessage = ({ messageId, channelId }: Omit<MessageType, 'userId'>
     createStoreDraftFileFetch(files)
   }
 
+  const setMentions = (mentions: string[]) => {
+    draft.value.mentions = mentions
+  }
+
+  /**
+   * 送られてきたユーザIDが配列に存在していれば取り除く
+   * 存在しなければ追加する
+   */
+  const updateMentions = (subjectUserId: string) => {
+    if (draft.value.mentions.includes(subjectUserId)) {
+      // 取り除く
+      draft.value.mentions = draft.value.mentions.filter((userid) => {
+        return userid !== subjectUserId
+      })
+    } else {
+      // 追加
+      draft.value.mentions.push(subjectUserId)
+    }
+    createStoreDraftFetchTimeout()
+  }
+
+  const setShowMentions = (value: boolean) => {
+    showMentions.value = value
+  }
+
   watch(draft, () => {
     if (oneOrMore(draft.value.message) || existFile.value) {
       // messageが一文字以上か、ファイルが一つ以上の場合はデータベースから削除しない
@@ -241,6 +235,45 @@ export const useMessage = ({ messageId, channelId }: Omit<MessageType, 'userId'>
     createDeleteDraftFetchTimeout()
   }, { deep: true })
 
+  /**
+   * ファイルが存在する時にpadding-bottomを追加する
+   */
+  watch(displayFilesZoneHeight, () => {
+    let paddingBottom = 20
+    if (existFile.value) {
+      // ファイルを表示するために空白を開ける
+      paddingBottom += displayFilesZoneHeight.value
+    }
+    // エディタにpaddingを追加
+    const element = document.getElementById(editorId)?.getElementsByClassName('q-editor__content')
+    if (element === undefined) {
+      return
+    }
+
+    for (let i = 0; i < (element as HTMLCollectionOf<HTMLElement>).length; i += 1) {
+      (element as HTMLCollectionOf<HTMLElement>)[i].style.paddingBottom = `${paddingBottom}px`
+    }
+  })
+
+  /**
+   * メンションの表示欄用のpaddingを追加する
+   */
+  watch(mentionZoneHeight, () => {
+    let paddingTop = 10
+    if (draft.value.mentions) {
+      paddingTop += mentionZoneHeight.value
+    }
+
+    // エディタにpaddingを追加
+    const element = document.getElementById(editorId)?.getElementsByClassName('q-editor__content')
+    if (element === undefined) {
+      return
+    }
+
+    for (let i = 0; i < (element as HTMLCollectionOf<HTMLElement>).length; i += 1) {
+      (element as HTMLCollectionOf<HTMLElement>)[i].style.paddingTop = `${paddingTop}px`
+    }
+  })
   const { isOverDropZone } = useDropZone(dropZone, droped)
 
   // quasorのせってい
@@ -250,20 +283,28 @@ export const useMessage = ({ messageId, channelId }: Omit<MessageType, 'userId'>
       icon: 'send',
       handler: sendMessage,
     },
+    mention: {
+      tip: 'メンション',
+      icon: 'alternate_email',
+      handler: setShowMentions,
+    },
   }
 
   const toolBar = [
-    ['bold', 'italic', 'strike', 'underline', 'quote', 'unordered', 'ordered', 'outdent', 'indent'],
+    ['bold', 'italic', 'strike', 'underline', 'quote', 'unordered', 'ordered', 'outdent', 'indent', 'mention'],
     ['send'],
   ]
-
 
   return {
     draft,
     dummyMessage,
     setMessage,
+    showMentions,
+    setMentions,
+    updateMentions,
+    setShowMentions,
+    mentionZone,
     dropZone,
-    textZone,
     editorId,
     existFile,
     displayFilesZone,
