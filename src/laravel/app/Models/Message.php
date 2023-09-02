@@ -14,6 +14,7 @@ class Message extends Moloquent
         'storage',
         'sended',
         'files',
+        'mentions',
         'thread',
         'thread_message_id',
         'reactions',

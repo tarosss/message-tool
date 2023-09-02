@@ -8,7 +8,7 @@ type MessageType = {
   channelId: string,
   threadMessageId?: string,
 }
-const getDraftKey = ({ userId, threadMessageId, channelId }: MessageType) => {
+export const getDraftKey = ({ userId, threadMessageId, channelId }: MessageType) => {
   if (threadMessageId) {
     return `${userId}-${channelId}-${threadMessageId}`
   }
@@ -28,6 +28,7 @@ export const getDefaultDraft = (
     message: '',
     files: {},
     reactions: {},
+    mentions: [],
     storage: 'local',
     thread: [],
     created_at: format({ date: null, formatString: 'yyyy-MM-dd HH:mm:ss' }),
