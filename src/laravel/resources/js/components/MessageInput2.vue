@@ -30,20 +30,23 @@
         <div
             class="absolute mentions-show q-pa-sm row q-gutter-x-lg"
             ref="mentionZone">
-            <div class="reletive-position">
-                <p 
-                    v-for="userId of draft.mentions" 
-                    :key="'selected' + props.channel._id + props.message?._id + userId"
-                    class="bg-light-blue-8 rounded-borders q-px-xs">
+            <div 
+                v-for="userId of draft.mentions" 
+                :key="'selected' + props.channel._id + props.message?._id + userId"
+                class="reletive-position">
+                <q-card 
+                    class="bg-light-blue-8 rounded-borders q-pl-xs q-pr-lg">
                     @{{ users.get(userId)?.display_name }}
-                </p>
-                <q-btn
-                    icon="close"
-                    color="white"
-                    size="xs"
-                    class="ab"
-                    dense>
-                </q-btn>
+                    <q-badge 
+                        color="white" 
+                        text-color="black"
+                        class="cursor-pointer"
+                        floating
+                        @click="updateMentions(userId)">
+                        ×
+                    </q-badge>
+                </q-card>
+                
             </div>
         </div>
         <Mention

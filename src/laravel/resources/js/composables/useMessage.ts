@@ -4,30 +4,15 @@ import { useDrafts } from '../store/drafts'
 import { format } from '../common/dateFormats'
 import { getFetch, getFetch2, fetchDeleteDraftFile } from '../common/fetches'
 import { deepCopy, toFormData } from '../common/objectUtils'
-import { validDraft, getPostDraft, getEditorId, getDefaultDraft, getDraftData } from '../common/draftUtils'
+import { validDraft, getPostDraft, getEditorId, getDefaultDraft, getDraftData, getDraftKey } from '../common/draftUtils'
 import { draftUpdateUrl, draftDeleteUrl, messageStoreUrl2, draftFileDeleteUrl, draftFilesUpdateUrl } from '../consts/fetches'
 import { oneOrMore } from '../common/regularExpression'
 
-const formatString = 'yyyy-MM-dd HH:mm:ss'
 const timeout = 1000
 type MessageType = {
   userId: string,
   channelId: string,
   messageId?: string,
-}
-
-type GetDraftAttr = MessageType & {
-  draftKey: string,
-  userId: string,
-  default?: boolean
-}
-
-const getDraftKey = ({ userId, messageId, channelId }: MessageType) => {
-  if (messageId) {
-    return `${userId}-${channelId}-${messageId}`
-  }
-
-  return `${userId}-${channelId}`
 }
 
 export const useMessage = ({ messageId, channelId }: Omit<MessageType, 'userId'>) => {
