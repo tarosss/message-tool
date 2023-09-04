@@ -3,6 +3,7 @@ declare type User = {
   user_name: string,
   display_name: string,
   email: string,
+  bookmarks: [],
 }
 
 declare type MessageReactions = {

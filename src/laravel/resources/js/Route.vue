@@ -1,8 +1,7 @@
 <template>
   <Header></Header>
   <Body v-if="show" ></Body>
-  <router-link to="/"></router-link>
-  <!-- <router-link to="/about"></router-link> -->
+  <AddChannel></AddChannel>
 </template>
 <script setup lang="ts">
 import { computed, onBeforeMount, onMounted, provide, ref } from 'vue';
@@ -10,6 +9,7 @@ import { useFetch } from '@vueuse/core';
 import { getFetch } from './common/fetches';
 import Header from './components/Header2.vue'
 import Body from './components/Body.vue'
+import AddChannel from './components/AddChannel.vue';
 import { useLoging } from './store/loging';
 import { useUsers } from './store/users';
 import { useChannels } from './store/channels'
@@ -52,7 +52,7 @@ onBeforeMount(()=> {
 
       }),
     useFetch('api/message').post({
-      userId: props.logingUserId, 
+      userId: props.loggingUserId, 
       by: 'channel_id', 
       messageKey: '_id',
     })

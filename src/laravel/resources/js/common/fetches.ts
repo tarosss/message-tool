@@ -1,6 +1,6 @@
 import { inject } from 'vue'
 import { createFetch } from '@vueuse/core'
-import { draftFileDeleteUrl } from '../consts/fetches'
+import { draftFileDeleteUrl, channelStoreUrl } from '../consts/fetches'
 
 type GetFetch2Args = {
   // headers: {
@@ -14,6 +14,8 @@ type GetFetch2Args = {
 }
 
 type Body = FormData | string
+
+type FetchAttributes = Omit<GetFetch2Args, 'url' | 'contentType'>
 
 const getContentType = (data: object | FormData) => {
 }
@@ -50,6 +52,19 @@ export const getFetch2 = ({ body, url, token, contentType }: GetFetch2Args) => {
 
 export const fetchDeleteDraftFile = ({ token, body }:{ token: string, body: Body }) => {
   const f = fetch(draftFileDeleteUrl, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body,
+  })
+
+  return f
+}
+
+export const fetchStoreChannel = ({ token, body }: FetchAttributes) => {
+  const f = fetch(channelStoreUrl, {
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',
