@@ -2,12 +2,12 @@ import { computed, ref, Ref, watch , inject } from 'vue'
 import { useShowing } from '../store/showing'
 import { useChannels } from '../store/channels'
 import { fetchStoreChannel } from '../common/fetches'
-import { pushOrDelete } from '../common/arrayUtils'
 import { format } from '../common/dateFormats'
+// import { ChannelType } from '../consts/channel'
 
 export const useAddChannel = () => {
   const { showAddChannelModal } = useShowing()
-  const { channels } = useChannels()
+  const { channels, pushChannel } = useChannels()
   const userId = inject('logging-user-id', '')
   const token = inject('token', '')
 
@@ -20,7 +20,7 @@ export const useAddChannel = () => {
   /** チャンネル名にかぶしがないかチェック */
   const canUseChannelName = computed(() => {
     for (const [id, channel] of channels.value) {
-      if (channel.channel_name.indexOf(channelName.value) !== -1) {
+      if (channelName.value == channel.channel_name) {
         return false
       }
     }
@@ -38,8 +38,15 @@ export const useAddChannel = () => {
 
   /** チャンネルにユーザを追加 */
   const addUser = (addedUserId: string) => {
-    pushOrDelete({ array: users.value, data: addedUserId })
-    console.log(users.value)
+    if (users.value.includes(addedUserId)) {
+      // 取り除く
+      users.value = users.value.filter((d) => {
+        return d !== addedUserId
+      })
+    } else {
+      // 追加
+      users.value.push(addedUserId)
+    }
   }
 
   /** チャンネルの追加 */
@@ -49,8 +56,10 @@ export const useAddChannel = () => {
     }
 
     const data = {
-      channel_name: channelName,
+      channel_type: 1,
+      channel_name: channelName.value,
       create_user: userId,
+      users: Array.from(new Set([userId].concat(users.value))),
       created_at: format({ date: null, formatString: null }),
     }
 
@@ -59,7 +68,19 @@ export const useAddChannel = () => {
         if (!res.ok) {
           throw new Error()
         }
+
+        return res.json()
+      })
+      .then((res) => res.channel as Channel)
+      .then((channel) => {
+        // モーダル非表示
+        showAddChannelModal.value = false
+        // リセット
         channelName.value = ''
+        users.value = []
+        showAddUsers.value = false
+        // チャンネルストアに追加
+        pushChannel({ newChannel: channel })
       })
       .catch((e) => {
         console.error(e)

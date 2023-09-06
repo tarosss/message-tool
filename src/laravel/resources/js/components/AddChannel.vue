@@ -66,15 +66,28 @@
                             :key="'add-channel-' + userId"
                             class="cursor-pointer"
                             :class="{'bg-red': users.includes(userId)}"
-                            dense
-                            @click="addUser(userId)">
+                            dense>
                             <q-item-section avatar>
                                 <q-icon color="primary" name="bluetooth"></q-icon>
                             </q-item-section>
-                            <q-item-section>{{ user.display_name }}</q-item-section>
+                            <q-item-section @click="addUser(userId)">{{ user.display_name }}</q-item-section>
                         </q-item>
                     </q-list>
                 </q-card>
+            </q-card-section>
+            <q-card-section class="row">
+                <q-btn
+                    label="戻る"
+                    flat
+                    @click="showAddUsers = false">
+                </q-btn>
+                <q-space></q-space>
+                <q-btn 
+                    color="primary"
+                    label="決定" 
+                    flat
+                    @click="add">
+                </q-btn>
             </q-card-section>
         </q-card>
     </q-dialog>
@@ -101,5 +114,8 @@ const {
     closeModal,
 } = useAddChannel()
 
+const a = () => {
+    console.log('vjak')
+}
 // const f = fetchStoreChannel({ token, body: '' })
 </script>

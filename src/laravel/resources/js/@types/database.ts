@@ -64,7 +64,7 @@ declare type MessageFile = {
 
 declare type Channel = {
   _id: string,
-  channel_type: number,
+  channel_type: 1 | 2,
   channel_name: string,
   created_at: string,
   create_user: string,
