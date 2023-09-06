@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 
 /**
@@ -11,6 +11,9 @@ const store = defineStore('showing', () => {
   const component = ref('')
   const showingThreadMessageId = ref('')
   const showThread = ref(false)
+  /** チャンネル追加のモーダルウィンドウの表示 */
+  const showAddChannelModal = ref(false)
+
   const setShowing = (newShowing: string) => {
     showingId.value = newShowing
     switch (newShowing) {
@@ -51,6 +54,7 @@ const store = defineStore('showing', () => {
     component: computed(() => component.value),
     showingThreadMessageId: computed(() => showingThreadMessageId.value),
     showThread: computed(() => showThread.value),
+    showAddChannelModal,
     setShowing,
     setThread,
     setShowingThread,

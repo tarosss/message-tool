@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Facades\Date;
 use Illuminate\Http\Request;
 use App\Interfaces\Repositories\MessageToolRepositoryInterface;
 use Illuminate\Http\Response;
@@ -37,16 +38,19 @@ class ChannelController extends \App\Http\Controllers\Controller
      */
     public function store(Request $request, MessageToolRepositoryInterface $messageToolRepository)
     {
+        Log::info($request);
         try {
-            $messageToolRepository->createChannel([
+            $channel = $messageToolRepository->createChannel([
                 'channel_type' => $request->input('channel_type'),
                 'channel_name' => $request->input('channel_name'),
                 'create_user' => $request->input('create_user'),
                 'users' => $request->has('users') ? $request->input('users') : [],
+                'created_at' => Date::getNowString(),
             ]);
 
             return response()->json([
-                'error' => false
+                'error' => false,
+                'channel' => $channel,
             ], Response::HTTP_CREATED);
         } catch (Exception $e) {
             return response()->json([

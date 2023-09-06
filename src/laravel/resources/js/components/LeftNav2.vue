@@ -29,11 +29,11 @@
                 :title="channel.channel_name"
                 clickable>
             </LeftNavRow>
-            <q-item 
-                class="row items-center cursor-pointer"
+            <q-item
+                class="row items-center cursor-pointer q-py-lg"
                 dense>
                 <div>
-                    <q-icon 
+                    <q-icon
                         class="q-mr-sm"
                         name="add">
                     </q-icon>
@@ -41,6 +41,16 @@
                         チャンネルを追加する
                     </span>
                 </div>
+                <q-menu>
+                    <q-list class="q-py-lg">
+                        <q-item class="cursor-pointer" >
+                            <span @click="showAddChannelModal = true">新しいチャンネルを作成する</span>
+                        </q-item>
+                        <q-item class="cursor-pointer">
+                            <span>チャンネル一覧</span>
+                        </q-item>
+                    </q-list>
+                </q-menu>
             </q-item>
         </q-expansion-item>
     </q-list>
@@ -55,12 +65,9 @@ import { useMessages } from '../store/messages';
 import router from '../router'
 const workspaceName = 'ワークスペースめい'
 const channels = useChannels()
+const { showAddChannelModal } = useShowing()
 const selectedDetail = ref('')
 
 const showChannel = ref(true)
-// useMessages().set('mvaklmkl')
 
-// const click = (path: string) => {
-//     router.push(path)
-// }
 </script>
