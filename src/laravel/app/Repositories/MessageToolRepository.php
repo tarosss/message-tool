@@ -49,9 +49,14 @@ class MessageToolRepository implements MessageToolRepositoryInterface
         Member::insert($data);
     }
 
-    public function getMessage()
+    public function getMessage(array $wheres)
     {
+        $data = Message::select('*');
+        if (isset($wheres['_id'])) {
+            $data->where('_id', $wheres['_id']);
+        }
 
+        return $data->first();
     }
 
     public function getMessages(array $wheres)
@@ -76,10 +81,10 @@ class MessageToolRepository implements MessageToolRepositoryInterface
         Message::insert($data);
     }
 
-    public function updateMessage(string $id, array $data)
+    public function updateMessage(array $wheres, array $data)
     {
         unset($data['_id']);
-        return Message::where('_id', $id)
+        return Message::where($wheres)
             ->update($data);
     }
 

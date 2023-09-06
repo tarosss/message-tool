@@ -23,6 +23,11 @@
                     {{ thread.tip }}
                 </q-tooltip>
             </q-btn>
+            <q-btn
+                icon="edit"
+                size="xs"
+                @click="emits('editMessage')">
+            </q-btn>
         </q-card-actions>
     </q-card>
     <!-- <Reaction
@@ -56,5 +61,7 @@ const logingUserId = inject('logging-user-id', '')
 const token = inject('token', '')
 const { showing, showingChannelId, setThread } = useShowing()
 const { reactions, thread } = useReactionBar()
-
+const emits = defineEmits<{
+    (e: 'editMessage'): void,
+}>()
 </script>

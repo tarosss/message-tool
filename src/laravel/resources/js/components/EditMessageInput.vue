@@ -1,19 +1,20 @@
 <template>
     <q-editor
-        v-model="dummyMessage"
+        v-model="editedMessage"
         :toolbar="toolBar"
         :definitions="definitions"
-        :placeholder="props.channel.channel_name + 'へのメッセージ'"
         dark
-        @update:model-value="s => setMessage(s, true)"
         ref="dropZone">
     </q-editor>
 </template>
 
 <script lang="ts" setup>
+import { ref } from 'vue'
+import { useEditMessage } from '../composables/useEditMessage'
+
 const props = defineProps<{
     message: Message,
 }>()
 
-
+const { editedMessage, editedMentions, toolBar, definitions } = useEditMessage(props.message)
 </script>
