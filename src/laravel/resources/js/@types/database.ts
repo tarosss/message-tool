@@ -3,6 +3,7 @@ declare type User = {
   user_name: string,
   display_name: string,
   email: string,
+  icon: string | undefined,
   bookmarks: [],
 }
 
@@ -66,6 +67,7 @@ declare type Channel = {
   _id: string,
   channel_type: 1 | 2,
   channel_name: string,
+  users: string[],
   created_at: string,
   create_user: string,
 }

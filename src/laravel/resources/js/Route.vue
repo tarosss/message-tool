@@ -2,6 +2,7 @@
   <Header></Header>
   <Body v-if="show" ></Body>
   <AddChannel></AddChannel>
+  <AddDirectMessage></AddDirectMessage>
 </template>
 <script setup lang="ts">
 import { computed, onBeforeMount, onMounted, provide, ref } from 'vue';
@@ -9,7 +10,8 @@ import { useFetch } from '@vueuse/core';
 import { getFetch } from './common/fetches';
 import Header from './components/Header2.vue'
 import Body from './components/Body.vue'
-import AddChannel from './components/AddChannel.vue';
+import AddChannel from './components/AddChannel.vue'
+import AddDirectMessage from './components/AddDirectMessage.vue'
 import { useLoging } from './store/loging';
 import { useUsers } from './store/users';
 import { useChannels } from './store/channels'

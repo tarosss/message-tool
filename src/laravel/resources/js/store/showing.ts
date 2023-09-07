@@ -14,6 +14,9 @@ const store = defineStore('showing', () => {
   /** チャンネル追加のモーダルウィンドウの表示 */
   const showAddChannelModal = ref(false)
 
+  /** ダイレクトメッセージのモーダルウィンドウを表示 */
+  const showAddDirectMessageModal = ref(false)
+
   const setShowing = (newShowing: string) => {
     showingId.value = newShowing
     switch (newShowing) {
@@ -55,6 +58,7 @@ const store = defineStore('showing', () => {
     showingThreadMessageId: computed(() => showingThreadMessageId.value),
     showThread: computed(() => showThread.value),
     showAddChannelModal,
+    showAddDirectMessageModal,
     setShowing,
     setThread,
     setShowingThread,
