@@ -1,6 +1,6 @@
 import { inject } from 'vue'
 import { createFetch } from '@vueuse/core'
-import { draftFileDeleteUrl, channelStoreUrl } from '../consts/fetches'
+import { messageUpdateUrl, draftFileDeleteUrl, channelStoreUrl } from '../consts/fetches'
 
 type GetFetch2Args = {
   // headers: {
@@ -65,6 +65,19 @@ export const fetchDeleteDraftFile = ({ token, body }:{ token: string, body: Body
 
 export const fetchStoreChannel = ({ token, body }: FetchAttributes) => {
   const f = fetch(channelStoreUrl, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body,
+  })
+
+  return f
+}
+
+export const fetchUpdateMessage = ({ token, body }: FetchAttributes) => {
+  const f = fetch(messageUpdateUrl, {
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',

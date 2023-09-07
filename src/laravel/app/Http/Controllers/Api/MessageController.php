@@ -249,22 +249,21 @@ class MessageController extends \App\Http\Controllers\Controller
     public function update(Request $request, MessageToolRepositoryInterface $messageToolRepository)
     {
         try {
-            foreach($request['data'] as $data) {
-                Log::info($data);
-                $messageToolRepository->updateMessage($data['_id'], $data);
-            }
+            $messageToolRepository->updateMessage(['_id' => $request->input('_id')], $request->all());
+            $message = $messageToolRepository->getMessage(['_id' => $request->input('_id')]);
 
-            broadcast(new \App\Events\UpdateMessage($request['data']));
-        } catch (Exception $e) {
-            $this->error = true;
-            $this->code = Response::HTTP_BAD_REQUEST;
-            $this->message = $e->getMessage();
-            Log::error($e);
-        } finally {
+            broadcast(new \App\Events\UpdateMessage([$message]));
+
             return response()->json([
-                'error' => $this->error,
-                'message' => $this->message
-            ], $this->code);
+                'error' => false,
+                'message' => $message,
+            ], Response::HTTP_OK);
+        } catch (Exception $e) {
+            Log::error($e);
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage(),
+            ], Response::HTTP_OK);
         }
     }
 

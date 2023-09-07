@@ -1,19 +1,33 @@
 <template>
     <q-editor
-        v-model="dummyMessage"
+        v-model="editedMessage"
         :toolbar="toolBar"
         :definitions="definitions"
-        :placeholder="props.channel.channel_name + 'へのメッセージ'"
         dark
-        @update:model-value="s => setMessage(s, true)"
         ref="dropZone">
     </q-editor>
 </template>
 
 <script lang="ts" setup>
+import { ref, watchEffect } from 'vue'
+import { useEditMessage } from '../composables/useEditMessage'
+
 const props = defineProps<{
     message: Message,
 }>()
 
+const emits = defineEmits<{
+    (e: 'endEdit'): void,
+}>()
 
+
+const { editedMessage, editedMentions, toolBar, definitions, endEdit } = useEditMessage(props.message)
+
+watchEffect(() => {
+    if (!endEdit.value) {
+        return
+    }
+
+    emits('endEdit')
+})
 </script>

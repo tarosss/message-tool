@@ -38,7 +38,6 @@ class ChannelController extends \App\Http\Controllers\Controller
      */
     public function store(Request $request, MessageToolRepositoryInterface $messageToolRepository)
     {
-        Log::info($request);
         try {
             $channel = $messageToolRepository->createChannel([
                 'channel_type' => $request->input('channel_type'),

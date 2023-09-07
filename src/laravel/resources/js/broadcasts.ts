@@ -33,6 +33,7 @@ window.Echo.channel('laravel_database_create_message').listen('CreateMessage', (
 })
 
 window.Echo.channel('laravel_database_update_message').listen('UpdateMessage', (data) => {
+  console.log(data)
   for (const message  of data.messages as Message[]) {
     useMessages('message-' + message.channel_id).updateMessage({ updatedMessage: message })
   }
