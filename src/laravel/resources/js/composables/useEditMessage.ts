@@ -10,6 +10,9 @@ export const useEditMessage = (subjectMessage: Message) => {
   const editedMessage = ref(tempMessage.message)
   const editedMentions = ref(tempMessage.mentions)
 
+  /** 編集が終了したらtrueにする */
+  const endEdit = ref(false)
+
   const sendMessage = () => {
     const body = JSON.stringify({
       _id: subjectMessage._id,
@@ -22,7 +25,7 @@ export const useEditMessage = (subjectMessage: Message) => {
         if (!res.ok) {
           throw new Error()
         }
-
+        endEdit.value = true
         return res.json()
       })
     //   .then((res) => res.message as Message)
@@ -61,5 +64,6 @@ export const useEditMessage = (subjectMessage: Message) => {
     toolBar,
     editedMessage,
     editedMentions,
+    endEdit,
   }
 }

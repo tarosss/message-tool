@@ -9,12 +9,25 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { ref, watchEffect } from 'vue'
 import { useEditMessage } from '../composables/useEditMessage'
 
 const props = defineProps<{
     message: Message,
 }>()
 
-const { editedMessage, editedMentions, toolBar, definitions } = useEditMessage(props.message)
+const emits = defineEmits<{
+    (e: 'endEdit'): void,
+}>()
+
+
+const { editedMessage, editedMentions, toolBar, definitions, endEdit } = useEditMessage(props.message)
+
+watchEffect(() => {
+    if (!endEdit.value) {
+        return
+    }
+
+    emits('endEdit')
+})
 </script>

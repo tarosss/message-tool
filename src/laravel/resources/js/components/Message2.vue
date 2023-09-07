@@ -38,7 +38,8 @@
         </div>
         <div v-else>
             <EditMessageInput
-                :message="props.message">
+                :message="props.message"
+                @endEdit="editing = false">
             </EditMessageInput>
         </div>
     </q-card>
@@ -68,4 +69,5 @@ const editing = ref(false)
 const startEdit = () => {
     editing.value = true
 }
+
 </script>
