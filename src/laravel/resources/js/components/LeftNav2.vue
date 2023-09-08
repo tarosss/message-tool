@@ -23,9 +23,8 @@
             label="チャンネル">
             <LeftNavRow
                 v-for="[channelId, channel] in participatingChannels" 
-                :key="'chanel' + channelId" 
-                :_id="channelId"
-                :title="channel.channel_name"
+                :key="'left-nav-chanel-' + channelId" 
+                :channel="channel"
                 clickable>
             </LeftNavRow>
             <q-item
@@ -56,6 +55,12 @@
             v-model="showDirectMessages"
             switch-toggle-side
             label="ダイレクトメッセージ">
+            <LeftNavRow
+                v-for="[channelId, directMessage] in directMessages" 
+                :key="'left-nav-direct-message-' + channelId" 
+                :channel="directMessage"
+                clickable>
+            </LeftNavRow>
             <q-item
                 class="row items-center cursor-pointer q-py-lg"
                 dense>
@@ -80,6 +85,7 @@ import { useChannels } from '../store/channels';
 import { useShowing } from '../store/showing';
 import { useMessages } from '../store/messages';
 import router from '../router'
+
 const workspaceName = 'ワークスペースめい'
 const { channels, participatingChannels, directMessages, getChannel } = useChannels()
 const { showAddChannelModal, showAddDirectMessageModal } = useShowing()

@@ -1,1 +1,3 @@
-export type ChannelType = 1 | 2
+export const CHANNEL_TYPE_NORMAL = 1
+export const CHANNEL_TYPE_DIRECT_MESSAGE = 2
+export const CHANNEL_TYPE_MEMO = 3
