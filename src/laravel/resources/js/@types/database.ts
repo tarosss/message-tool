@@ -70,8 +70,10 @@ declare type Channel = {
   channel_type: 1 | 2 | 3,
   channel_name: string,
   users: string[],
-  created_at: string,
+  topic: string | undefined,
+  description: string | undefined,
   create_user: string,
+  created_at: string,
 }
 
 declare type Reaction = {

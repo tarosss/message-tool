@@ -30,6 +30,9 @@
         <q-btn icon="help" class="text-white" square flat dense></q-btn>
         <Avator
             :user="loggingUser">
+            <q-card>
+                v,al;s,c
+            </q-card>
         </Avator>
     </q-toolbar>
     <q-dialog v-model="showSearchDialog">

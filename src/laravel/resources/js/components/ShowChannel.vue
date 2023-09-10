@@ -5,8 +5,12 @@
                # {{ displayChannelName }}
             </q-toolbar-title>
             <Avatar
-                :user="loggingUser">
+                :user="loggingUser"
+                :size="25"
+                class="q-mr-sm"
+                @click="showChannelDialog = true">
             </Avatar>
+            <span>{{ props.channel.users.length }}</span>
         </q-toolbar>
         <div
             v-if="isNormalChannel"
@@ -56,6 +60,114 @@
             </MessageInput>
         </div>
     </div>
+    <q-dialog v-model="showChannelDialog">
+        <q-card class="body-channel-dialog">
+            <q-toolbar>
+                <q-toolbar-title class="font-16">
+                    # {{ displayChannelName }}
+                </q-toolbar-title>
+                <q-space></q-space>
+                <q-btn
+                    icon="close"
+                    flat
+                    @click="showChannelDialog = false">
+                </q-btn>
+            </q-toolbar>
+            <q-tabs
+                v-model="tab"
+                align="justify"
+                narrow-indicator
+                class="q-mb-lg">
+                <q-tab class="text-purple" name="channel" label="チャンネル情報" />
+                <q-tab class="text-orange" :name="'users' + props.channel.users.length" label="メンバー" />
+            </q-tabs>
+            <q-tab-panels v-model="tab"  class="text-dark text-center">
+                <q-tab-panel name="channel">
+                    <q-card 
+                        class="cursor-pointer text-left q-mb-lg"
+                        flat>
+                        <q-card-section class="row justify-between"> 
+                            <div class="row">
+                                <span
+                                    class="font-bold col-12">
+                                    チャンネル名
+                                </span>
+                                <span class="col-12">
+                                    {{ displayChannelName }}
+                                </span>
+                            </div>
+                            <q-btn
+                                label="編集"
+                                flat
+                                dense>
+                            </q-btn>
+
+                        </q-card-section>
+                    </q-card>
+                    <q-card 
+                        class="cursor-pointer q-mb-sm"
+                        flat>
+                        <q-card-section 
+                            class="row justify-between text-left">
+                            <div class="row">
+                                <span class="col-12">
+                                    トピック
+                                </span>
+                                <span class="col-12">
+                                    {{ props.channel.topic ?? 'トピックを追加する' }}
+                                </span>
+                            </div>
+                            <q-btn
+                                label="編集"
+                                flat
+                                dense>
+                            </q-btn>
+                        </q-card-section>
+                        <q-separator />
+                        <q-card-section 
+                            class="row justify-between text-left">
+                            <div class="row">
+                                <span class="col-12">
+                                    説明
+                                </span>
+                                <span class="col-12">
+                                    {{ props.channel.description ?? '説明を追加する' }}
+                                </span>
+                            </div>
+                            <q-btn
+                                label="編集"
+                                flat
+                                dense>
+                            </q-btn>
+                        </q-card-section>
+                        <q-separator />
+                        <q-card-section 
+                            class="row justify-between text-left">
+                            <div class="row">
+                                <span class="col-12">
+                                    作成者
+                                </span>
+                                <span class="col-12">
+                                    {{ props.channel.create_user }}さんが{{ props.channel.created_at }}に作成
+                                </span>
+                            </div>
+                        </q-card-section>
+                    </q-card>
+                    <q-card flat>
+                        <q-card-section class="text-left">
+                            <span>
+                                ファイル
+                            </span>
+                        </q-card-section>
+                    </q-card>
+                </q-tab-panel>
+                <q-tab-panel name="users">
+                    <div class="text-h6">Mails</div>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                </q-tab-panel>
+            </q-tab-panels>
+        </q-card>
+    </q-dialog>
 </template>
 <script lang="ts" setup>
 import { onUpdated, inject, computed, onMounted, ref, watchEffect } from 'vue';
@@ -82,4 +194,6 @@ const {
     showProfile,
 } = useShowChannel(props.channel)
 
+const showChannelDialog = ref(false)
+const tab = ref('')
 </script>
