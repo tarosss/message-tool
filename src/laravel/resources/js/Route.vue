@@ -114,3 +114,4 @@ const show = computed(() => {
 // }>()
 // console.log(props.data);
 </script>
+./store/logging

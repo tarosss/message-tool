@@ -1,1 +1,1 @@
-type QSizes = 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+type QSizes = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string

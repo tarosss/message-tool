@@ -1,5 +1,6 @@
 import { computed, inject, ref, Ref, watch } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
+import { useUsers } from '../store/users'
 import { CHANNEL_TYPE_NORMAL, CHANNEL_TYPE_DIRECT_MESSAGE, CHANNEL_TYPE_MEMO } from '../consts/channel'
 
 type DirectMessage = Channel & {
@@ -34,6 +35,11 @@ const store = defineStore('channels', () => {
    * @returns
    */
   const getAnotherUserId = (channel: Channel) => {
+    if (channel.channel_type === CHANNEL_TYPE_NORMAL) {
+      // 通常チャンネルの場合はahotherUserIdは使わないので空文字を返す
+      return ''
+    }
+
     if (channel.channel_type === CHANNEL_TYPE_DIRECT_MESSAGE) {
       return channel.users.filter((id) => id !== userId)[0]
     }
@@ -44,16 +50,17 @@ const store = defineStore('channels', () => {
   /**
    * ダイレクトメッセージや自分用のメモなどのチャンネル名を取得
    */
-  const getChannelName = (channel: Channel) => {
-    switch(channel.channel_type) {
-      case CHANNEL_TYPE_NORMAL:
-        return channel.channel_name
-      case CHANNEL_TYPE_DIRECT_MESSAGE:
-        return 
-      case CHANNEL_TYPE_MEMO:
-
-      default:
+  const getDisplayChannelName = (channel: Channel) => {
+    if (channel.channel_type === CHANNEL_TYPE_NORMAL) {
+      return channel.channel_name
     }
+
+    const { getUser } = useUsers()
+    const u = getUser(getAnotherUserId(channel))
+    if (u === undefined) {
+      return ''
+    }
+    return u.display_name
   }
 
   watch(channels, () => {
@@ -66,6 +73,7 @@ const store = defineStore('channels', () => {
       if (channel.channel_type === CHANNEL_TYPE_NORMAL && channel.users.includes(userId)) {
         tempParticipatingChannels.set(channelId, channel)
       }
+
       if (
         (
           channel.channel_type === CHANNEL_TYPE_DIRECT_MESSAGE
@@ -96,7 +104,7 @@ const store = defineStore('channels', () => {
     setChannels,
     pushChannel,
     getAnotherUserId,
-    getChannelName,
+    getDisplayChannelName,
   }
 })
 

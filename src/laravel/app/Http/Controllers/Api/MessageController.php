@@ -8,7 +8,7 @@ use App\Interfaces\Repositories\MessageToolRepositoryInterface;
 use App\Facades\StringUtils;
 use App\Facades\MimeType;
 use App\Facades\Date;
-
+use App\Facades\DraftUtils;
 use Exception;
 use Log;
 
@@ -120,6 +120,9 @@ class MessageController extends \App\Http\Controllers\Controller
         }
     }
 
+    /**
+     * 1つのメッセージを追加する
+     */
     public function store2(Request $request, MessageToolRepositoryInterface $messageToolRepository)
     {
         Log::info($request);
@@ -132,13 +135,15 @@ class MessageController extends \App\Http\Controllers\Controller
 
         try {
             $storage = \App\Factories\StorageFactory::getStorage();
-            $nowString = \App\Facades\Date::getNowString();
+            // $nowString = \App\Facades\Date::getNowString();
+            $userId = $request->input('user_id');
+            $channelId = $request->input('channel_id');
             $threadMessageId = $request->input('thread_message_id') ?? null;
             $message = [
                 'message' => $request->input('message'),
-                'user_id' => $request->input('user_id'),
+                'user_id' => $userId,
                 'storage' => $storage->getDisk(),
-                'channel_id' => $request->input('channel_id'),
+                'channel_id' => $channelId,
                 'thread_message_id' => $threadMessageId,
                 'thread' => $request->input('thread') ?? [],
                 'files' => $request->input('files') ?? [],
@@ -178,11 +183,11 @@ class MessageController extends \App\Http\Controllers\Controller
             $message['files'] = $_ids;
             $createdMessage = $messageToolRepository->createMessage($message);
     
+            // draftsコントローラから削除
+            $draftKey = DraftUtils::getDraftKey($userId, $channelId, $threadMessageId);
+            $messageToolRepository->deleteDraft(['draft_key' => $draftKey]);
             broadcast(new \App\Events\CreateMessage([$createdMessage], $createdFiles));
-            // if ($createdFiles) {
-            //     // ファイルありのメッセージの場合はファイルのEventを実行する
-            //     broadcast(new \App\Events\CreateFile($createdFiles));
-            // }
+
         } catch (Exception $e){
             Log::error($e);
             $code = Response::HTTP_BAD_REQUEST;

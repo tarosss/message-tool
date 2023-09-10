@@ -4,6 +4,8 @@ declare type User = {
   display_name: string,
   email: string,
   icon: string | undefined,
+  default_icon_color: string,
+  default_icon_background_color: string,
   bookmarks: [],
 }
 
