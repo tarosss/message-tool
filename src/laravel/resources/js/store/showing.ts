@@ -17,6 +17,14 @@ const store = defineStore('showing', () => {
   /** ダイレクトメッセージのモーダルウィンドウを表示 */
   const showAddDirectMessageModal = ref(false)
 
+  /** チャンネル編集用のモーダルを表示 */
+  const showChannelDialog = ref(false)
+  /** チャンネル編集用のモーダルに表示するチャンネル */
+  const channelDialogChannelId = ref('')
+
+  /** プロフィールを表示するユーザID */
+  const profileUserId = ref('')
+
   const setShowing = (newShowing: string) => {
     showingId.value = newShowing
     switch (newShowing) {
@@ -50,6 +58,14 @@ const store = defineStore('showing', () => {
     showThread.value = newShowThread
   }
 
+  /**
+   * 右にユーザのプロフィールを表示する
+   */
+  const displayUserProfile = (userId: string) => {
+    profileUserId.value = userId
+    showThread.value = true
+  }
+  
   return {
     showing: computed(() => showingId.value),
     /** sc */
@@ -59,9 +75,13 @@ const store = defineStore('showing', () => {
     showThread: computed(() => showThread.value),
     showAddChannelModal,
     showAddDirectMessageModal,
+    showChannelDialog,
+    channelDialogChannelId,
+    profileUserId: computed(() => profileUserId.value),
     setShowing,
     setThread,
     setShowingThread,
+    displayUserProfile,
   }
 })
 

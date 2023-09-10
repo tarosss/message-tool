@@ -1,5 +1,6 @@
 <template>
-    <q-card>
+    <q-card
+        v-if="user">
         <q-toolbar>
             <q-toolbar-title>
                 プロフィール

@@ -3,6 +3,7 @@
   <Body v-if="show" ></Body>
   <AddChannel></AddChannel>
   <AddDirectMessage></AddDirectMessage>
+  <ChannelDialog></ChannelDialog>
 </template>
 <script setup lang="ts">
 import { computed, onBeforeMount, onMounted, provide, ref } from 'vue';
@@ -12,7 +13,8 @@ import Header from './components/Header2.vue'
 import Body from './components/Body.vue'
 import AddChannel from './components/AddChannel.vue'
 import AddDirectMessage from './components/AddDirectMessage.vue'
-import { useLoging } from './store/loging';
+import ChannelDialog from './components/ChannelDialog.vue'
+import { useLogging } from './store/logging';
 import { useUsers } from './store/users';
 import { useChannels } from './store/channels'
 import { useMessages } from './store/messages'
@@ -79,7 +81,7 @@ onBeforeMount(()=> {
       }),
 
     getFetch({ token: props.token})(draftGetUrl).post({
-      userId: props.logingUserId
+      userId: props.loggingUserId
     })
       .then(res => res.data.value)
       .then(jsonText => JSON.parse(jsonText as string))

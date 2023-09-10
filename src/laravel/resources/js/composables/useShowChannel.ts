@@ -8,7 +8,10 @@ import { CHANNEL_TYPE_MEMO, CHANNEL_TYPE_NORMAL } from '../consts/channel';
 
 export const useShowChannel = (channel: Channel) => {
   const logingUserId = inject('logging-user-id', '')
-  const { showing, setShowingThread } = useShowing()
+
+  const {
+    showing, showChannelDialog, channelDialogChannelId, setShowingThread,
+  } = useShowing()
   const { users } = useUsers()
   const { getDisplayChannelName } = useChannels()
   const { htmlElement, bottom } = useScrollIntoViewOnce()
@@ -39,6 +42,14 @@ export const useShowChannel = (channel: Channel) => {
     setShowingThread(true)
   }
 
+  /**
+   * チャンネルのアバターをクリックした時にダイアログを表示する 
+   */
+  const clickChannelAvatar = (channelId: string) => {
+    channelDialogChannelId.value = channelId
+    showChannelDialog.value = true
+  }
+  
   /** デフォルトで一番下を表示する */
   onUpdated(() => {
     if (channel._id === showing.value) {
@@ -56,5 +67,6 @@ export const useShowChannel = (channel: Channel) => {
     isNormalChannel,
     isMemo,
     showProfile,
+    clickChannelAvatar
   }
 }
