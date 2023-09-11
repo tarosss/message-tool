@@ -1,6 +1,7 @@
 @use 'variables';
 
-.body-channel {
+.body {
+
     // &-messages-by-day-wrapper {
     //     // display: flex;
     //     // flex-direction: column-reverse;
@@ -9,19 +10,25 @@
         
     // }
 
-    &-messages-by-day {
-        position: relative;
-        border-top: rgb(171, 171, 171) 1px solid;
-        // overflow: scroll;
+    &-channel {
+        &-messages-by-day {
+            position: relative;
+            border-top: rgb(171, 171, 171) 1px solid;
+            // overflow: scroll;
+    
+            &-date {
+                position: absolute;
+                border-radius: 20px;
+                border: rgb(171, 171, 171) 1px solid;
+                left: 50%;
+                transform: translate(-50%, -150%);
+                background-color: variables.$body-background-color;
+                padding: 0 20px;
+            }
+        }
 
-        &-date {
-            position: absolute;
-            border-radius: 20px;
-            border: rgb(171, 171, 171) 1px solid;
-            left: 50%;
-            transform: translate(-50%, -150%);
-            background-color: variables.$body-background-color;
-            padding: 0 20px;
+        &-dialog {
+            width: 1000px;
         }
     }
 }

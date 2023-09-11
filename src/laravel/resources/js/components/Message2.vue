@@ -6,7 +6,8 @@
             <div class="row text-white relative-position" >
                 <Avatar 
                     class="text-black q-mr-sm" 
-                    :badge="false" :size="'md'">
+                    :badge="false" 
+                    :size="35">
                 </Avatar>
                 <div class="column">
                     <div class="col row items-end">

@@ -23,6 +23,9 @@ class User extends Authenticatable
         'email',
         'password',
         'bookmarks',
+        'icon',
+        'default_icon_color',
+        'default_icon_background_color',
     ];
 
     /**

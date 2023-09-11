@@ -28,7 +28,12 @@
         </q-card>
         <q-space></q-space>
         <q-btn icon="help" class="text-white" square flat dense></q-btn>
-        <Avator></Avator>
+        <Avator
+            :user="loggingUser">
+            <q-card>
+                v,al;s,c
+            </q-card>
+        </Avator>
     </q-toolbar>
     <q-dialog v-model="showSearchDialog">
         <q-card>
@@ -46,8 +51,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import Avator from './Avatar.vue'
+import { useLogging } from '../store/logging'
 import { useHeader } from '../composables/useHeader' 
 
+const { loggingUser } = useLogging()
 const { searchText, showHeaderSearch, canShowHeaderSearch, showSearchDialog, setCanShowHeaderSearch,  clickTune } = useHeader()
 
 </script>

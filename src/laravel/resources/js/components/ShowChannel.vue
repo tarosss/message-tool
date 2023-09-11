@@ -1,32 +1,57 @@
 <template>
-    <div v-if="props.channel" class="body-channel padding-top-10 row justify-end" style="height: 100%">
-        <div class="body-channel-header col-12">
-            <p class="font-16">
-               # {{ props.channel.channel_name }}
-            </p>
-            <div class="body-channel-header-right">
-                <div class="body-channel-header-right-members">
-                    <p class="body-channel-header-right-members-icon"></p>
-                </div>
-            </div>
-        </div>
-        <div class="margin-bottom-30 col-12">
+    <div class="body-channel padding-top-10 row justify-end" style="height: 100%">
+        <q-toolbar class="body-channel-header col-12">
+            <q-toolbar-title class="font-16">
+               # {{ displayChannelName }}
+            </q-toolbar-title>
+            <Avatar
+                v-if="isNormalChannel"
+                :user="loggingUser"
+                :size="25"
+                class="q-mr-sm"
+                @click="clickChannelAvatar(props.channel._id)">
+            </Avatar>
+            <span>{{ props.channel.users.length }}</span>
+        </q-toolbar>
+        <div
+            v-if="isNormalChannel"
+            class="margin-bottom-30 col-12">
             <p class="font-20">
-                # {{ props.channel.channel_name }}
+                # {{ displayChannelName }}
             </p>
             <p>
                 {{ specialFormat(props.channel.created_at) }}、
                 {{ channelCreateUserDisplayName }} がこのチャンネルを作成しました。チャンネルをどんどん活用していきましょう！ 
             </p>
         </div>
+        <div v-else class="col-12">
+            <div>
+                <Avatar
+                    :user="loggingUser">
+                </Avatar>
+                <span
+                    class="cursor-pointer"
+                    @click="showProfile">
+                    {{ displayChannelName }}
+                </span>
+            </div>
+            <p v-if="isMemo">
+                <b>ここはあなただけのスペースです。 </b>
+            </p>
+            <p v-else>
+                この会話は @t.ukaiさんとの 2 人だけに公開されています。もっとよく知り合うため、プロフィールをチェックしてみましょう。
+            </p>
+        </div>
         <div class="body-channel-messages-by-day-wrapper col-12" ref="htmlElement">
             <div class="body-channel-messages-by-day q-py-lg relative-position"
-                v-for="[date, messageIds] of messages.messageIdsByDay.value">
+                v-for="[date, messageIds] of messageIdsByDay">
                 <span class="body-channel-messages-by-day-date pointer absolute-top-center"> 
                     {{ specialFormat(date, true) }} 
                 </span>
-                <Message v-for="messageId of messageIds" :key="'message' + messageId"
-                    :message="(messages.messages.value.get(messageId) as Message)">
+                <Message 
+                    v-for="messageId of messageIds" 
+                    :key="'show-message-' + messageId"
+                    :message="(messages.get(messageId) as Message)">
                 </Message>
             </div>
         </div>
@@ -38,39 +63,32 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { onUpdated, inject } from 'vue';
+import ChannelDialog from '../components/ChannelDialog.vue'
+import { onUpdated, inject, computed, onMounted, ref, watchEffect } from 'vue';
 import Message from './Message2.vue'
 import MessageInput from './MessageInput2.vue'
-import { computed, onMounted, ref, watchEffect } from 'vue';
-import { useUsers } from '../store/users';
-import { useChannels } from '../store/channels';
-import { useMessages } from '../store/messages';
+import Avatar from './Avatar.vue';
+import { useLogging } from '../store/logging'
 import { useShowing } from '../store/showing';
-import { useScrollIntoViewOnce } from '../composables/useScrollIntoViewOnce'
+import { useShowChannel } from '../composables/useShowChannel'
 import { specialFormat } from '../common/dateFormats'
+
 const props = defineProps<{
     channel: Channel,
 }>()
-const logingUserId = inject('logging-user-id', '')
-const users = useUsers()
-const showing = useShowing()
-const channel = computed(() => useChannels().getChannel(showing.showing.value))
-const messages =  computed(() => useMessages('message-' + showing.showing.value))
-const { htmlElement, bottom } = useScrollIntoViewOnce()
 
-onUpdated(() => {
-    if (props.channel._id === showing.showing.value) {
-        // 表示中のものだけ実行する
-        bottom()
-    }
-})
+const { loggingUser } = useLogging()
+const { 
+    channelCreateUserDisplayName, 
+    messages, 
+    messageIdsByDay, 
+    htmlElement,
+    displayChannelName,
+    isNormalChannel,
+    isMemo,
+    showProfile,
+    clickChannelAvatar,
+} = useShowChannel(props.channel)
 
-const channelCreateUserDisplayName = computed(() => {
-    if (props.channel.create_user === logingUserId) {
-        return 'あなた'
-    }
-
-    return users.users.value.get(logingUserId)?.display_name + 'さん'
-})
-
+const tab = ref('')
 </script>

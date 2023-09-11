@@ -6,8 +6,8 @@ use App\Facades\Date;
 use Illuminate\Http\Request;
 use App\Interfaces\Repositories\MessageToolRepositoryInterface;
 use Illuminate\Http\Response;
-
 use Log;
+
 class ChannelController extends \App\Http\Controllers\Controller
 {
     /**
@@ -46,6 +46,8 @@ class ChannelController extends \App\Http\Controllers\Controller
                 'users' => $request->has('users') ? $request->input('users') : [],
                 'created_at' => Date::getNowString(),
             ]);
+
+            broadcast(new \App\Events\CreateChannel([$channel]));
 
             return response()->json([
                 'error' => false,

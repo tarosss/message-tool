@@ -88,3 +88,21 @@ export const fetchUpdateMessage = ({ token, body }: FetchAttributes) => {
 
   return f
 }
+
+/**
+ * チャンネルを作成するfetchの作成
+ * @param param0
+ * @returns
+ */
+export const fetchCreateChannel = ({ token, body }: FetchAttributes) => {
+  const f = fetch(channelStoreUrl, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body,
+  })
+
+  return f
+}

@@ -4,7 +4,7 @@
             <q-card-section class="row">
                 <span class="text-h5">
                     チャンネル作成
-                </span>
+                </span>.
                 <q-space></q-space>
                 <q-btn
                     icon="close"

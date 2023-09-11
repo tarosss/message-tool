@@ -54,6 +54,7 @@ export const useMessage = ({ messageId, channelId }: Omit<MessageType, 'userId'>
         }
         draft.value.message = ''
         draft.value.files = {}
+        draft.value.mentions = []
       })
       .catch(res => {
         console.error('send message is fail')

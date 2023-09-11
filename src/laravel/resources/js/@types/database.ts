@@ -3,6 +3,9 @@ declare type User = {
   user_name: string,
   display_name: string,
   email: string,
+  icon: string | undefined,
+  default_icon_color: string,
+  default_icon_background_color: string,
   bookmarks: [],
 }
 
@@ -64,10 +67,13 @@ declare type MessageFile = {
 
 declare type Channel = {
   _id: string,
-  channel_type: 1 | 2,
+  channel_type: 1 | 2 | 3,
   channel_name: string,
-  created_at: string,
+  users: string[],
+  topic: string | undefined,
+  description: string | undefined,
   create_user: string,
+  created_at: string,
 }
 
 declare type Reaction = {
