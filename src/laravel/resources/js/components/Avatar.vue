@@ -38,7 +38,7 @@ const props = withDefaults(defineProps<{
     user?: User,
     badge?: boolean,
     size?: number,
-    rounded: boolean,
+    rounded?: boolean,
 }>(), {
     badge: false,
     size: 32,

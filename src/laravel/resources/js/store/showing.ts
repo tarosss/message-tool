@@ -1,4 +1,4 @@
-import { ref, computed, watch } from 'vue'
+import { ref, Ref, computed } from 'vue'
 import { defineStore, storeToRefs } from 'pinia'
 
 /**
@@ -9,8 +9,17 @@ const store = defineStore('showing', () => {
   /** s */
   const showingChannelId = ref('')
   const component = ref('')
-  const showingThreadMessageId = ref('')
+
+  // 右関連
+  /** 右にスレッドを表示するかのフラグ */
   const showThread = ref(false)
+  /** ユーザのプロフィールとスレッドのメッセージの切り替えのフラグ */
+  const rightContent: Ref<'thread' | 'profile'> = ref('thread')
+  /** 右に表示するスレッドのメッセージId */
+  const showingThreadMessageId = ref('')
+  /** プロフィールを表示するユーザID */
+  const profileUserId = ref('')
+
   /** チャンネル追加のモーダルウィンドウの表示 */
   const showAddChannelModal = ref(false)
 
@@ -21,9 +30,6 @@ const store = defineStore('showing', () => {
   const showChannelDialog = ref(false)
   /** チャンネル編集用のモーダルに表示するチャンネル */
   const channelDialogChannelId = ref('')
-
-  /** プロフィールを表示するユーザID */
-  const profileUserId = ref('')
 
   const setShowing = (newShowing: string) => {
     showingId.value = newShowing
@@ -54,8 +60,21 @@ const store = defineStore('showing', () => {
     }
   }
 
+  const setRightContent = (newValue: typeof rightContent.value) => {
+    rightContent.value = newValue
+  }
+
   const setShowingThread = (newShowThread: boolean) => {
     showThread.value = newShowThread
+  }
+
+  /**
+   * 右にスレッドを表示する
+   */
+  const displayThread = (threadMessageId: string) => {
+    showingThreadMessageId.value = threadMessageId
+    rightContent.value = 'thread'
+    showThread.value = true
   }
 
   /**
@@ -63,9 +82,10 @@ const store = defineStore('showing', () => {
    */
   const displayUserProfile = (userId: string) => {
     profileUserId.value = userId
+    rightContent.value = 'profile'
     showThread.value = true
   }
-  
+
   return {
     showing: computed(() => showingId.value),
     /** sc */
@@ -73,6 +93,7 @@ const store = defineStore('showing', () => {
     component: computed(() => component.value),
     showingThreadMessageId: computed(() => showingThreadMessageId.value),
     showThread: computed(() => showThread.value),
+    rightContent: computed(() => rightContent.value),
     showAddChannelModal,
     showAddDirectMessageModal,
     showChannelDialog,
@@ -81,6 +102,8 @@ const store = defineStore('showing', () => {
     setShowing,
     setThread,
     setShowingThread,
+    setRightContent,
+    displayThread,
     displayUserProfile,
   }
 })

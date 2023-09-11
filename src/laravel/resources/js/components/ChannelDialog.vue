@@ -110,11 +110,12 @@
                             <q-item-section avatar>
                                 <q-icon name="person_add" />
                             </q-item-section>
-                            <q-item-section>メンバーを追加する</q-item-section>
+                            <q-item-section @click="addUserDialog = true">メンバーを追加する</q-item-section>
                         </q-item>
                         <q-item
-                            v-for="[userId, user] of serachUsers(searchName)"
-                            :key="'channel-dialog-' + targetChannel._id + userId"
+                            v-for="[userId, user] of targetParticipatingUsers"
+                            :key="'channel-dialog-participating' + targetChannel._id + userId"
+                            clickable
                             @click="displayUserProfile(userId)">
                             <q-item-section avatar>
                                 <Avatar
@@ -135,6 +136,52 @@
             </q-tab-panels>
         </q-card>
     </q-dialog>
+    <q-dialog
+        v-model="addUserDialog">
+        <q-card>
+            <q-card-section>
+                <q-toolbar>
+                    <div class="row">
+                        <span class="col-12">
+                            メンバーを追加する
+                        </span>
+                        <span>
+                            # {{ targetChannel.channel_name }}
+                        </span>
+                    </div>
+                    <q-btn
+                        icon="close"
+                        flat
+                        @click="addUserDialog = false">
+                    </q-btn>
+                </q-toolbar>
+                <q-input outlined v-model="addUserDialogSearchName" dense>
+                    <template v-slot:prepend>
+                        <q-icon name="search" />
+                    </template>
+                </q-input>
+                <q-list>
+                    <q-item
+                        v-for="[userId, user] of targetNotParticipatingUsers"
+                        :key="'channel-dialog-not-participating-' + userId"
+                        class="cursor-pointer"
+                        clickable
+                        @click="addUser(user)">
+                        <q-item-section >
+                            <Avatar
+                                :user="user">
+                            </Avatar>
+                        </q-item-section>
+                        <q-item-section>
+                            <span>
+                                {{ user.display_name }} 
+                            </span>
+                        </q-item-section>
+                    </q-item>
+                </q-list>
+            </q-card-section>
+        </q-card>
+    </q-dialog>
 </template>
 <script lang="ts" setup>
 import Avatar from './Avatar.vue'
@@ -146,5 +193,15 @@ import { useChannelDialog } from '../composables/useChannelDialog'
 const { loggingUser } = useLogging()
 const { showChannelDialog, displayUserProfile } = useShowing()
 const { serachUsers } = useUsers()
-const { targetChannel, tab, searchName, addUser } = useChannelDialog()
+const { 
+    targetChannel, 
+    tab, 
+    searchName, 
+    addUserDialogSearchName,
+    participatingUsers, 
+    targetParticipatingUsers, 
+    targetNotParticipatingUsers, 
+    addUserDialog, 
+    addUser,
+} = useChannelDialog()
 </script>
