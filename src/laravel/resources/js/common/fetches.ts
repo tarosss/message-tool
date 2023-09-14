@@ -1,6 +1,12 @@
 import { inject } from 'vue'
 import { createFetch } from '@vueuse/core'
-import { messageUpdateUrl, draftFileDeleteUrl, channelStoreUrl, channelUpdateUrl } from '../consts/fetches'
+import {
+  messageUpdateUrl,
+  draftFileDeleteUrl,
+  channelStoreUrl,
+  channelUpdateUrl,
+  fileGetUrl,
+} from '../consts/fetches'
 
 type GetFetch2Args = {
   // headers: {
@@ -118,6 +124,18 @@ export const fetchUpdateChannel = ({ token, body }: FetchAttributes) => {
     },
     method: 'POST',
     body,
+  })
+
+  return f
+}
+
+export const fetchGetFile = ({ token } : { token: string }) => {
+  const f = fetch(fileGetUrl, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
   })
 
   return f

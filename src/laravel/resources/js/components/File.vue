@@ -40,7 +40,7 @@
 <script lang="ts" setup>
 import { useElementHover } from '../composables/useElementHover'
 const props = defineProps<{
-    fileData: DraftFile,
+    fileData: DraftFile | MessageFile,
 }>()
 const { isHoverd, element } = useElementHover()
 

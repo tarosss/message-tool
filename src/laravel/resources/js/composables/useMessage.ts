@@ -27,7 +27,7 @@ export const useMessage = ({ messageId, channelId }: Omit<MessageType, 'userId'>
 
   // メッセージデータ関連
   const draft = ref(getDraftData({ userId, channelId, threadMessageId: messageId }))
-  const dummyMessage = computed(() => draft.value.message)
+  const dummyMessage = ref(draft.value.message)
   const existFile = computed(() => Boolean(Object.entries(draft.value.files).length))
 
   // HTML関連
@@ -52,9 +52,11 @@ export const useMessage = ({ messageId, channelId }: Omit<MessageType, 'userId'>
         if (!res.ok) {
           throw new Error()
         }
+        // 成功したら全てのデータを初期化
         draft.value.message = ''
         draft.value.files = {}
         draft.value.mentions = []
+        dummyMessage.value = ''
       })
       .catch(res => {
         console.error('send message is fail')

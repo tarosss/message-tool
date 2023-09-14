@@ -203,4 +203,15 @@ class MessageToolRepository implements MessageToolRepositoryInterface
     {
         ReactionKind::insert($data);
     }
+
+    public function getFiles(array $wheres = [])
+    {
+        $data = File::select('*');
+        if (isset($wheres['user_id'])) {
+            $data->where('user_id', $wheres['user_id']);
+        }
+
+        $data->orderBy('created_at');
+        return $data->count() ? $data->get()->toArray() : [];
+    }
 }

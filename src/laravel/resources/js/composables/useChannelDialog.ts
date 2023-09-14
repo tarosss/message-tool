@@ -12,7 +12,8 @@ export const useChannelDialog = () => {
   const { users } = useUsers()
 
   const targetChannel = computed(() => channels.value.get(channelDialogChannelId.value) as Channel)
-  const tab = ref('')
+  const createUser = computed(() => users.value.get(targetChannel.value.create_user) as User)
+  const tab = ref('channel')
   const searchName = ref('')
   /** 参加しているユーザをあらかじめ取得しておく */
   const participatingUsers = computed(() => {
@@ -118,6 +119,7 @@ export const useChannelDialog = () => {
 
   return {
     targetChannel,
+    createUser,
     tab,
     searchName,
     participatingUsers,

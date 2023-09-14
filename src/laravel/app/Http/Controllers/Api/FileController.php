@@ -80,27 +80,19 @@ class FileController extends \App\Http\Controllers\Controller
      */
     public function show(Request $request, MessageToolRepositoryInterface $messageToolRepository)
     {
-        $code = Response::HTTP_OK;
-        $response = [
-            'error' => true,
-            'message' => null,
-            'files' => [],
-        ];
-
         try {
             $files = $messageToolRepository->getFiles();
 
-
-            $response['files'] = array_column($files, null, '_id');
+            return response()->json([
+                'error' => false,
+                'files' => array_column($files, null, '_id')
+            ], Response::HTTP_OK);
         } catch (Exception $e) {
             Log::error($e);
-            $response = [
+            return response()->json([
                 'error' => true,
                 'message' => $e->getMessage(),
-            ];
-            $code = Response::HTTP_BAD_REQUEST;
-        } finally {
-            return response()->json($response, $code);
+            ], Response::HTTP_BAD_REQUEST);
         }
     }
 

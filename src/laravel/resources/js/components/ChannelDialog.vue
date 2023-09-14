@@ -86,7 +86,7 @@
                                     作成者
                                 </span>
                                 <span class="col-12">
-                                    {{ targetChannel.create_user }}さんが{{ targetChannel.created_at }}に作成
+                                    {{ createUser.display_name }}さんが{{ format({ date: targetChannel.created_at, formatString: 'yyyy年MM月dd日'}) }}に作成
                                 </span>
                             </div>
                         </q-card-section>
@@ -198,12 +198,14 @@ import { useLogging } from '../store/logging'
 import { useShowing } from '../store/showing'
 import { useUsers } from '../store/users'
 import { useChannelDialog } from '../composables/useChannelDialog'
-
+import { format } from '../common/dateFormats'
 const { loggingUser } = useLogging()
 const { showChannelDialog, displayUserProfile } = useShowing()
 const { serachUsers } = useUsers()
+
 const { 
     targetChannel, 
+    createUser,
     tab, 
     searchName, 
     addUserDialogSearchName,

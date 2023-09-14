@@ -18,9 +18,12 @@ import { useLogging } from './store/logging';
 import { useUsers } from './store/users';
 import { useChannels } from './store/channels'
 import { useMessages } from './store/messages'
+import { useFiles } from './store/files'
 import { useDrafts } from './store/drafts'
 import { useReactions } from './store/reactions'
 import { reactionGetUrl, draftGetUrl } from './consts/fetches'
+import { fetchGetFile } from './common/fetches'
+
 const props = defineProps<{
  loggingUserId: string,
  token: string,
@@ -32,6 +35,7 @@ const showFlags = ref({
   user: false,
   reaction: false,
   channel: false,
+  files: false
 })
 
 provide('logging-user-id', props.loggingUserId)
@@ -89,6 +93,13 @@ onBeforeMount(()=> {
         useDrafts().setDrafts(json.drafts)
         showFlags.value.draft = true
       }),
+    fetchGetFile({ token: props.token })
+    .then((res) => res.json())
+    .then((json) => {
+      console.log(json)
+      useFiles().setFiles(json.files)
+      showFlags.value.files = true
+    })
   ])
 })
 
