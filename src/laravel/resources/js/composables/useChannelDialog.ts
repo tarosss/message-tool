@@ -1,10 +1,13 @@
-import { computed, ref, Ref } from 'vue'
+import { computed, inject, ref, Ref } from 'vue'
 import { useShowing } from '../store/showing'
 import { useChannels } from '../store/channels'
 import { useUsers } from '../store/users'
+import { fetchUpdateChannel } from '../common/fetches'
+import { deepCopy } from '../common/objectUtils'
 
 export const useChannelDialog = () => {
-  const { channelDialogChannelId, setRightContent } = useShowing()
+  const token = inject('token', '')
+  const { channelDialogChannelId, showChannelDialog, setRightContent } = useShowing()
   const { channels } = useChannels()
   const { users } = useUsers()
 
@@ -55,6 +58,12 @@ export const useChannelDialog = () => {
   const addUserDialog = ref(false)
   /** ユーザ参加ダイアログの名前検索 */
   const addUserDialogSearchName = ref('')
+  /** 追加されるユーザ */
+  const addedUsers: Ref<string[]> = ref([])
+  const addedUsersLength = computed(() => addedUsers.value.length)
+  const showAddUserDialog = () => {
+    addUserDialog.value = true
+  }
 
   const targetNotParticipatingUsers = computed(() => {
     if (addUserDialogSearchName.value === '') {
@@ -75,7 +84,36 @@ export const useChannelDialog = () => {
    * ユーザをチャンネルに追加する
    */
   const addUser = (addedUser: User) => {
-    console.log(addedUser)
+    if (addedUsers.value.includes(addedUser._id)) {
+      addedUsers.value = addedUsers.value.filter((uid) => {
+        return uid !== addedUser._id
+      })
+    } else {
+      addedUsers.value.push(addedUser._id)
+    }
+  }
+
+  const clickAddUser = () => {
+    if (!addedUsersLength.value) {
+      return
+    }
+
+    const postData = deepCopy<Channel>(targetChannel.value)
+
+    postData.users.push(...addedUsers.value)
+    fetchUpdateChannel({ token, body: JSON.stringify(postData) })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error()
+        }
+
+        // 変更に成功したらダイアログを非表示にする
+        showChannelDialog.value = false
+        addUserDialog.value = false
+      })
+      .catch((e) => {
+        console.error(e)
+      })
   }
 
   return {
@@ -87,6 +125,10 @@ export const useChannelDialog = () => {
     targetParticipatingUsers,
     targetNotParticipatingUsers,
     addUserDialog,
+    addedUsers,
+    addedUsersLength,
+    showAddUserDialog,
     addUser,
+    clickAddUser,
   }
 }

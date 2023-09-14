@@ -47,6 +47,7 @@ window.Echo.channel('laravel_database_create_channel').listen('CreateChannel', (
 
 window.Echo.channel('laravel_database_update_channel').listen('UpdateChannel', (data) => {
   const { channels } = useChannels()
+  console.log(data)
   for (const channel of data.channels as Channel[]) {
     channels.value.set(channel._id, channel)
   }

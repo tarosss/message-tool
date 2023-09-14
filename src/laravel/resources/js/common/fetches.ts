@@ -1,6 +1,6 @@
 import { inject } from 'vue'
 import { createFetch } from '@vueuse/core'
-import { messageUpdateUrl, draftFileDeleteUrl, channelStoreUrl } from '../consts/fetches'
+import { messageUpdateUrl, draftFileDeleteUrl, channelStoreUrl, channelUpdateUrl } from '../consts/fetches'
 
 type GetFetch2Args = {
   // headers: {
@@ -96,6 +96,22 @@ export const fetchUpdateMessage = ({ token, body }: FetchAttributes) => {
  */
 export const fetchCreateChannel = ({ token, body }: FetchAttributes) => {
   const f = fetch(channelStoreUrl, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+    body,
+  })
+
+  return f
+}
+
+/**
+ * チャンネル情報を編集する
+ */
+export const fetchUpdateChannel = ({ token, body }: FetchAttributes) => {
+  const f = fetch(channelUpdateUrl, {
     headers: {
       Authorization: `Bearer ${token}`,
       'Content-Type': 'application/json',

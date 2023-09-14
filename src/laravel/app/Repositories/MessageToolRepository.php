@@ -170,6 +170,13 @@ class MessageToolRepository implements MessageToolRepositoryInterface
         return $channels->get()->toArray();
     }
 
+    public function updateChannel(array $wheres, array $data)
+    {
+        unset($data['_id']);
+        Channel::where($wheres)
+            ->update($data);
+    }
+
     public function createReaction($data): Reaction
     {
         return Reaction::create($data);

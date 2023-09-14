@@ -17,8 +17,8 @@
                 align="justify"
                 narrow-indicator
                 class="q-mb-lg">
-                <q-tab class="text-purple" name="channel" label="チャンネル情報" />
-                <q-tab class="text-orange" name="users" label="メンバー" />
+                <q-tab class="" name="channel" label="チャンネル情報" />
+                <q-tab class="" name="users" label="メンバー" />
             </q-tabs>
             <q-tab-panels v-model="tab"  class="text-dark text-center">
                 <q-tab-panel name="channel">
@@ -106,7 +106,7 @@
                         </template>
                     </q-input>
                     <q-list class="cursor-pointer">
-                        <q-item @click="addUser">
+                        <q-item @click="showAddUserDialog">
                             <q-item-section avatar>
                                 <q-icon name="person_add" />
                             </q-item-section>
@@ -165,6 +165,7 @@
                         v-for="[userId, user] of targetNotParticipatingUsers"
                         :key="'channel-dialog-not-participating-' + userId"
                         class="cursor-pointer"
+                        :class="{'bg-light-blue-4': addedUsers.includes(userId)}"
                         clickable
                         @click="addUser(user)">
                         <q-item-section >
@@ -179,6 +180,14 @@
                         </q-item-section>
                     </q-item>
                 </q-list>
+                <div class="row justify-right">
+                    <q-btn 
+                        v-if="addedUsersLength"
+                        color="primary" 
+                        label="追加する"
+                        @click="clickAddUser">
+                    </q-btn>
+                </div>
             </q-card-section>
         </q-card>
     </q-dialog>
@@ -202,6 +211,10 @@ const {
     targetParticipatingUsers, 
     targetNotParticipatingUsers, 
     addUserDialog, 
+    addedUsers,
+    addedUsersLength,
+    showAddUserDialog,
     addUser,
+    clickAddUser,
 } = useChannelDialog()
 </script>

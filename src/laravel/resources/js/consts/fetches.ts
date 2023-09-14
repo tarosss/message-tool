@@ -13,3 +13,4 @@ export const draftDeleteUrl = 'api/delete/draft'
 export const draftFileDeleteUrl = 'api/delete/draft/file'
 
 export const channelStoreUrl = 'api/store/channel'
+export const channelUpdateUrl = 'api/update/channel'
