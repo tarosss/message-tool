@@ -10,7 +10,7 @@ class File extends Moloquent
 
     protected $fillable = [
         'file_name',
-        'priginal_file_name',
+        'original_file_name',
         'mime_type',
         'user_id',
         'channel_id',

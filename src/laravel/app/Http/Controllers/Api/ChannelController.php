@@ -103,9 +103,27 @@ class ChannelController extends \App\Http\Controllers\Controller
      * @param  \App\Models\Todo  $todo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Todo $todo)
+    public function update(Request $request, MessageToolRepositoryInterface $messageToolRepository)
     {
-        //
+        try {
+            $messageToolRepository->updateChannel(
+                [
+                    '_id' => $request->input('_id'),
+                ],
+                $request->all(),
+            );
+            
+            broadcast(new \App\Events\UpdateChannel([$request->all()]));
+            
+            return response()->json([
+                'error' => false,
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage(),
+            ], Response::HTTP_BAD_REQUEST);   
+        }
     }
 
     /**

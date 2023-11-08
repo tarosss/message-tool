@@ -10,6 +10,8 @@ use App\Facades\MimeType;
 use App\Facades\Date;
 
 use Exception;
+use GuzzleHttp\Psr7\Response as Psr7Response;
+use Illuminate\Support\Facades\Response as FacadesResponse;
 use Log;
 
 class FileController extends \App\Http\Controllers\Controller
@@ -153,5 +155,30 @@ class FileController extends \App\Http\Controllers\Controller
     public function destroy(Todo $todo)
     {
         //
+    }
+
+    public function download(Request $request, MessageToolRepositoryInterface $messageToolRepository)
+    {
+        try {
+            $id = $request->input('id');
+            $file = $messageToolRepository->getFile($id);
+            if ($file === null) {
+                // throw new FileNotFoundException;
+            }
+
+            $headers = [
+                'Content-Type' => $file['mime_type'],
+            ];
+            
+            // ストレージのパスをStrageクラスから持ってきて付け足す
+            return response()->download($file['file_name'], $file['original_file_name'], $headers);
+        } catch (FileNotFoundException $e) {
+
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 }

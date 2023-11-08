@@ -63,6 +63,37 @@ const store = defineStore('channels', () => {
     return u.display_name
   }
 
+  /**
+   * 与えられたダイレクトメッセージのidを取得する
+   * 同じIDが指定された場合自分用のメッセージのIDを返す
+   * @param userId1
+   * @param userId2
+   */
+  const getDirectMessageChannelId = (userId1: string, userId2: string) => {
+    if (userId1 === userId2) {
+      for (const [channelId, channel] of channels.value) {
+        if (
+          channel.channel_type === CHANNEL_TYPE_MEMO
+          && channel.users.includes(userId1)
+        ) {
+          return channelId
+        }
+      }
+    }
+
+    for (const [channelId, channel] of channels.value) {
+      if (
+        channel.channel_type === CHANNEL_TYPE_DIRECT_MESSAGE
+        && channel.users.includes(userId1)
+        && channel.users.includes(userId2)
+      ) {
+        return channelId
+      }
+    }
+
+    return undefined
+  }
+
   watch(channels, () => {
     const tempParticipatingChannels: typeof participatingChannels.value = new Map()
     const tempDirectMessages: typeof directMessages.value = new Map()
@@ -105,6 +136,7 @@ const store = defineStore('channels', () => {
     pushChannel,
     getAnotherUserId,
     getDisplayChannelName,
+    getDirectMessageChannelId,
   }
 })
 

@@ -43,11 +43,17 @@ const store = defineStore('showing', () => {
       default:
         if (!showThread.value) {
           // スレッドが隠れている時に表示する
-          showingChannelId.value = newShowing
         }
+    console.log(newShowing)
+
+        showingChannelId.value = newShowing
         component.value = 'channel'
         break
     }
+  }
+
+  const setShowingChannelId = (newShowingChannelId: string) => {
+    showingChannelId.value = newShowingChannelId
   }
 
   const setThread = (
@@ -100,6 +106,7 @@ const store = defineStore('showing', () => {
     channelDialogChannelId,
     profileUserId: computed(() => profileUserId.value),
     setShowing,
+    setShowingChannelId,
     setThread,
     setShowingThread,
     setRightContent,

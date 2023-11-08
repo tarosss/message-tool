@@ -30,6 +30,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('/channel', '\App\Http\Controllers\Api\ChannelController@show');
         Route::post('/reaction', '\App\Http\Controllers\Api\ReactionController@show');
         Route::post('/reaction-kind', '\App\Http\Controllers\Api\ReactionKindController@show');
+        Route::post('/file', '\App\Http\Controllers\Api\FileController@show');
     });
     
     Route::group(['prefix' => 'update', 'middleware' => ['abilities:collection:update']], function () {

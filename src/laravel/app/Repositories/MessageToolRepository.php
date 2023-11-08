@@ -170,6 +170,13 @@ class MessageToolRepository implements MessageToolRepositoryInterface
         return $channels->get()->toArray();
     }
 
+    public function updateChannel(array $wheres, array $data)
+    {
+        unset($data['_id']);
+        Channel::where($wheres)
+            ->update($data);
+    }
+
     public function createReaction($data): Reaction
     {
         return Reaction::create($data);
@@ -195,5 +202,16 @@ class MessageToolRepository implements MessageToolRepositoryInterface
     public function createReactionKinds($data): void
     {
         ReactionKind::insert($data);
+    }
+
+    public function getFiles(array $wheres = [])
+    {
+        $data = File::select('*');
+        if (isset($wheres['user_id'])) {
+            $data->where('user_id', $wheres['user_id']);
+        }
+
+        $data->orderBy('created_at');
+        return $data->count() ? $data->get()->toArray() : [];
     }
 }
