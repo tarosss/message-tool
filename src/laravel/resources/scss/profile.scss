@@ -1,0 +1,11 @@
+@use 'variables';
+
+.profile {
+    &-email {
+        // color: red;
+        cursor: pointer;
+        :hover {
+            text-decoration: underline;
+        }
+    }
+}

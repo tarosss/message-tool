@@ -10,6 +10,8 @@ use App\Facades\MimeType;
 use App\Facades\Date;
 
 use Exception;
+use GuzzleHttp\Psr7\Response as Psr7Response;
+use Illuminate\Support\Facades\Response as FacadesResponse;
 use Log;
 
 class FileController extends \App\Http\Controllers\Controller
@@ -80,19 +82,27 @@ class FileController extends \App\Http\Controllers\Controller
      */
     public function show(Request $request, MessageToolRepositoryInterface $messageToolRepository)
     {
+        $code = Response::HTTP_OK;
+        $response = [
+            'error' => true,
+            'message' => null,
+            'files' => [],
+        ];
+
         try {
             $files = $messageToolRepository->getFiles();
 
-            return response()->json([
-                'error' => false,
-                'files' => array_column($files, null, '_id')
-            ], Response::HTTP_OK);
+
+            $response['files'] = array_column($files, null, '_id');
         } catch (Exception $e) {
             Log::error($e);
-            return response()->json([
+            $response = [
                 'error' => true,
                 'message' => $e->getMessage(),
-            ], Response::HTTP_BAD_REQUEST);
+            ];
+            $code = Response::HTTP_BAD_REQUEST;
+        } finally {
+            return response()->json($response, $code);
         }
     }
 
@@ -145,5 +155,30 @@ class FileController extends \App\Http\Controllers\Controller
     public function destroy(Todo $todo)
     {
         //
+    }
+
+    public function download(Request $request, MessageToolRepositoryInterface $messageToolRepository)
+    {
+        try {
+            $id = $request->input('id');
+            $file = $messageToolRepository->getFile($id);
+            if ($file === null) {
+                // throw new FileNotFoundException;
+            }
+
+            $headers = [
+                'Content-Type' => $file['mime_type'],
+            ];
+            
+            // ストレージのパスをStrageクラスから持ってきて付け足す
+            return response()->download($file['file_name'], $file['original_file_name'], $headers);
+        } catch (FileNotFoundException $e) {
+
+        } catch (Exception $e) {
+            return response()->json([
+                'error' => true,
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 }

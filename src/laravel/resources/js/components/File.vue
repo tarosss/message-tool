@@ -42,6 +42,8 @@ import { useElementHover } from '../composables/useElementHover'
 const props = defineProps<{
     fileData: DraftFile | MessageFile,
 }>()
+
+console.log(props.fileData)
 const { isHoverd, element } = useElementHover()
 
 </script>

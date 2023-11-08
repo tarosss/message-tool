@@ -16,6 +16,7 @@ export default defineConfig({
         'resources/scss/message.scss',
         'resources/scss/reaction.scss',
         'resources/scss/file.scss',
+        'resources/scss/profile.scss',
 
         'resources/js/header.ts',
       ],

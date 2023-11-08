@@ -4,7 +4,7 @@
         ref="element">
         <div v-if="!editing">
             <div class="row text-white relative-position" >
-                <Avatar 
+                <Avatar
                     class="text-black q-mr-sm" 
                     :badge="false" 
                     :size="35">
@@ -23,12 +23,14 @@
                     </div>
                 </div>
             </div>
-            <div v-if="props.message.files.length">
-                <!-- <File
+            <div v-if="props.message.files.length"
+                class="row">
+                <File
                     v-for="fileId of props.message.files"
                     :key="'message-row' + props.message._id + fileId"
-                    :file-data="(files.get(fileId) as MessageFile)">
-                </File> -->
+                    :file-data="(files.get(fileId) as MessageFile)"
+                    class="col-3">
+                </File>
             </div>
             <UserReactionBar
                 v-if="Object.keys(props.message.reactions).length"
